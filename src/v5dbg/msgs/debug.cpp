@@ -52,15 +52,14 @@ V5Dbg_VStackForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
         frameIndex--;
       }
 
-      break;
-
-
       // End of stack
 
-      rVal.paramBuffer.clear();
+      rVal.paramBuffer = "ENDSTACK";
       rVal.type = DEBUGGER_MESSAGE_VSTACK_END;
 
       printf("%s\n", V5Dbg_SerializeMessage(rVal).c_str());
+
+      break;
     }
 
     x++;

@@ -2,6 +2,7 @@
 #include "v5dbg/debinfo.h"
 #include <mutex>
 #include "v5dbg/server.h"
+#include "stack.h"
 
 V5DbgFunction::V5DbgFunction(const std::string& name, const char* file, int line, void* pAddress)
 {
@@ -18,8 +19,16 @@ V5DbgFunction::V5DbgFunction(const std::string& name, const char* file, int line
   frame.jmpAddress = pAddress;
   frame.stackBegin.filePath = file;
   frame.stackBegin.lineNumber = line;
+  frame.pMemory = &m_memory; // Pointer is only valid until object destruction and stack pop
 
   thread->stack.push_back(frame);
+}
+
+void V5DbgFunction::expose(const std::shared_ptr<V5DbgMemoryObject>& memObject)
+{
+  m_memory.local.push_back(memObject);
+
+  printf("ExposeLocalMemory\n");
 }
 
 V5DbgFunction::~V5DbgFunction()

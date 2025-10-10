@@ -5,7 +5,19 @@
  * Main user-facing API
  */
 
-/// @brief  Begin a debuggable function
+/**
+ * Begin a debuggable function
+ * @note Without this your function will not appear in stack traces and most debugger functions will not work
+ */
 #define $function                                                                                                      \
   __v5dbg_func:                                                                                                        \
-  V5DbgFunction _fStackCatch(__PRETTY_FUNCTION__, __FILE__, __LINE__, &&__v5dbg_func);
+  V5DbgFunction _v5dbg_stack_func(__PRETTY_FUNCTION__, __FILE__, __LINE__, &&__v5dbg_func);
+
+/**
+ * @brief  Expose a scoped variable to the debugger.
+ * @note Can only be called within a debuggable function
+ */
+#define $expose(target) \
+  std::shared_ptr<V5DbgMemoryObject> _v5dbg_var_##target = std::make_shared<V5DbgMemoryObject>(&target); \
+  _v5dbg_stack_func.expose(_v5dbg_var_##target);
+
