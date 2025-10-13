@@ -3,9 +3,9 @@
 #include <vector>
 #include "pros/rtos.hpp"
 #include "v5dbg/protocol.h"
-#include "v5dbg/debug.h"
 
 struct v5dbg_server_state_t;
+struct v5dbg_thread_t;
 typedef void (*V5Dbg_ServerMsgCallback)(v5dbg_server_state_t *pState, const v5dbg_message_t &msg);
 
 struct v5dbg_server_msg_callback_t
@@ -67,7 +67,16 @@ v5dbg_server_state_t V5Dbg_AllocateServerState();
 v5dbg_thread_t V5Dbg_AllocateServerThread();
 
 /// @brief  Return the v5dbg_thread_t* for the current task
+v5dbg_thread_t* V5Dbg_ThreadForTask(v5dbg_server_state_t *pState);
+
+/// @brief  Uses CURRENT_SERVER when calling V5Dbg_ThreadForTask
 v5dbg_thread_t* V5Dbg_ThreadForTask();
+
+/// @brief  Uses CURRENT_SERVER when calling V5Dbg_ThreadForTask
+v5dbg_thread_t* V5Dbg_ThreadWithID(v5dbg_server_state_t* pState, int id);
+
+/// @brief  Return the v5dbg_thread_t for the given task
+v5dbg_thread_t* V5Dbg_ThreadWithID(int id);
 
 /// @brief  Internal server main function, should never be called manually
 void V5Dbg_ServerMain();

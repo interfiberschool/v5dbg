@@ -1,4 +1,6 @@
+#include "v5dbg/debinfo.h"
 #include "v5dbg/msg.h"
+#include "v5dbg/stack.h"
 
 // Thread and stack manipulation
 

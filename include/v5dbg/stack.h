@@ -33,12 +33,44 @@ struct v5dbg_stack_frame_t
 };
 
 /**
+ * Stores memory information across function calls.
+ * A V5DbgFunction is reallocated every time while its V5DbgStackMemory function is only allocated once per unique function
+ */
+class V5DbgStackMemory
+{
+public:
+  V5DbgStackMemory() = default;
+
+  /**
+   * Expose a memory object to the debug server
+   * @param mem Memory object to expose
+   * @note 
+   */
+  void expose(const std::shared_ptr<V5DbgMemoryObject> &memObject);
+
+  /**
+   * Mark all allocations as deallocated while still storing their location information
+   * @note Automatically called when a function scope ends
+   */
+  void deallocateAll();
+
+  /// @brief  Return the underlying stack frame memory object
+  [[nodiscard]] inline v5dbg_stack_frame_memory_t* getMemory()
+  {
+    return &m_memory;
+  }
+
+private:
+  v5dbg_stack_frame_memory_t m_memory{};
+};
+
+/**
  * Created by a call to $function capturing stack information and reporting captured memory to the debugger
  */
 class V5DbgFunction
 {
 public:
-  V5DbgFunction(const std::string& name, const char* file, int line, void* pAddress);
+  V5DbgFunction(const std::string& name, const char* file, int line, void* pAddress, V5DbgStackMemory *memory);
   ~V5DbgFunction();
 
   /**
@@ -48,5 +80,5 @@ public:
   void expose(const std::shared_ptr<V5DbgMemoryObject> &memObject);
 
 private:
-  v5dbg_stack_frame_memory_t m_memory{};
+  V5DbgStackMemory* m_memory{};
 };

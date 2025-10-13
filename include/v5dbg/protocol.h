@@ -44,8 +44,17 @@ enum v5dbg_message_type_e
   /// @brief  Stop accepting DEBUGGER_MESSAGE_RVSTACK messages
   DEBUGGER_MESSAGE_VSTACK_END = 9,
 
+  /// @brief  List memory for the given stack frame with thread ID
+  DEBUGGER_MESSAGE_LMEM_FOR = 10,
+
+  /// @brief  Returned message for DEBUGGER_MESSAGE_LMEM_FOR, keep accepting messages until DEBUGGER_MESSAGE_LMEM_END
+  DEBUGGER_MESSAGE_RLMEM = 11,
+
+  /// @brief  Stop accepting DEBUGGER_MESSAGE_RLMEM messages
+  DEBUGGER_MESSAGE_LMEM_END = 12,
+
   /// @brief  Max debugger message ID
-  DEBUGGER_MESSAGE_MAX = 10
+  DEBUGGER_MESSAGE_MAX = 13
 };
 
 struct v5dbg_message_t

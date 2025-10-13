@@ -58,7 +58,7 @@ opcontrol()
 }
 ```
 
-## `$expose`
+## `$expose(t)`
 Expose a scoped variable to the debug server for inspection.
 
 #### Example
@@ -80,5 +80,48 @@ opcontrol()
             driveVoltage(0);
         }
     }
+}
+```
+
+## `$break`
+Place non-conditional breakpoint at this location in the program. This breakpoint can be enabled by referencing its file and line number.
+
+#### Example
+```c++
+void opcontrol()
+{
+
+    // Segfault here
+    DriveTrain* drive = nullptr;
+    $expose(drive); // Expose drivetrain memory address to debugger
+
+    // What went wrong? Place a breakpoint to inspect state!
+    $break
+
+    drive->calibrate();
+
+}
+```
+
+
+## `$cbreak(cond)`
+Place conditional breakpoint at this location in the program. This breakpoint can be enabled by referencing its file and line number.
+
+**NOTE:** You still have to enable this breakpoint but it will only fire when the condition provided is true.
+
+#### Example
+```c++
+void opcontrol()
+{
+
+    // Segfault here
+    DriveTrain* drive = makeDrivetrain();
+    $expose(drive); // Expose drivetrain memory address to debugger
+
+    // If drivetrain failed to build then break for debugging!
+    $cbreak(drive == nullptr)
+
+    drive->calibrate();
+
 }
 ```

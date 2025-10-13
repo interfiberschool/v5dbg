@@ -1,6 +1,7 @@
 #include "v5dbg/server.h"
 #include <iostream>
 #include <mutex>
+#include "pros/rtos.h"
 #include "v5dbg/debugger.h"
 #include "v5dbg/msg.h"
 #include "v5dbg/stack.h"
@@ -122,17 +123,44 @@ V5Dbg_ServerMain()
 v5dbg_thread_t*
 V5Dbg_ThreadForTask()
 {
-  std::lock_guard<pros::rtos::Mutex> _g(*CURRENT_SERVER->threadListLock);
+  return V5Dbg_ThreadForTask(CURRENT_SERVER);
+}
 
-  for (auto& task : CURRENT_SERVER->threads)
+v5dbg_thread_t*
+V5Dbg_ThreadForTask(v5dbg_server_state_t* pState)
+{
+  std::lock_guard<pros::rtos::Mutex> _g(*pState->threadListLock);
+
+  for (auto& task : pState->threads)
   {
     if (task.task.get_name() == pros::rtos::Task::current().get_name())
     {
-      CURRENT_SERVER->threadListLock->unlock();
       return &task;
     }
   }
 
 
   return nullptr;
+}
+
+v5dbg_thread_t*
+V5Dbg_ThreadWithID(v5dbg_server_state_t* pState, int id)
+{
+  std::lock_guard<pros::rtos::Mutex> _g(*pState->threadListLock);
+
+  for (int i = 0; i < pState->threads.size(); i++)
+  {
+    if (i == id)
+    {
+      return &pState->threads[i];
+    }
+  }
+
+  return nullptr;
+}
+
+v5dbg_thread_t*
+V5Dbg_ThreadWithID(int id)
+{
+  return V5Dbg_ThreadWithID(id);
 }
