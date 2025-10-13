@@ -13,6 +13,16 @@ struct v5dbg_code_point_t
   int lineNumber;
 };
 
+/// @brief  Describes a variable located in the program
+struct v5dbg_variable_t
+{
+  /// @brief  Variable name
+  std::string name;
+
+  /// @brief  Allocation point
+  v5dbg_code_point_t allocationPoint;
+};
+
 struct v5dbg_stack_frame_t;
 
 /// @brief Thread with a stack trace

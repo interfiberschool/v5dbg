@@ -1,7 +1,9 @@
+#include "debinfo.h"
 #include "v5dbg/pretty.h"
 
-V5DbgMemoryObject::V5DbgMemoryObject()
+V5DbgMemoryObject::V5DbgMemoryObject(const v5dbg_variable_t &var)
 {
+    m_variable = var;
     m_id = getNextID();
 }
 

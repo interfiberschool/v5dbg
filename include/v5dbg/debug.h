@@ -31,7 +31,12 @@ public:
  * @note Can only be called within a debuggable function
  */
 #define $expose(target)                                                                                                \
-  static std::shared_ptr<V5DbgMemoryObject> _v5dbg_var_##target = std::make_shared<V5DbgMemoryObject>();               \
+  constexpr int _v5dbg_var_line_##target = __LINE__; \
+  static v5dbg_variable_t _v5dbg_var_info_##target{}; \
+  _v5dbg_var_info_##target.name = #target; \
+  _v5dbg_var_info_##target.allocationPoint.filePath = __FILE__; \
+  _v5dbg_var_info_##target.allocationPoint.lineNumber = _v5dbg_var_line_##target; \
+  static std::shared_ptr<V5DbgMemoryObject> _v5dbg_var_##target = std::make_shared<V5DbgMemoryObject>(_v5dbg_var_info_##target);               \
   _v5dbg_var_##target->setPtr(&target);                                                                                \
   _v5dbg_stack_func.expose(_v5dbg_var_##target);
 

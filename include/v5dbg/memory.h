@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include "v5dbg/debinfo.h"
 
 /// @brief  Enum used to determine correct pretty printer function to use
 enum v5dbg_memory_type_e
@@ -50,8 +51,10 @@ enum v5dbg_memory_state_e
 class V5DbgMemoryObject
 {
 public:
-  /// Automatically infer the memory type based off T
-  V5DbgMemoryObject();
+  /**
+   * Create a memory object from variable information
+   */
+  explicit V5DbgMemoryObject(const v5dbg_variable_t &variable);
 
   static uint32_t getNextID()
   {
@@ -77,11 +80,18 @@ public:
     return m_memory;
   }
 
+  [[nodiscard]] inline v5dbg_variable_t
+  getVariable() const
+  {
+    return m_variable;
+  }
+
   /// @brief  Memory state
   v5dbg_memory_state_e memState = MEMORY_STATE_ALLOCATED;
 
 private:
   uint32_t m_id;
+  v5dbg_variable_t m_variable;
 
   void* m_memory;
   v5dbg_memory_type_e m_memoryType;

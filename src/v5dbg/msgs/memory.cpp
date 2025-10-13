@@ -55,7 +55,8 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 
       for (auto& obj : thread->stack[i].pMemory->local)
       {
-        printf("(%i) void* ptr = %p\n", obj->getID(), obj->getPtr());
+        printf("(%i) void* %s = %p;\n", obj->getID(), obj->getVariable().name.c_str(), obj->getPtr());
+        printf("  Allocated at %s:%i\n", obj->getVariable().allocationPoint.filePath.c_str(), obj->getVariable().allocationPoint.lineNumber);
       }
 
       break;
