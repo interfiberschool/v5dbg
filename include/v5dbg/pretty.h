@@ -1,38 +1,40 @@
 #pragma once
-#include <string>
+#include <typeinfo>
+#include <unordered_map>
 #include "v5dbg/memory.h"
 
-/**
- * Handles pretty-printing raw memory objects based on type
- * @note We just cast memory addresses to whatever the fuck we want here
- */
-class V5DbgPrettyPrinter
+/// @brief  Function pointer to pretty printer impl
+typedef void (*V5Dbg_PrettyPrintMemoryObj)(V5DbgMemoryObject *pMemory);
+
+struct v5dbg_pretty_printer_state_t
 {
-public:
-  explicit V5DbgPrettyPrinter(V5DbgMemoryObject* pMemory);
+  /// @brief  Collection of pretty printers for each memory object type
+  std::unordered_map<v5dbg_memory_type_e, V5Dbg_PrettyPrintMemoryObj> printers;
 
-  /// @brief  Generate the printable string
-  /// @return Pretty printable string
-  [[nodiscard]] virtual std::string getPrintable() = 0;
-
-  /**
-   * Send the pretty printed string to stdout
-   */
-  void print();
-
-protected:
-  V5DbgMemoryObject* m_target;
+  /// @brief  Automatic type detection database where the key is the hash_code provided by std::type_info
+  std::unordered_map<std::size_t, v5dbg_memory_type_e> typeDb;
 };
 
-#define $pretty_printer(className) class className : public V5DbgPrettyPrinter
+/// @brief  Return the global pretty printer state object
+inline v5dbg_pretty_printer_state_t* V5Dbg_GetPrettyPrinterState()
+{
+  static v5dbg_pretty_printer_state_t state{};
+
+  return &state;
+}
+
 
 /**
- * Memory address (aka pointer) pretty printer
- */
-$pretty_printer(V5DbgPtrPrettyPrinter)
-{
-public:
-  explicit V5DbgPtrPrettyPrinter(V5DbgMemoryObject * pMemory) : V5DbgPrettyPrinter(pMemory){};
+ * @brief  Detect the memory object type from the compilers provided std::type_info, def
+ * @return Correct type, if no type is found we default to a raw pointer
+*/
+v5dbg_memory_type_e V5Dbg_MemoryTypeFromType(const std::type_info &typeInfo);
 
-  [[nodiscard]] std::string getPrintable() override;
-};
+/**
+ * @brief  Find the correct pretty printer to use for the given memory type
+ * @return Correct pretty printer or nullptr if none was found
+ */
+V5Dbg_PrettyPrintMemoryObj V5Dbg_PrettyPrinterFromType(v5dbg_pretty_printer_state_t *pState, v5dbg_memory_type_e memType);
+
+/// @brief  Register a pretty printer with a C++ type 
+#define $pretty_printer(func, type)
