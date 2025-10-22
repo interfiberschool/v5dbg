@@ -11,6 +11,9 @@ enum v5dbg_memory_type_e
   /// @brief  String which is represented by an array of characters, aka char*
   MEMORY_TYPE_CSTR,
 
+  /// @brief  Single character
+  MEMORY_TYPE_CHAR,
+
   /// @brief  String which is represented by an std::string
   MEMORY_TYPE_STDSTR,
 
@@ -34,6 +37,18 @@ enum v5dbg_memory_type_e
 
   /// @brief  pros::MotorGroup
   MEMORY_TYPE_MOTORGROUP,
+
+  /// @brief  String vector
+  MEMORY_TYPE_SVEC,
+
+  /// @brief  Integer vector
+  MEMORY_TYPE_IVEC,
+
+  /// @brief  Floating point vector
+  MEMORY_TYPE_FVEC,
+
+  /// @brief  Double vector
+  MEMORY_TYPE_DVEC,
 
   /// @brief  Begin custom region
   MEMORY_TYPE_MAX
@@ -84,6 +99,18 @@ public:
   getVariable() const
   {
     return m_variable;
+  }
+
+  [[nodiscard]] inline v5dbg_memory_type_e
+  getMemoryType() const
+  {
+    return m_memoryType;
+  }
+
+  void
+  setMemoryType(v5dbg_memory_type_e memType)
+  {
+    m_memoryType = memType;
   }
 
   /// @brief  Memory state

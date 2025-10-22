@@ -1,8 +1,6 @@
 #include "v5dbg/debugger.h"
 #include "v5dbg/msg.h"
 
-// Program state manipulation
-
 void
 V5Dbg_ServerSuspendHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 {

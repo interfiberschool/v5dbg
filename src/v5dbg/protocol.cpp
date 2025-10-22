@@ -1,6 +1,7 @@
 #include "v5dbg/protocol.h"
 #include <sstream>
 #include <vector>
+#include "v5dbg/util.h"
 
 std::string
 V5Dbg_SerializeMessage(v5dbg_message_t message)
@@ -25,7 +26,7 @@ V5Dbg_DeserializeMessage(const std::string& msg)
 
   if (msg[0] != '%')
   {
-    printf("Invalid message! No %% starting");
+    info("Invalid message! No %% starting");
     return {};
   }
 
@@ -54,7 +55,7 @@ V5Dbg_DeserializeMessage(const std::string& msg)
 
   if (collectedArguments < 2)
   {
-    printf("Invalid message! Got: %i parameters\n", collectedArguments);
+    info("Invalid message! Got: %i parameters", collectedArguments);
     return {};
   }
 
@@ -62,17 +63,17 @@ V5Dbg_DeserializeMessage(const std::string& msg)
 
   v5dbg_message_t message{};
 
-  printf("%s %s %s\n", parameters[0].c_str(), parameters[1].c_str(), parameters[2].c_str());
+  info("%s %s %s", parameters[0].c_str(), parameters[1].c_str(), parameters[2].c_str());
 
   int msgType = std::stoi(parameters[1]);
 
   if (msgType > DEBUGGER_MESSAGE_MAX - 1)
   {
-    printf("Invalid message! Unknown message type!");
+    info("Invalid message! Unknown message type!");
   }
   else if (std::stoi(parameters[0]) != V5DBG_SERVER_VERSION)
   {
-    printf("Invalid message! Protocol mismatch!");
+    info("Invalid message! Protocol mismatch!");
   }
 
   message.type = (v5dbg_message_type_e)msgType;

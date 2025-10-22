@@ -53,13 +53,32 @@ opcontrol(void)
     $ntask
     $function
 
+    int x = 0;
+
+    std::vector<int> data;
+    $expose(data);
+
+    std::vector<double> dataHist;
+    $expose(dataHist);
+
     while (true)
     {
-        int test = 100;
+        int test = x * 2;
         $expose(test);
+
+        double other = x * 2.344;
+        $expose(other);
+
+        std::string myName = "Hunter - Lead programer for 8568T";
+        $expose(myName);
+
+        data.push_back(x);
+        dataHist.push_back(other);
 
         opLoop();
 
         pros::delay(300);
+
+        x++;
     }
 }

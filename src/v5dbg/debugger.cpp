@@ -1,6 +1,7 @@
 #include "v5dbg/debugger.h"
 #include <mutex>
 #include "pros/rtos.hpp"
+#include "util.h"
 #include "v5dbg/server.h"
 #include "v5dbg/stack.h"
 
@@ -9,14 +10,14 @@ V5Dbg_SuspendProgram(v5dbg_server_state_t* pState)
 {
   std::lock_guard<pros::rtos::Mutex> g(*pState->threadListLock);
 
-  printf("SuspendState: %p\n", pState);
+  info("SuspendState: %p", pState);
 
   for (auto& task : pState->threads)
   {
     task.task.suspend();
   }
 
-  printf("ProgramSuspend\n");
+  info("ProgramSuspend");
 }
 
 void
@@ -24,7 +25,7 @@ V5Dbg_ResumeProgram(v5dbg_server_state_t* pState)
 {
   std::lock_guard<pros::rtos::Mutex> g(*pState->threadListLock);
 
-  printf("ResumeState: %p\n", pState);
+  info("ResumeState: %p\n", pState);
 
   for (auto& task : pState->threads)
   {
@@ -34,5 +35,5 @@ V5Dbg_ResumeProgram(v5dbg_server_state_t* pState)
     }
   }
 
-  printf("ProgramResume\n");
+  info("ProgramResume\n");
 }

@@ -1,4 +1,4 @@
-# 8568T's V5 Debugger
+# V5 Debugger
 V5dbg is an experimental realtime debugger for the V5 brain
 
 ## What can v5dbg do?

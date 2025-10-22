@@ -1,4 +1,5 @@
 #include "v5dbg/server.h"
+#include "v5dbg/util.h"
 #include <iostream>
 #include <mutex>
 #include "pros/rtos.h"
@@ -23,11 +24,11 @@ V5Dbg_StartServer(v5dbg_server_state_t* pState)
 {
   if (pState == nullptr)
   {
-    printf("Allocated state is nullptr\n");
+    info("Allocated state is nullptr");
     return;
   }
 
-  printf("ServerInit\n");
+  info("ServerInit");
 
   CURRENT_SERVER = pState;
 
@@ -46,7 +47,7 @@ V5Dbg_Init()
 v5dbg_thread_t*
 V5Dbg_RemoteInit(pros::rtos::Task other)
 {
-  printf("RemoteInit\n");
+  info("RemoteInit");
 
   std::lock_guard<pros::rtos::Mutex> _g(*CURRENT_SERVER->threadListLock);
 
@@ -57,7 +58,7 @@ V5Dbg_RemoteInit(pros::rtos::Task other)
 
   CURRENT_SERVER->threads.push_back(thread);
 
-  printf("RemoteInitDone\n");
+  info("RemoteInitDone");
 
   return &CURRENT_SERVER->threads.back();
 }
@@ -88,10 +89,11 @@ V5Dbg_ServerMain()
       continue;
     }
 
-    const v5dbg_message_t message = V5Dbg_NextMessage(CURRENT_SERVER);
 
     try
     {
+      const v5dbg_message_t message = V5Dbg_NextMessage(CURRENT_SERVER);
+
       bool f = false;
 
       for (auto& handler : CURRENT_SERVER->messageHandlers)
@@ -107,12 +109,12 @@ V5Dbg_ServerMain()
 
       if (!f)
       {
-        printf("Invalid message with type: %i\n", message.type);
+        info("Invalid message with type: %i", message.type);
       }
     }
     catch (std::exception& e)
     {
-      printf("MessageHandlerException: %s\n", e.what());
+      info("MessageHandlerException: %s", e.what());
     }
 
     // Debugger delay of 10ms

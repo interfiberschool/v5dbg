@@ -23,8 +23,8 @@ public:
  */
 #define $function                                                                                                      \
   __v5dbg_func:                                                                                                        \
-  static V5DbgStackMemory memory;                                                                                      \
-  V5DbgFunction _v5dbg_stack_func(__PRETTY_FUNCTION__, __FILE__, __LINE__, &&__v5dbg_func, &memory);
+  static V5DbgStackMemory _v5dbg_stack_func_memory;                                                                                      \
+  V5DbgFunction _v5dbg_stack_func(__PRETTY_FUNCTION__, __FILE__, __LINE__, &&__v5dbg_func, &_v5dbg_stack_func_memory);
 
 /**
  * @brief  Expose a scoped variable to the debugger.
@@ -37,6 +37,7 @@ public:
   _v5dbg_var_info_##target.allocationPoint.filePath = __FILE__; \
   _v5dbg_var_info_##target.allocationPoint.lineNumber = _v5dbg_var_line_##target; \
   static std::shared_ptr<V5DbgMemoryObject> _v5dbg_var_##target = std::make_shared<V5DbgMemoryObject>(_v5dbg_var_info_##target);               \
+  _v5dbg_var_##target->setMemoryType(V5Dbg_MemoryTypeFromType(typeid(target))); \
   _v5dbg_var_##target->setPtr(&target);                                                                                \
   _v5dbg_stack_func.expose(_v5dbg_var_##target);
 
