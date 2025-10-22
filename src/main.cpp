@@ -37,7 +37,7 @@ void printData(const char* s)
 
     $expose(s);
 
-    pros::lcd::print(1, "%s", s);
+    pros::lcd::print(0, "%s", s);
 }
 
 void opLoop()
@@ -45,6 +45,8 @@ void opLoop()
     $function
 
     printData("Hello World");
+
+    pros::delay(300);
 }
 
 void
@@ -75,9 +77,11 @@ opcontrol(void)
         data.push_back(x);
         dataHist.push_back(other);
 
+        printf("%i\n", x);
+
         opLoop();
 
-        pros::delay(300);
+        pros::lcd::print(1, "%i", x);
 
         x++;
     }

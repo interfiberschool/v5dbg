@@ -3,7 +3,7 @@
 
 /*
  * Example packet:
- * [PACKET_TYPE:VERSION,CLOSE,OPEN,etc]:[DEST:INCOMING(0),OUTGOING(1)]:[PACKET_DATA]
+ * [PROTOCOL_VERSION]:[PACKET_TYPE]:[PACKET_DATA]
  */
 
 /// Server protocol version
