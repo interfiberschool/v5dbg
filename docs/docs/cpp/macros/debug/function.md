@@ -24,7 +24,7 @@ The `$function` macro allows v5dbg to generate a **backtrace** to determine the 
 
 === "Example 1 (Single function)"
 
-    ```c++ hl_lines="8" linenums="1"
+    ```c++ hl_lines="7" linenums="1"
     #include "v5dbg/debug.h"
 
     void
@@ -48,7 +48,7 @@ The `$function` macro allows v5dbg to generate a **backtrace** to determine the 
 
 === "Example 2"
 
-    ```c++ hl_lines="8" linenums="1"
+    ```c++ hl_lines="6" linenums="1"
     #include "v5dbg/debug.h"
 
     void
