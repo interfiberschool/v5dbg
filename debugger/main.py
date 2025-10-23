@@ -1,33 +1,42 @@
+import argparse
 from comms import DebugServer
 from debugger import debug_stacktrace, debug_threads
-from protocol import DebuggerMessage,DebuggerMessageType
+from protocol import PROTOCOL_VERSION, DebuggerMessage,DebuggerMessageType
 
+print("Welcome to the v5dbg debugger client!")
+print("We're running protocol version: " + str(PROTOCOL_VERSION))
+print("---------------------------------------------------------\n")
+
+parser = argparse.ArgumentParser(
+    prog='v5dbg',
+    description='Debugger client for the remote v5dbg server',
+    epilog='(Written by Hunter from 8568T) https://github.com/Interfiber/v5dbg'
+)
+
+debugger = parser.add_subparsers(help='Debugger commands', dest='debugger')
+
+bt = debugger.add_parser('bt', help='Print the backtrace for the current thread', aliases=['backtrace', 'stack'])
+
+print("Connecting to local communications server...")
 server = DebugServer()
+
+print("Connected to remote debug server! Environment is ready to go!")
 
 while server.connected():
     cmd = input("% ")
 
-    if cmd == "suspend" or cmd == "pause" or cmd == "p":
-        server.proc.stdin.write(b"%1:1:0\n")
-        server.proc.stdin.flush()
+    try:
+        parsed = parser.parse_args(cmd.split())
+    except:
+        # Retry
+        continue
 
-        print("Program execution paused")
-    elif cmd == "resume" or cmd == "continue" or cmd == "c":
-        server.proc.stdin.write(b"%1:4:0\n")
-        server.proc.stdin.flush()
-
-        print("Program execution resumed")
-    elif cmd == "threads" or cmd == "th":
-        server.proc.stdin.write(b"%1:5:0\n")
-        server.proc.stdin.flush()
-
-        debug_threads(server.wait_for(DebuggerMessageType.RTHREADS))
-    elif cmd == "bt" or cmd == "backtrace" or cmd == "stack":
+    if parsed.debugger == 'bt':
         server.proc.stdin.write(b"%1:7:0\n")
         server.proc.stdin.flush()
 
         result = server.get_msg_range(DebuggerMessageType.RVSTACK, DebuggerMessageType.VSTACK_END)
 
         debug_stacktrace(result)
-    else:
-        print("Unknown command:", cmd)
+
+print("Disconnected from comms server, exiting...")
