@@ -1,5 +1,5 @@
 # V5 Debugger
-The only true debugger™.
+The only true VEX debugger™
 
 ## What is v5dbg?
 V5dbg is an **experimental** debugger for the V5 brain used in V5 Robotics competitions.
