@@ -42,6 +42,7 @@ theme:
     - navigation.path
     - content.code.copy
     - navigation.top
+    - navigation.instant
     - content.code.annotate
     - toc.integrate
 

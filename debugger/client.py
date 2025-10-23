@@ -1,12 +1,12 @@
-from enum import IntEnum
+from enum import IntFlag, auto
 from comms import DebugServer
 from protocol import DebuggerMessage, DebuggerMessageType
 from utils import print_list
 
 # Debugger state bitflags
-class DebuggerState(IntEnum):
-    RUN = 1 << 0
-    SUSPEND = 1 << 2
+class DebuggerState(IntFlag):
+    RUN = auto()
+    SUSPEND = auto()
 
 # Thread managed by the remote v5dbg server 
 class DebuggerThread:
@@ -29,6 +29,7 @@ class DebuggerClient:
 
     def __init__(self, server: DebugServer):
         self.server = server
+        self.state = DebuggerState.RUN
 
         self.active_thread = DebuggerThread(self.server, 0)
 
@@ -40,9 +41,21 @@ class DebuggerClient:
     def switch_thread(self, thread_id: int):
         self.active_thread = DebuggerThread(self.server, thread_id)
 
+    # Print debugger state
+    def print_state(self):
+        if self.state & DebuggerState.RUN:
+            print("Program is: RUNNING")
+
+        if self.state & DebuggerState.SUSPEND:
+            print("Program is: SUSPENDED")
+
     # Print out the current threads stack trace
     def print_stacktrace(self):
         # Ask debugger for virtual callstack
+
+        if self.state & DebuggerState.RUN:
+            print("Program must be in the SUSPEND state for a stacktrace to be generated")
+            return
 
         vstack_for = DebuggerMessage(DebuggerMessageType.VSTACK_FOR)
         vstack_for.data = str(self.active_thread.thread_id)
@@ -67,6 +80,29 @@ class DebuggerClient:
         stacktrace.reverse() # Reverse so the newest function is on top; the debug server has the newest function on the bottom
         print_list(stacktrace)
 
+    # Suspend all supervised threads
+    def suspend(self):
+        if self.state & DebuggerState.SUSPEND:
+            print("Program is not in the RUN state")
+            return False
+
+        self.state |= DebuggerState.SUSPEND
+        self.state = self.state & ~DebuggerState.RUN
+
+        suspend = DebuggerMessage(DebuggerMessageType.SUSPEND)
+        self.send_msg(suspend)
+    
+    # Resume all supervised threads
+    def resume(self):
+        if self.state & DebuggerState.RUN:
+            print("Program is not in the SUSPEND state")
+            return False
+
+        self.state |= DebuggerState.RUN
+        self.state = self.state & ~DebuggerState.SUSPEND
+
+        resume = DebuggerMessage(DebuggerMessageType.RESUME)
+        self.send_msg(resume)
 
     # Print out the list of supervised threads to the console
     def print_threads(self):
@@ -95,11 +131,16 @@ class DebuggerClient:
             thread_blob_split.reverse()
 
             i = 0
+            c_thread = False
             for blob in thread_blob_split:
                 if i % 2 == 0:
+                    if int(blob) == self.active_thread.thread_id:
+                        c_thread = True
+
                     print(f"({blob}) ", end="")
                 else:
-                    print(blob)
+                    print(f"{blob} {"[Current]" if c_thread else ""}")
+                    c_thread = False
 
                 i += 1
 

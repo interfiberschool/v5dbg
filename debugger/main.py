@@ -26,7 +26,12 @@ parser = argparse.ArgumentParser(
 
 debugger = parser.add_subparsers(help='Debugger commands', dest='debugger')
 
+help = debugger.add_parser('help', help="Show this page", aliases=['h', '?'])
+
 bt = debugger.add_parser('bt', help='Print the backtrace for the current thread', aliases=['backtrace', 'stack'])
+suspend = debugger.add_parser('suspend', help='Suspend the execution of all supervised threads', aliases=['halt', 's'])
+resume = debugger.add_parser('resume', help='Resume the execution of all supervised threads', aliases=['continue', 'c'])
+state = debugger.add_parser('state', help='Print the debugger\'s state')
 
 thread = debugger.add_parser('thread', help='Manage supervised threads')
 thread_sub = thread.add_subparsers(help='Thread commands', dest="thread")
@@ -66,10 +71,19 @@ while server.connected():
         # Retry
         continue
 
-    print(parsed)
-
     if parsed.debugger == 'bt' or parsed.debugger == 'backtrace' or parsed.debugger == 'stack':
         client.print_stacktrace()
+    elif parsed.debugger == 'suspend' or parsed.debugger == 'halt' or parsed.debugger == 's':
+        if client.suspend() == None:
+            print("All supervised threads have been suspended")
+    elif parsed.debugger == 'resume' or parsed.debugger == 'continue' or parsed.debugger == 'c':
+        if client.resume() == None:
+            print("All supervised threads have resumed execution")
+    elif parsed.debugger == 'state':
+        client.print_state()
+
+    if parsed.debugger == 'help' or parsed.debugger == 'h' or parsed.debugger == '?':
+        parser.print_help()
 
     if parsed.debugger == 'thread':
         if parsed.thread == 'set':
@@ -80,8 +94,5 @@ while server.connected():
             client.print_threads()
         elif parsed.thread == None:
             client.print_threads()
-
-            print(f"\nActive thread ID: {client.active_thread.thread_id}")
-
 
 print("Disconnected from comms server, exiting...")
