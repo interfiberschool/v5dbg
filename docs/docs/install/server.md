@@ -22,7 +22,7 @@ Please read through the requirements carefully
 Download the latest `v5dbg_server.zip` from the [releases page](https://github.com/Interfiber/v5dbg/releases) on GitHub, now extract this archive into your project folder.
 
 !!! note "Pick the correct file!"
-    Make sure to download **`v5dbg_server.zip`**, and **not** tip`v5dbg_debugger.zip`. 
+    Make sure to download **`v5dbg_server.zip`**, and **not** `v5dbg_debugger.zip`. 
 
 ??? question "Debugger vs Debug Server"
     The debug server is the program that executes **on the brain** and performs all of the internal debug logic.
