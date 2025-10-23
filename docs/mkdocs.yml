@@ -5,26 +5,27 @@ repo_name: Interfiber/v5dbg
 nav:
   - Home: index.md
   - Getting Started:
-    - Installation: install.md
-    - Integration: integration.md
+    - Installation: install/server.md
+    - Integration: getting_started/integration.md
   - C++ Documentation:
-    - Macros: macros.md
-    - Functions: functions.md
-    - Classes: classes.md
+    - Header files: cpp/header_files.md
+    - Macros:
+      - Debug macros:
+        - $function: cpp/macros/debug/function.md
+        - $ntask: cpp/macros/debug/ntask.md
   - Debugger:
-    - Installation: install_debugger.md
-    - Commands: commands.md
+    - Installation: install/debugger.md
+    - Commands:
+      - suspend: debugger/cmds/suspend.md
   - Advanced Topics:
-    - Pretty Printers: pretty_printers.md
-    - Wireless Debugging: wireless.md
+    - Pretty Printers: advanced/pretty_printers.md
+    - Wireless Debugging: advanced/wireless.md
   - Engineering:
     - Debug Server:
       - Stack traces: debug_server/stack.md
       - Exposed memory: debug_server/exposed_memory.md
     - Debugger:
       - Comms server: debugger/comms.md
-      - Handling commands:
-        - suspend: debugger/cmds/suspend.md
     - Protocol Documentation:
       - V1 (Current): protocol/v1.md
 
@@ -32,6 +33,8 @@ theme:
   name: material
   font:
     code: JetBrains Mono
+  icon:
+    logo: material/bug
   palette:
     primary: black
     scheme: slate
@@ -39,6 +42,9 @@ theme:
     - navigation.tabs
     - navigation.path
     - content.code.copy
+    - navigation.top
+    - content.code.annotate
+    - toc.integrate
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -57,3 +63,5 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tabbed:
+      alternate_style: true
