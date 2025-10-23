@@ -9,25 +9,25 @@
       
       
       
-        <link rel="prev" href="../functions/">
+        <link rel="prev" href="../../getting_started/integration/">
       
       
-        <link rel="next" href="../install_debugger/">
+        <link rel="next" href="../macros/debug/function/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
     
     
       
-        <title>Classes - V5 Debugger</title>
+        <title>Header files - V5 Debugger</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.84d31ad4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,7 +46,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -69,6 +69,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#header-files" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -79,10 +84,10 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="V5 Debugger" class="md-header__button md-logo" aria-label="V5 Debugger" data-md-component="logo">
+    <a href="../.." title="V5 Debugger" class="md-header__button md-logo" aria-label="V5 Debugger" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 12h-4v-2h4m0 6h-4v-2h4m6-6h-2.81a6 6 0 0 0-1.82-1.96L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -99,7 +104,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Classes
+              Header files
             
           </span>
         </div>
@@ -184,7 +189,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -205,7 +210,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../install/" class="md-tabs__link">
+        <a href="../../install/server/" class="md-tabs__link">
           
   
   
@@ -227,7 +232,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../macros/" class="md-tabs__link">
+        <a href="./" class="md-tabs__link">
           
   
   
@@ -247,7 +252,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../install_debugger/" class="md-tabs__link">
+        <a href="../../install/debugger/" class="md-tabs__link">
           
   
   
@@ -267,7 +272,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../pretty_printers/" class="md-tabs__link">
+        <a href="../../advanced/pretty_printers/" class="md-tabs__link">
           
   
   
@@ -294,7 +299,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../debug_server/stack.md" class="md-tabs__link">
+        <a href="../../debug_server/stack/" class="md-tabs__link">
           
   
   
@@ -329,12 +334,14 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="V5 Debugger" class="md-nav__button md-logo" aria-label="V5 Debugger" data-md-component="logo">
+    <a href="../.." title="V5 Debugger" class="md-nav__button md-logo" aria-label="V5 Debugger" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 12h-4v-2h4m0 6h-4v-2h4m6-6h-2.81a6 6 0 0 0-1.82-1.96L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20z"/></svg>
 
     </a>
     V5 Debugger
@@ -361,7 +368,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -424,7 +431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../install/" class="md-nav__link">
+      <a href="../../install/server/" class="md-nav__link">
         
   
   
@@ -447,7 +454,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../integration/" class="md-nav__link">
+      <a href="../../getting_started/integration/" class="md-nav__link">
         
   
   
@@ -520,52 +527,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../macros/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Macros
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../functions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Functions
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -575,18 +536,164 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
-    Classes
+    Header files
     
   </span>
   
 
       </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Macros
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Macros
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_1" id="__nav_3_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Debug macros
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Debug macros
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../macros/debug/function/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    $function
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../macros/debug/ntask/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    $ntask
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -648,7 +755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../install_debugger/" class="md-nav__link">
+      <a href="../../install/debugger/" class="md-nav__link">
         
   
   
@@ -670,9 +777,23 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../commands/" class="md-nav__link">
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
   
   
   <span class="md-ellipsis">
@@ -681,7 +802,42 @@
   </span>
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Commands
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debugger/cmds/suspend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    suspend
+    
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -742,7 +898,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pretty_printers/" class="md-nav__link">
+      <a href="../../advanced/pretty_printers/" class="md-nav__link">
         
   
   
@@ -765,7 +921,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../wireless/" class="md-nav__link">
+      <a href="../../advanced/wireless/" class="md-nav__link">
         
   
   
@@ -877,7 +1033,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debug_server/stack.md" class="md-nav__link">
+      <a href="../../debug_server/stack/" class="md-nav__link">
         
   
   
@@ -900,7 +1056,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debug_server/exposed_memory.md" class="md-nav__link">
+      <a href="../../debug_server/exposed_memory/" class="md-nav__link">
         
   
   
@@ -972,7 +1128,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debugger/comms.md" class="md-nav__link">
+      <a href="../../debugger/comms/" class="md-nav__link">
         
   
   
@@ -983,78 +1139,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_6_2_2" id="__nav_6_2_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    Handling commands
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            Handling commands
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../debugger/cmds/suspend.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    suspend
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1116,7 +1200,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../protocol/v1/" class="md-nav__link">
+      <a href="../../protocol/v1/" class="md-nav__link">
         
   
   
@@ -1154,22 +1238,6 @@
               </div>
             
             
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           
             <div class="md-content" data-md-component="content">
@@ -1182,9 +1250,57 @@
   
 
 
-  <h1>Classes</h1>
-
-
+<h1 id="header-files">Header files</h1>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v5dbg/debug.h</code></td>
+<td>All debug macros for user programs</td>
+</tr>
+<tr>
+<td><code>v5dbg/memory.h</code></td>
+<td>Memory object handling</td>
+</tr>
+<tr>
+<td><code>v5dbg/protocol.h</code></td>
+<td>Debug protocol spec</td>
+</tr>
+<tr>
+<td><code>v5dbg/debinfo.h</code></td>
+<td>Runtime debug info</td>
+</tr>
+<tr>
+<td><code>v5dbg/pretty.h</code></td>
+<td>Pretty printer functions</td>
+</tr>
+<tr>
+<td><code>v5dbg/debugger.h</code></td>
+<td>Debugger functions (suspend, resume)</td>
+</tr>
+<tr>
+<td><code>v5dbg/msg.h</code></td>
+<td>Message handling definitions</td>
+</tr>
+<tr>
+<td><code>v5dbg/stack.h</code></td>
+<td>Stack reconstruction</td>
+</tr>
+<tr>
+<td><code>v5dbg/server.h</code></td>
+<td>Debug server implementation</td>
+</tr>
+<tr>
+<td><code>v5dbg/util.h</code></td>
+<td>Utility functions</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -1204,6 +1320,12 @@
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
         
       </main>
       
@@ -1233,10 +1355,10 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.path", "content.code.copy"], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.path", "content.code.copy", "navigation.top", "content.code.annotate", "toc.integrate"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
       
     
   </body>
