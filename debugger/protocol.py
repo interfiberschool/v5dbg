@@ -25,7 +25,15 @@ class DebuggerMessage():
     # The third parameter....
     data: str
 
-    def __init__(self, data: str):
+    def __init__(self, msg_type: DebuggerMessageType):
+        self.msg_type = msg_type
+        self.data = str()
+        self.parameters = list()
+
+    @classmethod
+    def deserialize(self, data: str):
+        msg = DebuggerMessage(0)
+
         if data[0] != '%': # Should never executed since the DebugServer checks for this to determine messages
             raise Exception("Incoming debugger message does not start with a '%'")
 
@@ -57,6 +65,12 @@ class DebuggerMessage():
         if int(parameters[0]) != PROTOCOL_VERSION:
             raise Exception("Debugger message has invalid protocol version, expected: " + PROTOCOL_VERSION + " and got: " + parameters[0])
 
-        self.msg_type = DebuggerMessageType(int(parameters[1]))
-        self.parameters = parameters
-        self.data = self.parameters[2]
+        msg.msg_type = DebuggerMessageType(int(parameters[1]))
+        msg.parameters = parameters
+        msg.data = msg.parameters[2]
+
+        return msg
+
+    # Return a serialized version of this message which is ready to be written to the server
+    def serialize(self):
+        return f"%{PROTOCOL_VERSION}:{self.msg_type}:{self.data}\n"

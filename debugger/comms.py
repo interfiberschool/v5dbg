@@ -16,7 +16,7 @@ class DebugServer:
     # NOTE: If get_msg_range is not called enough it will be auto cleaned by the message IO thread
     message_trace: list[DebuggerMessage]
 
-    def __init__(self):
+    def __init__(self, wait_open: bool = True):
         self.server_path = find_server()
 
         self.proc = subprocess.Popen([self.server_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -33,14 +33,21 @@ class DebugServer:
         self.io.start()
 
         print("Waiting for user program execution on target to begin....")
-        print("  * TIP! Your user program must be started after the debugger (this program) is started")
-        self.wait_for(DebuggerMessageType.OPEN)
+
+        if wait_open:
+            print("  * TIP! Your user program must be started after the debugger (this program) is started")
+            self.wait_for(DebuggerMessageType.OPEN)
 
         print("Target has begun execution of a v5dbg compatible program!")
 
     # Return True if we are connected to the remote debug server
     def connected(self):
         return self.proc.poll() == None
+    
+    # Write `buffer` to the remote servers incoming data stream and flush
+    def write(self, buffer: str):
+        self.proc.stdin.write(buffer.encode())
+        self.proc.stdin.flush()
 
     # Stockpile messages until msg_type is found
     # NOTE: This function blocks until completion, use carefully
@@ -88,17 +95,23 @@ class DebugServer:
         self.waits[msg_type] = thread.Condition()
 
         with self.waits[msg_type]:
-            self.waits[msg_type].wait()
+            self.waits[msg_type].wait(300)
 
         self.waits.pop(msg_type)
 
         if count == -1:
-            return self.wait_results[msg_type]
+            results = self.wait_results[msg_type]
+            self.wait_results.pop(msg_type)
+
+            return results
         elif count != len(self.wait_results[msg_type]):
             print("re-run wait_for to meet count")
             return self.wait_for(msg_type, count)
         elif count == len(self.wait_results[msg_type]):
-            return self.wait_results[msg_type]
+            results = self.wait_results[msg_type]
+            self.wait_results.pop(msg_type)
+
+            return results
 
     # IO thread for reading messages from the debug server (remote)
     def io_thread(self):
@@ -113,7 +126,7 @@ class DebugServer:
             if data[0] != '%':
                 continue
 
-            msg = DebuggerMessage(data)
+            msg = DebuggerMessage.deserialize(data)
 
             if len(self.message_trace) + 1 > self.MESSAGE_TRACE_MAX:
                 self.message_trace.clear()

@@ -1,4 +1,5 @@
 #include "v5dbg/server.h"
+#include "protocol.h"
 #include "v5dbg/util.h"
 #include <iostream>
 #include <mutex>
@@ -80,6 +81,12 @@ V5Dbg_ServerMain()
 
   // Configure message handler list
   V5Dbg_PrimeServerMessageHandlers(CURRENT_SERVER);
+
+  v5dbg_message_t open{};
+  open.type = DEBUGGER_MESSAGE_OPEN;
+  open.paramBuffer = "SERVEROPEN";
+
+  printf("%s\n", V5Dbg_SerializeMessage(open).c_str());
 
   while (CURRENT_SERVER->canRun)
   {
