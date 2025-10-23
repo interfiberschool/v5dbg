@@ -1,6 +1,7 @@
 from enum import IntEnum
 from comms import DebugServer
 from protocol import DebuggerMessage, DebuggerMessageType
+from utils import print_list
 
 # Debugger state bitflags
 class DebuggerState(IntEnum):
@@ -38,6 +39,34 @@ class DebuggerClient:
     # Switch the active thread to `thread_id`
     def switch_thread(self, thread_id: int):
         self.active_thread = DebuggerThread(self.server, thread_id)
+
+    # Print out the current threads stack trace
+    def print_stacktrace(self):
+        # Ask debugger for virtual callstack
+
+        vstack_for = DebuggerMessage(DebuggerMessageType.VSTACK_FOR)
+        vstack_for.data = str(self.active_thread.thread_id)
+
+        self.send_msg(vstack_for)
+
+        # Compile message list
+
+        stacktrace = []
+        messages = self.server.get_msg_range(DebuggerMessageType.RVSTACK, DebuggerMessageType.VSTACK_END)
+
+        for x in messages:
+            if x.msg_type == DebuggerMessageType.VSTACK_END:
+                break
+
+            if x.msg_type == DebuggerMessageType.RVSTACK:
+                stacktrace.append(x.data)
+
+        print("Current thread:")
+        print("---------------")
+
+        stacktrace.reverse() # Reverse so the newest function is on top; the debug server has the newest function on the bottom
+        print_list(stacktrace)
+
 
     # Print out the list of supervised threads to the console
     def print_threads(self):

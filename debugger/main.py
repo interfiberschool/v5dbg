@@ -3,7 +3,6 @@ import atexit
 import os
 import client
 from comms import DebugServer
-from debugger import debug_stacktrace, debug_threads
 from protocol import PROTOCOL_VERSION, DebuggerMessage,DebuggerMessageType
 import readline
 
@@ -70,12 +69,7 @@ while server.connected():
     print(parsed)
 
     if parsed.debugger == 'bt' or parsed.debugger == 'backtrace' or parsed.debugger == 'stack':
-        server.proc.stdin.write(b"%1:7:0\n")
-        server.proc.stdin.flush()
-
-        result = server.get_msg_range(DebuggerMessageType.RVSTACK, DebuggerMessageType.VSTACK_END)
-
-        debug_stacktrace(result)
+        client.print_stacktrace()
 
     if parsed.debugger == 'thread':
         if parsed.thread == 'set':
