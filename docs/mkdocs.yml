@@ -10,9 +10,8 @@ nav:
   - C++ Documentation:
     - Header files: cpp/header_files.md
     - Macros:
-      - Debug macros:
-        - $function: cpp/macros/debug/function.md
-        - $ntask: cpp/macros/debug/ntask.md
+      - $function: cpp/macros/debug/function.md
+      - $ntask: cpp/macros/debug/ntask.md
   - Debugger:
     - Installation: install/debugger.md
     - Commands:
