@@ -4,9 +4,8 @@ All macros should be defined in the `v5dbg/debug.h` header file, **make sure to 
 ## `$function`
 Makes the currently scoped function debuggable.
 
-**NOTE**: Without this function 99% of program debugging functions will not work, and this frame will be hidden from stack traces.
-
-#### Example
+!!! note inline end
+    Without this function 99% of program debugging functions **WILL NOT WORK**, and this frame will be hidden from stack traces.
 
 ```c++
 // Some dummy functions to demonstrate $function
@@ -40,9 +39,9 @@ driveTime(int ms)
 ## `$ntask`
 Informs the debugger of a new task to supervise, this should be the first line of code within every function.
 
-**NOTE**: When `$ntask` falls out of scope the task is automatically dropped from the debugger making it undebuggable.
+!!! note inline end
+    When `$ntask` falls out of scope the task is automatically dropped from the debugger making it **undebuggable**
 
-#### Example
 ```c++
 void
 opcontrol()
@@ -61,7 +60,6 @@ opcontrol()
 ## `$expose(t)`
 Expose a scoped variable to the debug server for inspection.
 
-#### Example
 ```c++
 void
 opcontrol()
@@ -86,7 +84,6 @@ opcontrol()
 ## `$break`
 Place non-conditional breakpoint at this location in the program. This breakpoint can be enabled by referencing its file and line number.
 
-#### Example
 ```c++
 void opcontrol()
 {
@@ -107,9 +104,9 @@ void opcontrol()
 ## `$cbreak(cond)`
 Place conditional breakpoint at this location in the program. This breakpoint can be enabled by referencing its file and line number.
 
-**NOTE:** You still have to enable this breakpoint but it will only fire when the condition provided is true.
+!!! note inline end
+    You still have to enable this breakpoint but it will only fire when the condition provided is true.
 
-#### Example
 ```c++
 void opcontrol()
 {

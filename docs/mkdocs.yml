@@ -1,4 +1,6 @@
 site_name: V5 Debugger
+repo_url: https://github.com/Interfiber/v5dbg
+repo_name: Interfiber/v5dbg
 
 nav:
   - Home: index.md
@@ -15,15 +17,24 @@ nav:
   - Advanced Topics:
     - Pretty Printers: pretty_printers.md
     - Wireless Debugging: wireless.md
-  - Protocol Documentation:
-    - V1 (Current): protocol/v1.md
+  - Engineering:
+    - Debug Server:
+      - Stack traces: debug_server/stack.md
+      - Exposed memory: debug_server/exposed_memory.md
+    - Debugger:
+      - Comms server: debugger/comms.md
+      - Handling commands:
+        - suspend: debugger/cmds/suspend.md
+    - Protocol Documentation:
+      - V1 (Current): protocol/v1.md
 
 theme:
   name: material
   font:
     code: JetBrains Mono
   palette:
-    primary: red
+    primary: black
+    scheme: slate
   features:
     - navigation.tabs
     - navigation.path
@@ -37,3 +48,12 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
