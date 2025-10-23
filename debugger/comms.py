@@ -18,7 +18,6 @@ class DebugServer:
 
     def __init__(self):
         self.server_path = find_server()
-        print("  * Starting comms server from: " + self.server_path)
 
         self.proc = subprocess.Popen([self.server_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.waits = dict()
@@ -33,7 +32,8 @@ class DebugServer:
         self.io = thread.Thread(target=self.io_thread)
         self.io.start()
 
-        print("Waiting for program execution on target to begin....")
+        print("Waiting for user program execution on target to begin....")
+        print("  * TIP! Your user program must be started after the debugger (this program) is started")
         self.wait_for(DebuggerMessageType.OPEN)
 
         print("Target has begun execution of a v5dbg compatible program!")
