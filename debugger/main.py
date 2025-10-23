@@ -1,7 +1,12 @@
 import argparse
+import atexit
+import os
 from comms import DebugServer
 from debugger import debug_stacktrace, debug_threads
 from protocol import PROTOCOL_VERSION, DebuggerMessage,DebuggerMessageType
+import readline
+
+HISTORY_LENGTH = 1000
 
 print("Welcome to the v5dbg debugger client!")
 print("We're running protocol version: " + str(PROTOCOL_VERSION))
@@ -21,6 +26,19 @@ print("Connecting to local communications server...")
 server = DebugServer()
 
 print("Connected to remote debug server! Environment is ready to go!")
+
+histfile = os.path.join(os.path.expanduser("~"), ".v5dbg_history")
+
+print(f"Your command history is being loaded from '{histfile}' with a total of {HISTORY_LENGTH} items")
+
+try:
+    readline.read_history_file(histfile)
+    # default history len is -1 (infinite), which may grow unruly
+    readline.set_history_length(HISTORY_LENGTH)
+except FileNotFoundError:
+    pass
+
+atexit.register(readline.write_history_file, histfile)
 
 while server.connected():
     cmd = input("% ")

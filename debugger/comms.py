@@ -1,5 +1,6 @@
 # Handles debugger -> debug server communication and various utils around messaging
 
+import time
 from utils import find_server
 from protocol import DebuggerMessage,DebuggerMessageType
 import threading as thread
@@ -18,10 +19,17 @@ class DebugServer:
 
     def __init__(self):
         self.server_path = find_server()
-        self.proc = subprocess.Popen(['./v5dbg-server/target/debug/v5dbg-server'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        self.proc = subprocess.Popen(['./v5dbg-server/target/debug/v5dbg-server'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.waits = dict()
         self.wait_results = dict()
         self.message_trace = list()
+
+        time.sleep(2) # Kinda lazy but we need to wait for the process to try and connect to the server, i'll remove later with the introduction of OPEN messages
+
+        if self.proc.poll() != None:
+            print("Failed to start and communicate with v5dbg comms server!")
+            print("Exit data: " + self.proc.stderr.readline().decode())
+            exit(-1)
 
         self.io = thread.Thread(target=self.io_thread)
         self.io.start()
