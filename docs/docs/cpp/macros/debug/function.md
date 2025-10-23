@@ -75,6 +75,6 @@ The `$function` macro allows v5dbg to generate a **backtrace** to determine the 
 
 
     1. For more information on `$ntask` look [here](./ntask.md)
-    2. Now our `printAndSleep` will be the second item in the callstack, it should now look like this:
+    2. Now our `printAndSleep` function will be the second item in the callstack, it should now look like this:
         - `void printAndSleep(const std::string &p)`
         - `void opcontrol()`
