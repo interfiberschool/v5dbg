@@ -1,6 +1,5 @@
 # Handles debugger -> debug server communication and various utils around messaging
 
-import time
 from utils import find_server
 from protocol import DebuggerMessage,DebuggerMessageType
 import threading as thread

@@ -1,0 +1,39 @@
+site_name: V5 Debugger
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: install.md
+    - Integration: integration.md
+  - C++ Documentation:
+    - Macros: macros.md
+    - Functions: functions.md
+    - Classes: classes.md
+  - Debugger:
+    - Installation: install_debugger.md
+    - Commands: commands.md
+  - Advanced Topics:
+    - Pretty Printers: pretty_printers.md
+    - Wireless Debugging: wireless.md
+  - Protocol Documentation:
+    - V1 (Current): protocol/v1.md
+
+theme:
+  name: material
+  font:
+    code: JetBrains Mono
+  palette:
+    primary: red
+  features:
+    - navigation.tabs
+    - navigation.path
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

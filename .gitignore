@@ -17,3 +17,7 @@ temp.errors
 .d/
 
 v5dbg-server/target/*
+docs/site/*
+docs/lib64/*
+docs/lib/*
+docs/bin/*
