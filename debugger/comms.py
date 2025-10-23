@@ -19,12 +19,12 @@ class DebugServer:
 
     def __init__(self):
         self.server_path = find_server()
-        self.proc = subprocess.Popen(['./v5dbg-server/target/debug/v5dbg-server'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("  * Starting comms server from: " + self.server_path)
+
+        self.proc = subprocess.Popen([self.server_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.waits = dict()
         self.wait_results = dict()
         self.message_trace = list()
-
-        time.sleep(2) # Kinda lazy but we need to wait for the process to try and connect to the server, i'll remove later with the introduction of OPEN messages
 
         if self.proc.poll() != None:
             print("Failed to start and communicate with v5dbg comms server!")
@@ -33,6 +33,11 @@ class DebugServer:
 
         self.io = thread.Thread(target=self.io_thread)
         self.io.start()
+
+        print("Waiting for program execution on target to begin....")
+        self.wait_for(DebuggerMessageType.OPEN)
+
+        print("Target has begun execution of a v5dbg compatible program!")
 
     # Return True if we are connected to the remote debug server
     def connected(self):
