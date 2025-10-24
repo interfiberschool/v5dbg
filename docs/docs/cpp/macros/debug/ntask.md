@@ -1,5 +1,5 @@
 ---
-summary: Documentation for the $ntask macro which is used to supervise the current task and allow for debugging functionality
+description: Documentation for the $ntask macro which is used to supervise the current task and allow for debugging functionality
 ---
 
 # `$ntask`

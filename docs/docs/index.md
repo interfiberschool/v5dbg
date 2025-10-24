@@ -1,5 +1,5 @@
 ---
-summary: The only true VEX debugger™
+description: The only true VEX debugger™
 ---
 
 # V5 Debugger

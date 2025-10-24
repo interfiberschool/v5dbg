@@ -1,5 +1,5 @@
 ---
-summary: Reference for all of the header files in v5dbg and their usage
+description: Reference for all of the header files in v5dbg and their usage
 ---
 
 # Header files

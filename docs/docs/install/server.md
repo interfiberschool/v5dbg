@@ -1,5 +1,5 @@
 ---
-summary: Install the v5dbg debug server into your PROs project
+description: Install the v5dbg debug server into your PROs project
 ---
 
 # Installation

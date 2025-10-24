@@ -1,5 +1,5 @@
 ---
-summary: Documentation for the $function macro which is used to mark the entrance of functions
+description: Documentation for the $function macro which is used to mark the entrance of functions
 ---
 
 # `$function`
