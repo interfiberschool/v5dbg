@@ -3,7 +3,7 @@
 !!! abstract "Version information"
     Introduced in version **v0.1** :octicons-tag-24:
 
-    This macro is considered **unavailable** :octicons-x-circle-fill-24:
+    This macro is considered **stable** :octicons-check-24:
 
 ## About
 
@@ -16,6 +16,9 @@ The `$ntask` macro informs the debug server of a newly spawned thread/task. It s
 
 !!! danger "Required environment"
     - This macro **requires** the debug server to have been initialized before being called.
+
+!!! bug "Task names"
+    Make sure that every task has a **unique name** otherwise tasks can be confused internally by the debug server.
 
 ## Example
 

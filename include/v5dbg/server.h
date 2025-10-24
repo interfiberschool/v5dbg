@@ -60,6 +60,9 @@ v5dbg_thread_t* V5Dbg_Init();
 /// @brief  Can be called to add another task object to the debugger
 v5dbg_thread_t* V5Dbg_RemoteInit(pros::rtos::Task other);
 
+/// @brief  Stop supervising the given thread
+void V5Dbg_Leave(v5dbg_thread_t* pThread);
+
 /// @brief  Allocate a new server state object
 v5dbg_server_state_t V5Dbg_AllocateServerState();
 

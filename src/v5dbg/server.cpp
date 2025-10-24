@@ -45,6 +45,21 @@ V5Dbg_Init()
   return V5Dbg_RemoteInit(pros::rtos::Task::current());
 }
 
+void
+V5Dbg_Leave(v5dbg_thread_t* pThread)
+{
+  std::lock_guard<pros::rtos::Mutex> _g(*CURRENT_SERVER->threadListLock);
+
+  for (int i = 0; i < CURRENT_SERVER->threads.size(); i++)
+  {
+    if (CURRENT_SERVER->threads[i].name == pThread->name)
+    {
+      CURRENT_SERVER->threads.erase(CURRENT_SERVER->threads.begin()+i);
+      return;
+    }
+  }
+}
+
 v5dbg_thread_t*
 V5Dbg_RemoteInit(pros::rtos::Task other)
 {

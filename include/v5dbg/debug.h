@@ -1,4 +1,5 @@
 #pragma once
+#include "v5dbg/debinfo.h"
 #include "v5dbg/server.h"
 #include "v5dbg/stack.h"
 
@@ -9,12 +10,15 @@
 class V5DbgAutoTask
 {
 public:
-  V5DbgAutoTask() { V5Dbg_Init(); }
+  V5DbgAutoTask() { m_thread = V5Dbg_Init(); }
 
   ~V5DbgAutoTask()
   {
-    // FIXME: Call V5Dbg_Leave
+    V5Dbg_Leave(m_thread);
   }
+
+private:
+  v5dbg_thread_t *m_thread;
 };
 
 /**
