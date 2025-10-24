@@ -26,12 +26,14 @@ class DebuggerClient:
     state: DebuggerState
     active_thread: DebuggerThread
     server: DebugServer
+    current_frame: int
 
     def __init__(self, server: DebugServer):
         self.server = server
         self.state = DebuggerState.RUN
 
         self.active_thread = DebuggerThread(self.server, 0)
+        self.current_frame = 0
 
     # Send a message to the remote server
     def send_msg(self, message: DebuggerMessage):
@@ -51,14 +53,24 @@ class DebuggerClient:
 
     def print_memory(self):
         mem = DebuggerMessage(DebuggerMessageType.LMEM_FOR)
-        mem.data = "0,0"
+        mem.data = str(self.current_frame) + "," + str(self.active_thread.thread_id)
 
         self.send_msg(mem)
 
         memory = self.server.get_msg_range(DebuggerMessageType.RLMEM, DebuggerMessageType.LMEM_END)
 
         for x in memory:
-            print(x.data)
+            if x.msg_type != DebuggerMessageType.RLMEM:
+                continue
+
+            data_split = x.data.split(",")
+
+            debinfo = data_split[len(data_split) - 1] # Debug info is the last item in the split array
+
+            pretty_printer = data_split[0:len(data_split) - 1] # Variables like vectors have spaces so just merge everything up until (not including) the final one into a string again
+
+            print(", ".join(pretty_printer))
+            print(f"    Allocated at {debinfo}")
 
     # Print out the current threads stack trace
     def print_stacktrace(self):

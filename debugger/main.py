@@ -4,7 +4,14 @@ import os
 import client
 from comms import DebugServer
 from protocol import PROTOCOL_VERSION, DebuggerMessage,DebuggerMessageType
-import readline
+import platform
+
+ENABLE_READLINE = True
+
+if platform.system() != 'Windows':
+  import readline
+else:
+    ENABLE_READLINE = False
 
 # CLI arg parser
 program = argparse.ArgumentParser(prog='v5dbg',description='Debugger client for the remote v5dbg server')
@@ -16,6 +23,7 @@ HISTORY_LENGTH = 1000
 
 print("Welcome to the v5dbg debugger client!")
 print("We're running protocol version: " + str(PROTOCOL_VERSION))
+print("Current platform: " + platform.platform() + " on " + platform.architecture()[1] + " " + platform.architecture()[0] + " running Python " + platform.python_version())
 print("---------------------------------------------------------\n")
 
 parser = argparse.ArgumentParser(
@@ -33,6 +41,7 @@ suspend = debugger.add_parser('suspend', help='Suspend the execution of all supe
 resume = debugger.add_parser('resume', help='Resume the execution of all supervised threads', aliases=['continue', 'c'])
 state = debugger.add_parser('state', help='Print the debugger\'s state')
 mem = debugger.add_parser('mem', help='View local stack memory')
+exit = debugger.add_parser('exit', help='Exit the debugger and disconnect from the comms server', aliases=['q'])
 
 thread = debugger.add_parser('thread', help='Manage supervised threads')
 thread_sub = thread.add_subparsers(help='Thread commands', dest="thread")
@@ -52,14 +61,15 @@ histfile = os.path.join(os.path.expanduser("~"), ".v5dbg_history")
 
 print(f"Your command history is being loaded from '{histfile}' with a total of {HISTORY_LENGTH} items")
 
-try:
-    readline.read_history_file(histfile)
-    # default history len is -1 (infinite), which may grow unruly
-    readline.set_history_length(HISTORY_LENGTH)
-except FileNotFoundError:
+if ENABLE_READLINE:
+  try:
+      readline.read_history_file(histfile)
+      # default history len is -1 (infinite), which may grow unruly
+      readline.set_history_length(HISTORY_LENGTH)
+  except FileNotFoundError:
     pass
 
-atexit.register(readline.write_history_file, histfile)
+  atexit.register(readline.write_history_file, histfile)
 
 client = client.DebuggerClient(server)
 
@@ -84,6 +94,9 @@ while server.connected():
         client.print_state()
     elif parsed.debugger == 'mem':
         client.print_memory()
+    elif parsed.debugger == 'exit' or parsed.debugger == 'q':
+        print("Byte!")
+        break
 
     if parsed.debugger == 'help' or parsed.debugger == 'h' or parsed.debugger == '?':
         parser.print_help()
@@ -99,3 +112,4 @@ while server.connected():
             client.print_threads()
 
 print("Disconnected from comms server, exiting...")
+server.proc.kill()

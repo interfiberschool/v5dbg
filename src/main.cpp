@@ -79,7 +79,7 @@ opcontrol(void)
         data.push_back(x);
         dataHist.push_back(other);
 
-        printf("%i\n", x);
+        pros::lcd::print(3, "%i", x);
 
         opLoop();
 

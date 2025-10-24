@@ -11,9 +11,6 @@ class V5DbgBootManager
 public:
   V5DbgBootManager()
   {
-    FILE* sout = fopen("sout", "w");
-    int err = errno;
-
     printf("\n\n"); // Spacing
 
     info_pre("V5 Debugger active!");
@@ -24,7 +21,6 @@ public:
     info_pre("Website: https://v5dbg.beachmont.xyz");
     info_pre("Copyright (C) v5dbg contributors 2025");
     info_pre("This program has been placed under the MIT license");
-    info_pre("Serial port FD: %p (%i)", sout, err);
   }
 
   ~V5DbgBootManager()

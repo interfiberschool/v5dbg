@@ -43,9 +43,6 @@ struct v5dbg_server_state_t
 
   /// @brief  Turned to false when the server needs to be suspended
   bool canRun = true;
-
-  /// @brief  Write output
-  FILE* wOut;
 };
 
 [[maybe_unused]] static v5dbg_server_state_t* CURRENT_SERVER = nullptr;

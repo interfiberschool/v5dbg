@@ -4,10 +4,13 @@
 #include <iostream>
 #include "pros/apix.h" // Kernel API
 #include <mutex>
+#include <stdio.h>
 #include "pros/rtos.h"
 #include "v5dbg/debugger.h"
 #include "v5dbg/msg.h"
 #include "v5dbg/stack.h"
+
+using namespace pros::c;
 
 v5dbg_server_state_t
 V5Dbg_AllocateServerState()
@@ -18,8 +21,8 @@ V5Dbg_AllocateServerState()
   state.messageQueueLock = new pros::rtos::Mutex();
   state.canRun = true;
 
-  // Write to stdout without COBS
-  pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
+  // Disables COBS when writing to stdout, makes reading data on the debugger end much simpler
+  serctl(SERCTL_DISABLE_COBS, nullptr);
 
   return state;
 }
@@ -28,18 +31,15 @@ V5Dbg_AllocateServerState()
 void
 V5Dbg_WriteToOut(const std::string &msg)
 {
+  // This function used to handle writing to the actual serial device file but disabling COBS for all write operations seems to be better
+  // and it replaces fwrite/fflush with printf
   if (CURRENT_SERVER == nullptr)
   {
     info("V5Dbg_WriteToOut(...): Must have a server allocated!");
     return;
   }
 
-  std::string newBuffer = msg + "\n";
-
-  printf("%s", newBuffer.c_str());
-
-  // fwrite(newBuffer.c_str(), newBuffer.size() + 1, 1, CURRENT_SERVER->wOut);
-  fflush(CURRENT_SERVER->wOut); // Make sure the debugger gets the message
+  printf("%s\n", msg.c_str());
 }
 
 void

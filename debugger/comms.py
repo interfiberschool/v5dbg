@@ -118,10 +118,10 @@ class DebugServer:
         while self.proc.poll() == None:
             b = self.proc.stdout.readline()
 
-            print(b)
+            # print(b)
 
-            # First 6 bytes are useless to us as they only contain stream information
-            data = b[6:].decode()
+            # All messages should be written without COBS & stream multiplexing, so we can just read it raw here
+            data = b.decode()
             if len(data) == 0:
                 continue
 
