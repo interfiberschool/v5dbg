@@ -1,6 +1,7 @@
 site_name: V5 Debugger
 repo_url: https://github.com/Interfiber/v5dbg
 repo_name: Interfiber/v5dbg
+site_url: https://v5dbg.beachmont.xyz
 
 nav:
   - Home: index.md
@@ -45,6 +46,8 @@ theme:
     - navigation.instant
     - content.code.annotate
     - toc.integrate
+plugins:
+  - social
 
 markdown_extensions:
   - pymdownx.highlight:
