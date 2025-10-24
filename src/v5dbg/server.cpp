@@ -1,4 +1,5 @@
 #include "v5dbg/server.h"
+#include "pros/llemu.hpp"
 #include "protocol.h"
 #include "v5dbg/util.h"
 #include <iostream>
@@ -20,6 +21,12 @@ V5Dbg_AllocateServerState()
   state.threadListLock = new pros::rtos::Mutex();
   state.messageQueueLock = new pros::rtos::Mutex();
   state.canRun = true;
+  state.serial = fopen("/ser/sout", "wb");
+
+  if (state.serial == nullptr)
+  {
+    info("Failed to open /ser/sout for serial comms!");
+  }
 
   // Disables COBS when writing to stdout, makes reading data on the debugger end much simpler
   serctl(SERCTL_DISABLE_COBS, nullptr);
@@ -39,7 +46,10 @@ V5Dbg_WriteToOut(const std::string &msg)
     return;
   }
 
-  printf("%s\n", msg.c_str());
+  std::string buf = msg + "\n";
+
+  fwrite(buf.c_str(), buf.size(), 1, CURRENT_SERVER->serial);
+  pros::lcd::print(1, "%s", msg.c_str());
 }
 
 void

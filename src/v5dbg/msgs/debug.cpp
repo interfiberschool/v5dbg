@@ -41,17 +41,18 @@ V5Dbg_VStackForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
     {
       rVal.type = DEBUGGER_MESSAGE_RVSTACK;
 
-      int frameIndex = thread.stack.size() - 1;
-
       // Generate each line of stack trace;
-      for (auto& frame : thread.stack)
+      int iframe = 0;
+      for (int i = thread.stack.size() - 1; i >= 0; i--)
       {
-        rVal.paramBuffer = "(" + std::to_string(frameIndex) + ") " + frame.funcName + " at " + frame.stackBegin.filePath
-          + ":" + std::to_string(frame.stackBegin.lineNumber) + " -> 0x" + std::to_string((uintptr_t)frame.jmpAddress);
+        v5dbg_stack_frame_t frame = thread.stack[i];
+
+        rVal.paramBuffer = std::to_string(iframe) + ":" + frame.funcName + ":" + frame.stackBegin.filePath
+          + ":" + std::to_string(frame.stackBegin.lineNumber);
 
         V5Dbg_WriteToOut(V5Dbg_SerializeMessage(rVal));
 
-        frameIndex--;
+        iframe++;
       }
 
       // End of stack

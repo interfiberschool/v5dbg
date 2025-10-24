@@ -74,7 +74,7 @@ if ENABLE_READLINE:
 client = client.DebuggerClient(server)
 
 while server.connected():
-    cmd = input("% ")
+    cmd = input("(v5dbg) ")
 
     try:
         parsed = parser.parse_args(cmd.split())
@@ -83,7 +83,9 @@ while server.connected():
         continue
 
     if parsed.debugger == 'bt' or parsed.debugger == 'backtrace' or parsed.debugger == 'stack':
-        client.print_stacktrace()
+        stacktrace = client.get_stacktrace()
+        for s in stacktrace:
+            print(f"# {s}")
     elif parsed.debugger == 'suspend' or parsed.debugger == 'halt' or parsed.debugger == 's':
         if client.suspend() == None:
             print("All supervised threads have been suspended")

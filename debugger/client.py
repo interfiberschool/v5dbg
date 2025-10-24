@@ -1,5 +1,6 @@
 from enum import IntFlag, auto
 from comms import DebugServer
+from stack import StackFrame
 from protocol import DebuggerMessage, DebuggerMessageType
 from utils import print_list
 
@@ -69,11 +70,11 @@ class DebuggerClient:
 
             pretty_printer = data_split[0:len(data_split) - 1] # Variables like vectors have spaces so just merge everything up until (not including) the final one into a string again
 
-            print(", ".join(pretty_printer))
-            print(f"    Allocated at {debinfo}")
+            print('# ' + ", ".join(pretty_printer))
+            print(f"  Allocated at {debinfo}")
 
-    # Print out the current threads stack trace
-    def print_stacktrace(self):
+    # Return a list of StackFrame objects for the current thread
+    def get_stacktrace(self):
         # Ask debugger for virtual callstack
 
         if self.state & DebuggerState.RUN:
@@ -95,13 +96,9 @@ class DebuggerClient:
                 break
 
             if x.msg_type == DebuggerMessageType.RVSTACK:
-                stacktrace.append(x.data)
+                stacktrace.append(StackFrame.from_msg(x.data))
 
-        print("Current thread:")
-        print("---------------")
-
-        stacktrace.reverse() # Reverse so the newest function is on top; the debug server has the newest function on the bottom
-        print_list(stacktrace)
+        return stacktrace
 
     # Suspend all supervised threads
     def suspend(self):
