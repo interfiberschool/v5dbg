@@ -97,4 +97,4 @@ printData(const std::string &msg)
 }
 ```
 
-For more information on debugger macros see the [Macros](../cpp/macros/debug/function.md) section, or view the [Debugger Client](./install/debugger.md) documentation.
+For more information on debugger macros see the [Macros](../cpp/macros/debug/function.md) section, or view the [Debugger Client](../install/debugger.md) documentation.
