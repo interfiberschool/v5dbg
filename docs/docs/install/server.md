@@ -1,3 +1,7 @@
+---
+summary: Install the v5dbg debug server into your PROs project
+---
+
 # Installation
 
 ???+ warning "Limitations of v5dbg"
