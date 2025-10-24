@@ -2,6 +2,7 @@
 #include "protocol.h"
 #include "v5dbg/util.h"
 #include <iostream>
+#include "pros/apix.h" // Kernel API
 #include <mutex>
 #include "pros/rtos.h"
 #include "v5dbg/debugger.h"
@@ -17,7 +18,28 @@ V5Dbg_AllocateServerState()
   state.messageQueueLock = new pros::rtos::Mutex();
   state.canRun = true;
 
+  // Write to stdout without COBS
+  pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
+
   return state;
+}
+
+
+void
+V5Dbg_WriteToOut(const std::string &msg)
+{
+  if (CURRENT_SERVER == nullptr)
+  {
+    info("V5Dbg_WriteToOut(...): Must have a server allocated!");
+    return;
+  }
+
+  std::string newBuffer = msg + "\n";
+
+  printf("%s", newBuffer.c_str());
+
+  // fwrite(newBuffer.c_str(), newBuffer.size() + 1, 1, CURRENT_SERVER->wOut);
+  fflush(CURRENT_SERVER->wOut); // Make sure the debugger gets the message
 }
 
 void
@@ -101,7 +123,7 @@ V5Dbg_ServerMain()
   open.type = DEBUGGER_MESSAGE_OPEN;
   open.paramBuffer = "SERVEROPEN";
 
-  printf("%s\n", V5Dbg_SerializeMessage(open).c_str());
+  V5Dbg_WriteToOut(V5Dbg_SerializeMessage(open));
 
   while (CURRENT_SERVER->canRun)
   {

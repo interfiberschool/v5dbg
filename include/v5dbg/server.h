@@ -43,6 +43,9 @@ struct v5dbg_server_state_t
 
   /// @brief  Turned to false when the server needs to be suspended
   bool canRun = true;
+
+  /// @brief  Write output
+  FILE* wOut;
 };
 
 [[maybe_unused]] static v5dbg_server_state_t* CURRENT_SERVER = nullptr;
@@ -53,6 +56,12 @@ struct v5dbg_server_state_t
  * @param pState Allocated state object to use
  */
 void V5Dbg_StartServer(v5dbg_server_state_t* pState);
+
+/**
+ * Write a text buffer to the serial output stream
+ * @param msg Text buffer to write
+ */
+void V5Dbg_WriteToOut(const std::string &msg);
 
 /// @brief  Should be called as the first line of code in a new task, allows the debugger to manage this task
 v5dbg_thread_t* V5Dbg_Init();

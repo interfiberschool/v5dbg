@@ -32,6 +32,7 @@ bt = debugger.add_parser('bt', help='Print the backtrace for the current thread'
 suspend = debugger.add_parser('suspend', help='Suspend the execution of all supervised threads', aliases=['halt', 's'])
 resume = debugger.add_parser('resume', help='Resume the execution of all supervised threads', aliases=['continue', 'c'])
 state = debugger.add_parser('state', help='Print the debugger\'s state')
+mem = debugger.add_parser('mem', help='View local stack memory')
 
 thread = debugger.add_parser('thread', help='Manage supervised threads')
 thread_sub = thread.add_subparsers(help='Thread commands', dest="thread")
@@ -81,6 +82,8 @@ while server.connected():
             print("All supervised threads have resumed execution")
     elif parsed.debugger == 'state':
         client.print_state()
+    elif parsed.debugger == 'mem':
+        client.print_memory()
 
     if parsed.debugger == 'help' or parsed.debugger == 'h' or parsed.debugger == '?':
         parser.print_help()

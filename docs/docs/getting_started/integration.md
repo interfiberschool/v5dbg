@@ -1,6 +1,7 @@
 # Integration
 
 ## Step 1. Allocate the server state object
+
 v5dbg relies on a core server state object to contain the debuggers state. Find a place in your program like `main.cpp` where you can place the global server state object like below:
 
 ```c++
@@ -22,6 +23,7 @@ initialize()
 ```
 
 ## Step 2. Start the debug server
+
 In order to start integrating v5dbg into our bot code we need to actually start the debug server. Still in our `initialize` function we can add a call to `V5Dbg_StartServer` which takes in a pointer to the `v5dbg_server_state_t` object we allocated in the previous step. Our file should now look similar to whats below
 
 ```c++
@@ -41,6 +43,7 @@ initialize()
 ```
 
 ## Step 3. Inform the debugger of new tasks
+
 Right now the debug server is waiting for messages and API calls. We need to tell the debug server of any new tasks that we create, including ones automatically created by the PROS system daemon, such as `opcontrol`. Lets just to the first line of code in our `opcontrol` function.
 
 Here lets tell the debugger about the new task using `V5Dbg_Init`
@@ -83,6 +86,7 @@ void opcontrol()
 ```
 
 ## Step 4. Start tracking function calls
+
 Now we can use normal debugging macros! At the start of every function we can place a call to `$function` which will allow the debugger to generate stack traces in realtime when pausing our program. You should also make sure to call `$function` after informing the debugger of the `opcontrol` task so it shows up in stack traces!
 
 ```c++

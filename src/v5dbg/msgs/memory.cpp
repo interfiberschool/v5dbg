@@ -59,11 +59,10 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 
         std::string prettyPrint = V5Dbg_PrettyPrint(obj.get());
 
-        result.paramBuffer
-          = V5Dbg_FormatPrint("(%i) %s;", obj->getID(), prettyPrint.c_str());
+        result.paramBuffer = V5Dbg_FormatPrint("(%i) %s;", obj->getID(), prettyPrint.c_str());
         result.paramBuffer += V5Dbg_FormatPrint(",%s:%i", cPoint.filePath.c_str(), cPoint.lineNumber);
 
-        printf("%s\n", V5Dbg_SerializeMessage(result).c_str());
+        V5Dbg_WriteToOut(V5Dbg_SerializeMessage(result));
       }
 
       break;
@@ -73,5 +72,5 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
   result.paramBuffer = "ENDSTACKMEM";
   result.type = DEBUGGER_MESSAGE_LMEM_END;
 
-  printf("%s\n", V5Dbg_SerializeMessage(result).c_str());
+  V5Dbg_WriteToOut(V5Dbg_SerializeMessage(result));
 }

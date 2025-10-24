@@ -118,6 +118,8 @@ class DebugServer:
         while self.proc.poll() == None:
             b = self.proc.stdout.readline()
 
+            print(b)
+
             # First 6 bytes are useless to us as they only contain stream information
             data = b[6:].decode()
             if len(data) == 0:

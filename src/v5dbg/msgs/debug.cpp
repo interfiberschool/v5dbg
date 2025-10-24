@@ -1,5 +1,6 @@
 #include "v5dbg/debinfo.h"
 #include "v5dbg/msg.h"
+#include "v5dbg/server.h"
 #include "v5dbg/stack.h"
 
 // Thread and stack manipulation
@@ -13,13 +14,12 @@ V5Dbg_ThreadListHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
   int i = 0;
   for (auto& thread : pState->threads)
   {
-    rVal.paramBuffer
-      += thread.name + "," + std::to_string(i) + (i + 1 < (int)pState->threads.size() ? "," : "");
+    rVal.paramBuffer += thread.name + "," + std::to_string(i) + (i + 1 < (int)pState->threads.size() ? "," : "");
 
     i++;
   }
 
-  printf("%s\n", V5Dbg_SerializeMessage(rVal).c_str());
+  V5Dbg_WriteToOut(V5Dbg_SerializeMessage(rVal));
 }
 
 void
@@ -49,7 +49,7 @@ V5Dbg_VStackForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
         rVal.paramBuffer = "(" + std::to_string(frameIndex) + ") " + frame.funcName + " at " + frame.stackBegin.filePath
           + ":" + std::to_string(frame.stackBegin.lineNumber) + " -> 0x" + std::to_string((uintptr_t)frame.jmpAddress);
 
-        printf("%s\n", V5Dbg_SerializeMessage(rVal).c_str());
+        V5Dbg_WriteToOut(V5Dbg_SerializeMessage(rVal));
 
         frameIndex--;
       }
@@ -59,7 +59,7 @@ V5Dbg_VStackForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
       rVal.paramBuffer = "ENDSTACK";
       rVal.type = DEBUGGER_MESSAGE_VSTACK_END;
 
-      printf("%s\n", V5Dbg_SerializeMessage(rVal).c_str());
+      V5Dbg_WriteToOut(V5Dbg_SerializeMessage(rVal));
 
       break;
     }

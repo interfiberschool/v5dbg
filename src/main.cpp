@@ -1,4 +1,6 @@
 #include "main.h"
+#include <cerrno>
+#include <cstdio>
 #include "liblvgl/llemu.hpp"
 #include "pros/llemu.hpp"
 #include "v5dbg/debug.h"
@@ -80,8 +82,6 @@ opcontrol(void)
         printf("%i\n", x);
 
         opLoop();
-
-        pros::lcd::print(1, "%i", x);
 
         x++;
     }

@@ -49,6 +49,17 @@ class DebuggerClient:
         if self.state & DebuggerState.SUSPEND:
             print("Program is: SUSPENDED")
 
+    def print_memory(self):
+        mem = DebuggerMessage(DebuggerMessageType.LMEM_FOR)
+        mem.data = "0,0"
+
+        self.send_msg(mem)
+
+        memory = self.server.get_msg_range(DebuggerMessageType.RLMEM, DebuggerMessageType.LMEM_END)
+
+        for x in memory:
+            print(x.data)
+
     # Print out the current threads stack trace
     def print_stacktrace(self):
         # Ask debugger for virtual callstack
