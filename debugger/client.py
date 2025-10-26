@@ -1,27 +1,14 @@
 from enum import IntFlag, auto
 from comms import DebugServer
+from thread import DebuggerThread
 from memory import RawVariableData
-from stack import StackFrame
 from protocol import DebuggerMessage, DebuggerMessageType
 from utils import print_list
 
-# Debugger state bitflags
+# Debugger state bit flags
 class DebuggerState(IntFlag):
     RUN = auto()
     SUSPEND = auto()
-
-# Thread managed by the remote v5dbg server 
-class DebuggerThread:
-    thread_id: int
-    server: DebugServer
-
-    def __init__(self, server: DebugServer, thread_id: int):
-        self.server = server
-        self.thread_id = thread_id
-
-    # Return the backtrace for this thread
-    def backtrace(self):
-        pass
 
 # Local debugger client class
 class DebuggerClient:
@@ -34,7 +21,7 @@ class DebuggerClient:
         self.server = server
         self.state = DebuggerState.RUN
 
-        self.active_thread = DebuggerThread(self.server, 0)
+        self.active_thread = DebuggerThread(0, self.server)
         self.current_frame = 0
 
     # Send a message to the remote server
@@ -43,7 +30,7 @@ class DebuggerClient:
     
     # Switch the active thread to `thread_id`
     def switch_thread(self, thread_id: int):
-        self.active_thread = DebuggerThread(self.server, thread_id)
+        self.active_thread = DebuggerThread(thread_id, self.server)
 
     # Print debugger state
     def print_state(self):
@@ -53,17 +40,9 @@ class DebuggerClient:
         if self.state & DebuggerState.SUSPEND:
             print("Program is: SUSPENDED")
 
-    def print_memory(self):
-        mem = DebuggerMessage(DebuggerMessageType.LMEM_FOR)
-        mem.data = str(self.current_frame) + "," + str(self.active_thread.thread_id)
-
-        self.send_msg(mem)
-
-        memory = self.server.get_msg_range(DebuggerMessageType.RLMEM, DebuggerMessageType.LMEM_END)
-
-        var_data = RawVariableData(memory)
-
-        print(var_data.all())
+    # Return the current frame's stack memory
+    def get_memory(self):
+        return self.active_thread.get_memory()
 
     # Return a list of StackFrame objects for the current thread
     def get_stacktrace(self):
@@ -73,24 +52,7 @@ class DebuggerClient:
             print("Program must be in the SUSPEND state for a stacktrace to be generated")
             return
 
-        vstack_for = DebuggerMessage(DebuggerMessageType.VSTACK_FOR)
-        vstack_for.data = str(self.active_thread.thread_id)
-
-        self.send_msg(vstack_for)
-
-        # Compile message list
-
-        stacktrace = []
-        messages = self.server.get_msg_range(DebuggerMessageType.RVSTACK, DebuggerMessageType.VSTACK_END)
-
-        for x in messages:
-            if x.msg_type == DebuggerMessageType.VSTACK_END:
-                break
-
-            if x.msg_type == DebuggerMessageType.RVSTACK:
-                stacktrace.append(StackFrame.from_msg(x.data))
-
-        return stacktrace
+        return self.active_thread.get_backtrace()
 
     # Suspend all supervised threads
     def suspend(self):

@@ -41,6 +41,8 @@ suspend = debugger.add_parser('suspend', help='Suspend the execution of all supe
 resume = debugger.add_parser('resume', help='Resume the execution of all supervised threads', aliases=['continue', 'c'])
 state = debugger.add_parser('state', help='Print the debugger\'s state')
 mem = debugger.add_parser('mem', help='View local stack memory')
+print_var = debugger.add_parser('print', help='Print local stack memory objects', aliases=['p'])
+print_var.add_argument('variable_id', help='Name of the local variable to print', type=str, action="store")
 exit = debugger.add_parser('exit', help='Exit the debugger and disconnect from the comms server', aliases=['q'])
 
 thread = debugger.add_parser('thread', help='Manage supervised threads')
@@ -82,6 +84,8 @@ while server.connected():
         # Retry
         continue
 
+    # print(parsed)
+
     if parsed.debugger == 'bt' or parsed.debugger == 'backtrace' or parsed.debugger == 'stack':
         stacktrace = client.get_stacktrace()
         if stacktrace == None:
@@ -98,7 +102,7 @@ while server.connected():
     elif parsed.debugger == 'state':
         client.print_state()
     elif parsed.debugger == 'mem':
-        client.print_memory()
+        print(client.get_memory().all())
     elif parsed.debugger == 'exit' or parsed.debugger == 'q':
         print("Byte!")
         break
@@ -115,6 +119,14 @@ while server.connected():
             client.print_threads()
         elif parsed.thread == None:
             client.print_threads()
+    
+    if parsed.debugger == 'print' or parsed.debugger == 'p':
+        var = client.get_memory().get_variable(parsed.variable_id)
+
+        if var == None:
+            print(f"No variable with name '{parsed.variable_id}' is current scope")
+        else:
+            print(var)
 
 print("Disconnected from comms server, exiting...")
 server.proc.kill()

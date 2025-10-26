@@ -70,7 +70,11 @@ class RawVariableData:
 
     # Get a variable by name
     def get_variable(self, name: str):
-        pass
+        for v in self.variables:
+            if v.name == name:
+                return v
+
+        return None
 
     # Print all variables managed by this class
     def all(self):
