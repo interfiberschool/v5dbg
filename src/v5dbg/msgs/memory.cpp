@@ -49,9 +49,10 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
   v5dbg_message_t result{};
   result.type = DEBUGGER_MESSAGE_RLMEM;
 
+  int stackID = thread->stack.size() - 1;
   for (int i = 0; i < thread->stack.size(); i++)
   {
-    if (i == stackFrame)
+    if (stackID == stackFrame)
     {
       for (auto& obj : thread->stack[i].pMemory->local)
       {
@@ -70,6 +71,8 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 
       break;
     }
+
+    stackID--;
   }
 
   result.paramBuffer = "ENDSTACKMEM";

@@ -26,7 +26,7 @@ class DebuggerThread:
     return RawVariableData(memory)
 
   # Return the backtrace string for this thread
-  def get_backtrace(self):
+  def get_backtrace(self) -> list[StackFrame]:
     vstack_for = DebuggerMessage(DebuggerMessageType.VSTACK_FOR)
     vstack_for.data = str(self.id)
 

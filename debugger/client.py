@@ -1,5 +1,6 @@
 from enum import IntFlag, auto
 from comms import DebugServer
+from stack import StackFrame
 from thread import DebuggerThread
 from memory import RawVariableData
 from protocol import DebuggerMessage, DebuggerMessageType
@@ -45,7 +46,7 @@ class DebuggerClient:
         return self.active_thread.get_memory()
 
     # Return a list of StackFrame objects for the current thread
-    def get_stacktrace(self):
+    def get_stacktrace(self) -> list[StackFrame]:
         # Ask debugger for virtual callstack
 
         if self.state & DebuggerState.RUN:

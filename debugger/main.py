@@ -3,6 +3,7 @@ import atexit
 import os
 import client
 from comms import DebugServer
+from utils import ANSICodes
 from protocol import PROTOCOL_VERSION, DebuggerMessage,DebuggerMessageType
 import platform
 
@@ -92,7 +93,10 @@ while server.connected():
             continue
 
         for s in stacktrace:
-            print(f"# {s}")
+            if s.id == client.current_frame:
+                print(f"{ANSICodes.BOLD}# {s} {ANSICodes.END}")
+            else:
+                print(f"# {s}")
     elif parsed.debugger == 'suspend' or parsed.debugger == 'halt' or parsed.debugger == 's':
         if client.suspend() == None:
             print("All supervised threads have been suspended")
