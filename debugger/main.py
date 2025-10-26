@@ -42,8 +42,13 @@ suspend = debugger.add_parser('suspend', help='Suspend the execution of all supe
 resume = debugger.add_parser('resume', help='Resume the execution of all supervised threads', aliases=['continue', 'c'])
 state = debugger.add_parser('state', help='Print the debugger\'s state')
 mem = debugger.add_parser('mem', help='View local stack memory')
+
 print_var = debugger.add_parser('print', help='Print local stack memory objects', aliases=['p'])
 print_var.add_argument('variable_id', help='Name of the local variable to print', type=str, action="store")
+
+frame = debugger.add_parser('frame', help='Set/get the current frame index')
+frame.add_argument('frame_index', help='Frame index to set which can be obtained from "backtrace"', type=int, action="store", nargs="?")
+
 exit = debugger.add_parser('exit', help='Exit the debugger and disconnect from the comms server', aliases=['q'])
 
 thread = debugger.add_parser('thread', help='Manage supervised threads')
@@ -93,7 +98,7 @@ while server.connected():
             continue
 
         for s in stacktrace:
-            if s.id == client.current_frame:
+            if s.id == client.active_thread.frame_index:
                 print(f"{ANSICodes.BOLD}# {s} {ANSICodes.END}")
             else:
                 print(f"# {s}")
@@ -108,7 +113,7 @@ while server.connected():
     elif parsed.debugger == 'mem':
         print(client.get_memory().all())
     elif parsed.debugger == 'exit' or parsed.debugger == 'q':
-        print("Byte!")
+        print("Bye!")
         break
 
     if parsed.debugger == 'help' or parsed.debugger == 'h' or parsed.debugger == '?':
@@ -131,6 +136,14 @@ while server.connected():
             print(f"No variable with name '{parsed.variable_id}' is current scope")
         else:
             print(var)
+
+    if parsed.debugger == 'frame':
+        if parsed.frame_index == None:
+            print(f"Current stack frame: #{client.active_thread.frame_index}")
+        else:
+            client.active_thread.frame_index = parsed.frame_index
+
+            print(f"Switched to frame #{client.active_thread.frame_index}")
 
 print("Disconnected from comms server, exiting...")
 server.proc.kill()

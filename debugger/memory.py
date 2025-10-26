@@ -78,6 +78,9 @@ class RawVariableData:
 
     # Print all variables managed by this class
     def all(self):
+        if len(self.variables) == 0:
+            return "No variables exposed by debug server"
+
         d = ""
         for mem in self.variables:
             d += f"  {mem.type} {mem.name} = <Allocated at {mem.location}>\n"

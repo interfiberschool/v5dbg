@@ -16,14 +16,12 @@ class DebuggerClient:
     state: DebuggerState
     active_thread: DebuggerThread
     server: DebugServer
-    current_frame: int
 
     def __init__(self, server: DebugServer):
         self.server = server
         self.state = DebuggerState.RUN
 
         self.active_thread = DebuggerThread(0, self.server)
-        self.current_frame = 0
 
     # Send a message to the remote server
     def send_msg(self, message: DebuggerMessage):
