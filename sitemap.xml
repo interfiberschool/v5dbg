@@ -2,62 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://v5dbg.beachmont.xyz/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/advanced/pretty_printers/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/advanced/wireless/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/cpp/header_files/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/cpp/macros/debug/function/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/cpp/macros/debug/ntask/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/debug_server/exposed_memory/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/debug_server/stack/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/debugger/commands/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/debugger/comms/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/debugger/cmds/suspend/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/getting_started/integration/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/install/debugger/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/install/server/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
     <url>
          <loc>https://v5dbg.beachmont.xyz/protocol/v1/</loc>
-         <lastmod>2025-10-24</lastmod>
+         <lastmod>2025-10-26</lastmod>
     </url>
 </urlset>
