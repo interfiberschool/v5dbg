@@ -4,34 +4,35 @@
 #include "v5dbg/util.h"
 #include "v5dbg/pretty.h"
 
-std::string
+v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintInt(V5DbgMemoryObject *pMemory)
 {
-  return V5Dbg_FormatPrint("int %s = %i", pMemory->getVariable().name.c_str(), *((int*) pMemory->getPtr()));
+  return $pretty_print_result("int", pMemory->getVariable().name, V5Dbg_FormatPrint("%i", *((int*) pMemory->getPtr())));
 }
 
-std::string
+v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintPtr(V5DbgMemoryObject *pMemory)
 {
-  return V5Dbg_FormatPrint("void* %s = %p", pMemory->getVariable().name.c_str(), pMemory->getPtr());
+  return $pretty_print_result("void*", pMemory->getVariable().name, V5Dbg_FormatPrint("%p", pMemory->getPtr()));
 }
 
-std::string
+v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintFloat(V5DbgMemoryObject *pMemory)
 {
-  return V5Dbg_FormatPrint("float %s = %f", pMemory->getVariable().name.c_str(), *(float* ) pMemory->getPtr());
+  return $pretty_print_result("float", pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((float*) pMemory->getPtr())));
 }
 
-std::string
+v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintDouble(V5DbgMemoryObject *pMemory)
 {
-  return V5Dbg_FormatPrint("double %s = %f", pMemory->getVariable().name.c_str(), *(double* ) pMemory->getPtr());
+  return $pretty_print_result("double", pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((double*) pMemory->getPtr())));
 }
 
-std::string
+v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintChar(V5DbgMemoryObject *pMemory)
 {
-  return V5Dbg_FormatPrint("char %s = '%c'", pMemory->getVariable().name.c_str(), *(char* ) pMemory->getPtr());
+
+  return $pretty_print_result("char", pMemory->getVariable().name, V5Dbg_FormatPrint("%c", *((char*) pMemory->getPtr())));
 }
 
 $pretty_printer(V5Dbg_PrettyPrintInt, MEMORY_TYPE_BASE_INT);

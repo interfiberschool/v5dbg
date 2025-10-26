@@ -35,12 +35,12 @@ V5Dbg_RegisterPrettyPrinter(v5dbg_memory_type_e memType, V5Dbg_PrettyPrintMemory
   V5Dbg_GetPrettyPrinterState()->printers.insert({ memType, func });
 }
 
-std::string
+v5dbg_pretty_printed_t
 V5Dbg_PrettyPrint(V5DbgMemoryObject *pMem)
 {
   V5Dbg_PrettyPrintMemoryObj printer = V5Dbg_PrettyPrinterFromType(pMem->getMemoryType());
   if (printer == nullptr)
-    return V5Dbg_FormatPrint("%p (default)", pMem->getPtr());
+    return $pretty_print_result("void*", pMem->getVariable().name, V5Dbg_FormatPrint("%p (fallback)", pMem->getPtr()));
 
   return printer(pMem);
 }

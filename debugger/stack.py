@@ -1,4 +1,3 @@
-
 # Handles stack frames captured by the debug server
 class StackFrame:
     # Name of the stack frame, unmangled usually this is the function name obtained from __PRETTY_FUNCTION__
@@ -27,7 +26,7 @@ class StackFrame:
         if len(bsplit) != 4:
             raise Exception(f"Invalid StackFrame message: {buffer}, expected four encoded parameters")
         
-        # If we fail to cast any of these then we just die, we trust the debugger with our life tho...
+        # If we fail to cast any of these then we just die, we trust the debug server with our life tho...
 
         id = int(bsplit[0])
         name = bsplit[1] 

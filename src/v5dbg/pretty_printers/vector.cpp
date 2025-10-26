@@ -5,18 +5,22 @@
 #include "v5dbg/util.h"
 #include "v5dbg/pretty.h"
 
+/// @brief  Ugly macro used to generate pretty printers for specific std::vector templates
 #define $pretty_printer_vec(typeReadable, typeCpp, fmt) \
-  std::string \
+  v5dbg_pretty_printed_t \
   V5Dbg_PrettyPrintVector##typeReadable(V5DbgMemoryObject *pMem) \
   { \
   std::vector<typeCpp> v = *(std::vector<typeCpp>*) pMem->getPtr(); \
-  std::string r = V5Dbg_FormatPrint("std::vector<%s> %s = {", #typeCpp, pMem->getVariable().name.c_str()); \
+  v5dbg_pretty_printed_t r{}; \
+  r.typeName = "std::vector<" + std::string(#typeCpp) + ">"; \
+  r.varName = pMem->getVariable().name; \
+  r.printBuffer = "{"; \
   for (int i = 0; i < v.size(); i++) \
   { \
-    r += V5Dbg_FormatPrint(fmt, v[i]); \
-    if (i + 1 < v.size()) r += ","; \
+    r.printBuffer += V5Dbg_FormatPrint(fmt, v[i]); \
+    if (i + 1 < v.size()) r.printBuffer += ","; \
   } \
-  r += "}"; \
+  r.printBuffer += "}"; \
   return r; \
 } \
 

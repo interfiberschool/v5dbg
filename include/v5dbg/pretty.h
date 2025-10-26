@@ -4,8 +4,25 @@
 #include "v5dbg/util.h"
 #include "v5dbg/memory.h"
 
+/// @brief  Result from V5Dbg_PrettyPrint(...)
+struct v5dbg_pretty_printed_t
+{
+  /// @brief  Human readable type name, ex: std::vector<int>
+  std::string typeName;
+
+  /// @brief  Name of the pretty-printed variable
+  std::string varName; 
+
+  /// @brief  Pretty printed output for this variable
+  std::string printBuffer;
+};
+
+/// @brief  Quick constructor for v5dbg_pretty_printed_t
+#define $pretty_print_result(type, name, buf) v5dbg_pretty_printed_t { .typeName = type, .varName = name, .printBuffer = buf }
+
+
 /// @brief  Function pointer to pretty printer impl
-typedef std::string (*V5Dbg_PrettyPrintMemoryObj)(V5DbgMemoryObject *pMemory);
+typedef v5dbg_pretty_printed_t (*V5Dbg_PrettyPrintMemoryObj)(V5DbgMemoryObject *pMemory);
 
 struct v5dbg_pretty_printer_state_t
 {
@@ -47,9 +64,9 @@ void V5Dbg_RegisterPrettyPrinter(v5dbg_memory_type_e memType, V5Dbg_PrettyPrintM
 /**
  * @brief Return the pretty printed string for pMem
  * @param pMem Memory object to pretty-print, if not pretty printed is found we default back to a raw pointer(void*)
- * @return Pretty printed string for pMem
+ * @return Pretty printed result object
  */
-std::string V5Dbg_PrettyPrint(V5DbgMemoryObject *pMem);
+v5dbg_pretty_printed_t V5Dbg_PrettyPrint(V5DbgMemoryObject *pMem);
 
 /**
  * Internal class used to link pretty printer functions

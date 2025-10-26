@@ -1,5 +1,6 @@
 from enum import IntFlag, auto
 from comms import DebugServer
+from memory import RawVariableData
 from stack import StackFrame
 from protocol import DebuggerMessage, DebuggerMessageType
 from utils import print_list
@@ -60,18 +61,9 @@ class DebuggerClient:
 
         memory = self.server.get_msg_range(DebuggerMessageType.RLMEM, DebuggerMessageType.LMEM_END)
 
-        for x in memory:
-            if x.msg_type != DebuggerMessageType.RLMEM:
-                continue
+        var_data = RawVariableData(memory)
 
-            data_split = x.data.split(",")
-
-            debinfo = data_split[len(data_split) - 1] # Debug info is the last item in the split array
-
-            pretty_printer = data_split[0:len(data_split) - 1] # Variables like vectors have spaces so just merge everything up until (not including) the final one into a string again
-
-            print('# ' + ", ".join(pretty_printer))
-            print(f"  Allocated at {debinfo}")
+        print(var_data.all())
 
     # Return a list of StackFrame objects for the current thread
     def get_stacktrace(self):

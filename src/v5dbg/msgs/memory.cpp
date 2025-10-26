@@ -57,10 +57,13 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
       {
         v5dbg_code_point_t cPoint = obj->getVariable().allocationPoint;
 
-        std::string prettyPrint = V5Dbg_PrettyPrint(obj.get());
+        v5dbg_pretty_printed_t prettyPrint = V5Dbg_PrettyPrint(obj.get());
 
-        result.paramBuffer = V5Dbg_FormatPrint("%s;", prettyPrint.c_str());
-        result.paramBuffer += V5Dbg_FormatPrint(",%s:%i", cPoint.filePath.c_str(), cPoint.lineNumber);
+        // type name, variable name, pretty printed string buffer
+        result.paramBuffer = V5Dbg_FormatPrint("[%s]:%s", prettyPrint.typeName.c_str(), prettyPrint.varName.c_str());
+
+        // debug info location
+        result.paramBuffer += V5Dbg_FormatPrint(":%s:%i:[%s]", cPoint.filePath.c_str(), cPoint.lineNumber, prettyPrint.printBuffer.c_str());
 
         V5Dbg_WriteToOut(V5Dbg_SerializeMessage(result));
       }

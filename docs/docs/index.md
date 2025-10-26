@@ -1,5 +1,7 @@
 ---
 description: The only true VEX debugger™
+hide:
+    - footer
 ---
 
 # V5 Debugger

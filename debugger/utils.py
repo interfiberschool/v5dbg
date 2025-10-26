@@ -24,3 +24,24 @@ def print_list(list):
         print(x, abs(id - len(list) + 1))
 
         id += 1
+
+class DebugInfo:
+    file: str
+    line: int
+
+    def __init__(self, file: str, line: str):
+        self.file = file
+        self.line = line
+
+    # Create a DebugInfo instance using an encoded string formatted as:
+    # FILE_PATH:LINE_NUMBER
+    @classmethod
+    def from_str(self, data: str):
+        dsplit = data.split(":")
+        if len(dsplit) != 2:
+            raise Exception("from_str expected FILE:LINE encoded input")
+
+        return DebugInfo(dsplit[0], int(dsplit[1]))
+    
+    def __str__(self):
+        return f"{self.file}:{self.line}"

@@ -2,10 +2,10 @@
 #include "v5dbg/util.h"
 #include "v5dbg/pretty.h"
 
-std::string
+v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintString(V5DbgMemoryObject *pMem)
 {
-  return V5Dbg_FormatPrint("std::string %s = \"%s\"", pMem->getVariable().name.c_str(), (*(std::string*) pMem->getPtr()).c_str());
+  return $pretty_print_result("std::string", pMem->getVariable().name, V5Dbg_FormatPrint("\"%s\"", (*(std::string*) pMem->getPtr()).c_str()));
 }
 
 $pretty_printer(V5Dbg_PrettyPrintString, MEMORY_TYPE_STDSTR);

@@ -2,6 +2,7 @@ site_name: V5 Debugger
 repo_url: https://github.com/Interfiber/v5dbg
 repo_name: Interfiber/v5dbg
 site_url: https://v5dbg.beachmont.xyz
+copyright: Copyright &copy; 2025 Hunter Stasonis
 
 nav:
   - Home: index.md
@@ -46,8 +47,13 @@ theme:
     - navigation.instant
     - content.code.annotate
     - toc.integrate
+    - navigation.footer
+
 plugins:
-  - social
+  - social:
+      cards_layout_dir: layouts
+      cards_layout: custom
+      debug: true
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -68,3 +74,14 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.tabbed:
       alternate_style: true
+
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Interfiber/v5dbg
+      name: v5dbg on GitHub
+
+extra:
+  version:
+    provider: mike
