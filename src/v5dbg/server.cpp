@@ -1,15 +1,16 @@
 #include "v5dbg/server.h"
-#include "pros/llemu.hpp"
-#include "protocol.h"
-#include "v5dbg/util.h"
 #include <iostream>
-#include "pros/apix.h" // Kernel API
 #include <mutex>
 #include <stdio.h>
+#include "pros/apix.h" // Kernel API
+#include "pros/llemu.hpp"
 #include "pros/rtos.h"
+#include "pros/rtos.hpp"
+#include "protocol.h"
 #include "v5dbg/debugger.h"
 #include "v5dbg/msg.h"
 #include "v5dbg/stack.h"
+#include "v5dbg/util.h"
 
 using namespace pros::c;
 
@@ -21,35 +22,30 @@ V5Dbg_AllocateServerState()
   state.threadListLock = new pros::rtos::Mutex();
   state.messageQueueLock = new pros::rtos::Mutex();
   state.canRun = true;
-  state.serial = fopen("/ser/sout", "wb");
-
-  if (state.serial == nullptr)
-  {
-    info("Failed to open /ser/sout for serial comms!");
-  }
-
-  // Disables COBS when writing to stdout, makes reading data on the debugger end much simpler
-  serctl(SERCTL_DISABLE_COBS, nullptr);
 
   return state;
 }
 
 
 void
-V5Dbg_WriteToOut(const std::string &msg)
+V5Dbg_WriteToOut(const std::string& msg)
 {
-  // This function used to handle writing to the actual serial device file but disabling COBS for all write operations seems to be better
-  // and it replaces fwrite/fflush with printf
+  // This function used to handle writing to the actual serial device file but disabling COBS for all write operations
+  // seems to be better and it replaces fwrite/fflush with printf
   if (CURRENT_SERVER == nullptr)
   {
     info("V5Dbg_WriteToOut(...): Must have a server allocated!");
     return;
   }
 
+  if (CURRENT_SERVER->serial == nullptr)
+  {
+    info("V5Dbg_WriteToOut(...): V5Dbg_SetWriteMode(...) was never called, or failed!");
+  }
+
   std::string buf = msg + "\n";
 
   fwrite(buf.c_str(), buf.size(), 1, CURRENT_SERVER->serial);
-  pros::lcd::print(1, "%s", msg.c_str());
 }
 
 void
@@ -64,6 +60,12 @@ V5Dbg_StartServer(v5dbg_server_state_t* pState)
   info("ServerInit");
 
   CURRENT_SERVER = pState;
+
+  // Default to serial IO
+  if (CURRENT_SERVER->serial == nullptr)
+  {
+    V5Dbg_SetWriteMode(pState, WRITE_MODE_SERIAL);
+  }
 
   pros::rtos::Task* serverTask
     = new pros::rtos::Task([]() { V5Dbg_ServerMain(); }, TASK_PRIORITY_MAX, TASK_STACK_DEPTH_DEFAULT, "v5dbg Server");
@@ -86,7 +88,7 @@ V5Dbg_Leave(v5dbg_thread_t* pThread)
   {
     if (CURRENT_SERVER->threads[i].name == pThread->name)
     {
-      CURRENT_SERVER->threads.erase(CURRENT_SERVER->threads.begin()+i);
+      CURRENT_SERVER->threads.erase(CURRENT_SERVER->threads.begin() + i);
       return;
     }
   }
@@ -134,6 +136,22 @@ V5Dbg_ServerMain()
   open.paramBuffer = "SERVEROPEN";
 
   V5Dbg_WriteToOut(V5Dbg_SerializeMessage(open));
+
+  // Send an OPEN message to the debugger every once and awhile incase we miss the first one somehow
+  pros::rtos::Task openPoll(
+    []()
+    {
+      while (true)
+      {
+        v5dbg_message_t open{};
+        open.type = DEBUGGER_MESSAGE_OPEN;
+        open.paramBuffer = "SERVEROPEN";
+
+        V5Dbg_WriteToOut(V5Dbg_SerializeMessage(open));
+
+        pros::delay(2000);
+      }
+    });
 
   while (CURRENT_SERVER->canRun)
   {
@@ -219,4 +237,21 @@ v5dbg_thread_t*
 V5Dbg_ThreadWithID(int id)
 {
   return V5Dbg_ThreadWithID(id);
+}
+
+void
+V5Dbg_SetWriteMode(v5dbg_server_state_t* pState, v5dbg_server_write_mode_e writeMode)
+{
+  if (writeMode == WRITE_MODE_SERIAL)
+  {
+    pState->serial = fopen("/ser/sout", "wb");
+
+    if (pState->serial == nullptr)
+    {
+      info("Failed to open /ser/sout for serial comms!");
+    }
+
+    // Disables COBS when writing to stdout, makes reading data on the debugger end much simpler
+    serctl(SERCTL_DISABLE_COBS, nullptr);
+  }
 }

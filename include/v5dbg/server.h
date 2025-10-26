@@ -8,6 +8,12 @@ struct v5dbg_server_state_t;
 struct v5dbg_thread_t;
 typedef void (*V5Dbg_ServerMsgCallback)(v5dbg_server_state_t *pState, const v5dbg_message_t &msg);
 
+enum v5dbg_server_write_mode_e
+{
+  /// @brief  Write message data over the serial micro USB cable
+  WRITE_MODE_SERIAL = 0
+};
+
 struct v5dbg_server_msg_callback_t
 {
   /// @brief  Message type to handle
@@ -49,6 +55,13 @@ struct v5dbg_server_state_t
 };
 
 [[maybe_unused]] static v5dbg_server_state_t* CURRENT_SERVER = nullptr;
+
+/**
+ * Set the write mode for the given server state object
+ * @param writeMode Server write mode
+ * @note Must be called before V5Dbg_StartServer
+ */
+void V5Dbg_SetWriteMode(v5dbg_server_state_t *pState, v5dbg_server_write_mode_e writeMode);
 
 /**
  * Should be called as early as possible to start the debugger server

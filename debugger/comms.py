@@ -1,5 +1,6 @@
 # Handles debugger -> debug server communication and various utils around messaging
 
+import time
 from utils import find_server
 from protocol import DebuggerMessage,DebuggerMessageType
 import threading as thread
@@ -10,6 +11,15 @@ class DebugServer:
     waits: dict[DebuggerMessageType, thread.Condition]
     wait_results: dict[DebuggerMessageType, list[DebuggerMessage]]
 
+    # Parse incoming messages
+    io: thread.Thread
+
+    # Check if the connection to the remote server hung up
+    hang: thread.Thread
+
+    # Timestamp of the last OPEN message
+    last_open: int
+
     MESSAGE_TRACE_MAX = 100
 
     # Messages analyzed by get_msg_range, which automatically clears this.
@@ -18,6 +28,8 @@ class DebugServer:
 
     def __init__(self, wait_open: bool = True):
         self.server_path = find_server()
+
+        self.last_open = 0
 
         self.proc = subprocess.Popen([self.server_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.waits = dict()
@@ -29,8 +41,11 @@ class DebugServer:
             print("Exit data: " + self.proc.stderr.readline().decode())
             exit(-1)
 
-        self.io = thread.Thread(target=self.io_thread)
+        self.io = thread.Thread(target=self.io_thread, name="DebugServer IO thread")
         self.io.start()
+
+        self.hang = thread.Thread(target=self.hang_thread, name="DebugServer hang detector")
+        self.hang.start()
 
         print("Waiting for user program execution on target to begin....")
 
@@ -87,6 +102,16 @@ class DebugServer:
         return splice
 
 
+    # Check and see if the remote server has hung up if we don't get an OPEN message for over 5 seconds
+    def hang_thread(self):
+        while True:
+            c_time = int(time.time())
+
+            if c_time - self.last_open >= 5:
+                print("Warning! DebugServer (local) has not gotten any OPEN messages from the debug server in over 5s, did the debug server freeze?")
+
+            time.sleep(2)
+
     # Wait for the next message of the given type to arrive
     def wait_for(self, msg_type: DebuggerMessageType, count: int = -1):
         if msg_type in self.waits:
@@ -134,6 +159,9 @@ class DebugServer:
                 self.message_trace.clear()
             
             self.message_trace.append(msg)
+
+            if msg.msg_type == DebuggerMessageType.OPEN:
+                self.last_open = int(time.time())
 
             if msg.msg_type in self.waits:
                 if not msg.msg_type in self.wait_results:

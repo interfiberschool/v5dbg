@@ -84,6 +84,9 @@ while server.connected():
 
     if parsed.debugger == 'bt' or parsed.debugger == 'backtrace' or parsed.debugger == 'stack':
         stacktrace = client.get_stacktrace()
+        if stacktrace == None:
+            continue
+
         for s in stacktrace:
             print(f"# {s}")
     elif parsed.debugger == 'suspend' or parsed.debugger == 'halt' or parsed.debugger == 's':
