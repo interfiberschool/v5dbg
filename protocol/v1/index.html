@@ -1637,7 +1637,7 @@
 <li>Message payload</li>
 <li><abbr title="`\n`">Newline</abbr></li>
 </ul>
-<p>An example message can be seen as <code>%1:1:0</code>, message type one is program suspend. It should be noted that if more than three <abbr title="separator  `:`">message separator</abbr> characters are used then any located after the third are ignored and are merged into the message payload.</p>
+<p>An example message can be seen as <code>%1:1:0</code>, message type one is program suspend. It should be noted that if more than two <abbr title="separator  `:`">message separator</abbr> characters are used then any located after the third are ignored and are merged into the message payload.</p>
 <p>If we have the message <code>%1:2:0:1:2:3</code> then the message payload should be <code>0:1:2:3</code>, the extra <abbr title="separator  `:`">message separator</abbr> characters do not mess up the parser state and does not throw a warning or error of any kind</p>
 <h2 id="message-types">Message Types</h2>
 <p>Message types are defined as enums within <code>v5dbg/protocol.h</code> (include directory), the <code>DEBUGGER_MESSAGE_MAX</code> is used as a basic check to determine if a message type is invalid.</p>
