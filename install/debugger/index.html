@@ -99,6 +99,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#install-the-v5dbg-debugger" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -727,6 +732,21 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -739,6 +759,52 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#downloading-the-latest-archive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Downloading the latest archive
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extract-and-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extract and install
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commons-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commons errors
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -799,6 +865,167 @@
   
   <span class="md-ellipsis">
     suspend
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debugger/cmds/resume/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    resume
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debugger/cmds/backtrace/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    backtrace
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debugger/cmds/frame/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    frame
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debugger/cmds/mem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    mem
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debugger/cmds/print/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    print
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debugger/cmds/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    state
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../debugger/cmds/thread/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    thread
     
   </span>
   
@@ -1224,9 +1451,40 @@
   
 
 
-  <h1>Installation</h1>
-
-
+<h1 id="install-the-v5dbg-debugger">Install the v5dbg debugger</h1>
+<h2 id="downloading-the-latest-archive">Downloading the latest archive</h2>
+<p>Download the latest <code>v5dbg_debugger.zip</code> file for your platform from the <a href="https://github.com/Interfiber/v5dbg/releases">releases page</a></p>
+<ul>
+<li>For <strong>Windows</strong> users download <code>v5dbg_debugger_win32.zip</code></li>
+<li>For <strong>GNU/Linux</strong> users download <code>v5dbg_debugger_linux64.zip</code></li>
+<li><strong>MacOS</strong> is not currently built by the CI/CD system and archives are not published</li>
+</ul>
+<details class="tip">
+<summary>Verify checksums</summary>
+<p>If you want to verify that your file has not been tampered with you may check its checksum again the computed ones available on the versions specific release page.</p>
+</details>
+<h2 id="extract-and-install">Extract and install</h2>
+<p>Extract the downloaded zip file into an <strong>easily accessible location</strong>. If you wish to make the <code>v5dbg</code> command available in your shell without using the <strong>full path</strong> you can add the extracted location to your <code>PATH</code> variable.</p>
+<h2 id="commons-errors">Commons errors</h2>
+<details class="danger">
+<summary>Waiting for user program execution on target to begin....</summary>
+<p>If you get <strong>stuck</strong> at this message it means we are still waiting for the <strong>user program</strong> to start on the brain.</p>
+<p>Make sure that:</p>
+<ul>
+<li>You're <strong>wired</strong> to the brain over MicroUSB</li>
+<li>You have <strong>started</strong> the user program on the brain</li>
+</ul>
+</details>
+<details class="danger">
+<summary>Warning! DebugServer (local) has not gotten any OPEN messages from the debug server in over 5s, did the debug server freeze?</summary>
+<p>This means that the debug server running on the brain <strong>hasn't</strong> sent us any messages in over 5 seconds.</p>
+<p>This usually means:</p>
+<ul>
+<li>The user program &amp; debug server have <strong>crashed</strong></li>
+<li>The serial connection to the debug server has been <strong>dropped</strong>, try restarting the debugger</li>
+<li>The user program is <strong>hogging CPU resources</strong> and not allowing the debug server to execute</li>
+</ul>
+</details>
 
 
 
@@ -1328,7 +1586,7 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.path", "content.code.copy", "navigation.top", "navigation.instant", "content.code.annotate", "toc.integrate", "navigation.footer"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.path", "content.code.copy", "navigation.top", "navigation.instant", "content.code.annotate", "toc.integrate", "navigation.footer", "content.tooltips"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
