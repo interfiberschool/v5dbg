@@ -107,7 +107,7 @@ class DebuggerClient:
             c_thread = False
             for blob in thread_blob_split:
                 if i % 2 == 0:
-                    if int(blob) == self.active_thread.thread_id:
+                    if int(blob) == self.active_thread.id:
                         c_thread = True
 
                     print(f"({blob}) ", end="")

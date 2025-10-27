@@ -79,7 +79,7 @@ class RawVariableData:
     # Print all variables managed by this class
     def all(self):
         if len(self.variables) == 0:
-            return "No variables exposed by debug server"
+            return "No variables exposed by debug server\n"
 
         d = ""
         for mem in self.variables:
