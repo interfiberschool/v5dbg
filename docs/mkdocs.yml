@@ -18,6 +18,13 @@ nav:
     - Installation: install/debugger.md
     - Commands:
       - suspend: debugger/cmds/suspend.md
+      - resume: debugger/cmds/resume.md
+      - backtrace: debugger/cmds/backtrace.md
+      - frame: debugger/cmds/frame.md
+      - mem: debugger/cmds/mem.md
+      - print: debugger/cmds/print.md
+      - state: debugger/cmds/state.md
+      - thread: debugger/cmds/thread.md
   - Advanced Topics:
     - Pretty Printers: advanced/pretty_printers.md
     - Wireless Debugging: advanced/wireless.md
@@ -68,6 +75,7 @@ theme:
     - content.code.annotate
     - toc.integrate
     - navigation.footer
+    - content.tooltips
 
 plugins:
   - social:
@@ -76,12 +84,15 @@ plugins:
       debug: true
 
 markdown_extensions:
+  - abbr
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
-  - pymdownx.snippets
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbr.md 
   - pymdownx.superfences
   - admonition
   - pymdownx.details

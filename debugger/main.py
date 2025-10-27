@@ -111,7 +111,7 @@ while server.connected():
     elif parsed.debugger == 'state':
         client.print_state()
     elif parsed.debugger == 'mem':
-        print(client.get_memory().all())
+        print(client.get_memory().all(), end="")
     elif parsed.debugger == 'exit' or parsed.debugger == 'q':
         print("Bye!")
         break
