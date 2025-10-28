@@ -82,6 +82,7 @@ plugins:
       cards_layout_dir: layouts
       cards_layout: custom
       debug: true
+  - search
 
 markdown_extensions:
   - abbr
