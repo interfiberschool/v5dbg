@@ -12,7 +12,7 @@ v5dbg uses these to its advantage with the `V5DbgFunction` class. When this clas
 
 The C++ compiler will automatically call the destructor once this class instance falls out of scope in the **current function**, inside our destructor we call `pop_back` on the current virtual callstack vector.
 
-With this method, a function's debug information is inserted onto the virtual callstack at the **proper location** and is available for the **entire duration of its execution**. When we wish to inspect the callstack, like for [`DEBUGGER_MESSAGE_VSTACK_FOR`](/protocol/v1/#debugger_message_vstack_for) messages, we simply loop through the proper callstack vector.
+With this method, a function's debug information is inserted onto the virtual callstack at the **proper location** and is available for the **entire duration of its execution**. When we wish to inspect the callstack, like for [`DEBUGGER_MESSAGE_VSTACK_FOR`](/protocol/v1/#debugger_message_vstack_for) messages, we simply loop through the proper callstack vector to remove the last inserted frame.
 
 Since collecting debug info and constructing classes is annoying to do manually for every function its been compressed into a **singular macro** called [`$function`](/cpp/macros/debug/function), when this macro is used at the top of a function it **generates the code** required to generate stack traces and places the `V5DbgFunction` class instance in a local variable named `_v5dbg_stack_func`
 
