@@ -64,7 +64,7 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
     void
     printAndSleep(const std::string &p)
     {
-        $function // (2)
+        $function
         pros::lcd::print(1, "%s", p.c_str()); // Print our data to the screen
 
         pros::delay(300); // Wait 300ms

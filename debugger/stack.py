@@ -1,4 +1,7 @@
 # Handles stack frames captured by the debug server
+from subargs import subargs_parse
+
+
 class StackFrame:
     # Name of the stack frame, unmangled usually this is the function name obtained from __PRETTY_FUNCTION__
     name: str
@@ -22,9 +25,7 @@ class StackFrame:
     # Encoding should be: ID:NAME:FILE:LINE_NUMBER 
     @classmethod
     def from_msg(self, buffer: str):
-        bsplit = buffer.split(":")
-        if len(bsplit) != 4:
-            raise Exception(f"Invalid StackFrame message: {buffer}, expected four encoded parameters")
+        bsplit = subargs_parse(buffer)
         
         # If we fail to cast any of these then we just die, we trust the debug server with our life tho...
 

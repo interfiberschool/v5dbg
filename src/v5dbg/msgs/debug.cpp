@@ -47,7 +47,7 @@ V5Dbg_VStackForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
       {
         v5dbg_stack_frame_t frame = thread.stack[i];
 
-        rVal.paramBuffer = std::to_string(iframe) + ":" + frame.funcName + ":" + frame.stackBegin.filePath
+        rVal.paramBuffer = std::to_string(iframe) + ":[" + frame.funcName + "]:" + frame.stackBegin.filePath
           + ":" + std::to_string(frame.stackBegin.lineNumber);
 
         V5Dbg_WriteToOut(V5Dbg_SerializeMessage(rVal));

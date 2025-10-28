@@ -80,7 +80,7 @@ public:
   }
 
   /// @brief  Set the memory object pointer
-  void setPtr(void* ptr);
+  void setPtr(const void* ptr);
 
   /// @brief  Return this memory object's ID
   [[nodiscard]] inline uint32_t
@@ -89,7 +89,7 @@ public:
     return m_id;
   }
 
-  [[nodiscard]] inline void*
+  [[nodiscard]] inline const void*
   getPtr() const
   {
     return m_memory;
@@ -120,6 +120,6 @@ private:
   uint32_t m_id;
   v5dbg_variable_t m_variable;
 
-  void* m_memory;
+  const void* m_memory;
   v5dbg_memory_type_e m_memoryType;
 };

@@ -42,11 +42,14 @@ void printData(const char* s)
     pros::lcd::print(0, "%s", s);
 }
 
-void opLoop()
+void opLoop(const std::string &data)
 {
     $function
+    $expose(data);
 
-    printData("Hello World");
+    const void* buffer = &data;
+
+    printData(data.c_str());
 
     pros::delay(300);
 }
@@ -81,7 +84,7 @@ opcontrol(void)
 
         pros::lcd::print(3, "%i", x);
 
-        opLoop();
+        opLoop("Hello World");
 
         x++;
     }

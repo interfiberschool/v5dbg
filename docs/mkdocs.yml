@@ -35,8 +35,7 @@ nav:
       - Exposed memory: debug_server/exposed_memory.md
     - Debugger:
       - Comms server: debugger/comms.md
-    - Protocol Documentation:
-      - V1 (Current): protocol/v1.md
+    - Protocol Documentation: protocol/v1.md
 
 theme:
   name: material

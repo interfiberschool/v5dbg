@@ -8,7 +8,7 @@ V5DbgMemoryObject::V5DbgMemoryObject(const v5dbg_variable_t &var)
 }
 
 void
-V5DbgMemoryObject::setPtr(void* ptr)
+V5DbgMemoryObject::setPtr(const void* ptr)
 {
   m_memory = ptr;
 }
