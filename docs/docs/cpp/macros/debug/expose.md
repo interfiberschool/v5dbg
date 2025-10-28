@@ -24,6 +24,32 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
     - This macro **requires** the current thread to be supervised with [$ntask](./ntask.md) or `V5Dbg_Init`
     - This macro **requires** the current function to be [debuggable](../debug/function.md4)
 
+??? memory-error "Potential memory error"
+    The `$expose` macro allows you to expose memory which **should be marked as const**. For example the following code is valid:
+
+    ```c++
+    #include "v5dbg/debug.h"
+
+    void funcWithParams(const std::string &data)
+    {
+        $function
+
+        $expose(data);
+    }
+
+    void opcontrol()
+    {
+        $ntask
+        $function
+
+        funcWithParams("Hello this usually cannot be changed!");
+    }
+    ```
+
+    Using the debugger you can **set the value** of the `data` parameter even though in standard C++ this would result in a **compiler error**.
+
+    Setting the value will **usually** be fine but it should be classified as **undefined behavior**.
+
 ## Examples
 
 === "Single scope"
@@ -58,13 +84,16 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
 
 === "Multiple scopes"
 
-    ```c++ hl_lines="6" linenums="1"
+    ```c++ hl_lines="8 22" linenums="1"
     #include "v5dbg/debug.h"
 
     void
     printAndSleep(const std::string &p)
     {
         $function
+
+        $expose(p); // (1)
+
         pros::lcd::print(1, "%s", p.c_str()); // Print our data to the screen
 
         pros::delay(300); // Wait 300ms
@@ -73,18 +102,20 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
     void
     opcontrol()
     {
-        $ntask // (1)
+        $ntask
         $function
 
+        int i = 0;
+        $expose(i); // (2)
         while (true)
         {
             printAndSleep("Hello World");
+
+            i++;
         }
     }
     ```
 
 
-    1. For more information on `$ntask` look [here](./ntask.md)
-    2. Now our `printAndSleep` function will be the second item in the callstack, it should now look like this:
-        - `void printAndSleep(const std::string &p)`
-        - `void opcontrol()`
+    1. We can expose arguments, even references! This value with show up in a different stack frame from `opcontrol`
+    2. Expose our variable `i` here, this will show up in a different stack frame from the `$expose` in `printAndSleep`

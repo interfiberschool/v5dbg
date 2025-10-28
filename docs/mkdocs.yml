@@ -26,15 +26,15 @@ nav:
       - print: debugger/cmds/print.md
       - state: debugger/cmds/state.md
       - thread: debugger/cmds/thread.md
-  - Advanced Topics:
-    - Pretty Printers: advanced/pretty_printers.md
-    - Wireless Debugging: advanced/wireless.md
+  # - Advanced Topics:
+    # - Pretty Printers: advanced/pretty_printers.md
+    # - Wireless Debugging: advanced/wireless.md
   - Engineering:
     - Debug Server:
       - Stack traces: debug_server/stack.md
       - Exposed memory: debug_server/exposed_memory.md
-    - Debugger:
-      - Comms server: debugger/comms.md
+    # - Debugger:
+      # - Comms server: debugger/comms.md
     - Protocol Documentation: protocol/v1.md
 
 theme:
