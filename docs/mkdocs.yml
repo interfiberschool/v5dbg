@@ -14,6 +14,7 @@ nav:
     - Macros:
       - $function: cpp/macros/debug/function.md
       - $ntask: cpp/macros/debug/ntask.md
+      - $expose: cpp/macros/debug/expose.md
   - Debugger:
     - Installation: install/debugger.md
     - Commands:
@@ -76,6 +77,8 @@ theme:
     - toc.integrate
     - navigation.footer
     - content.tooltips
+    - navigation.tracking
+    - navigation.expand
 
 plugins:
   - social:
@@ -117,3 +120,6 @@ extra:
 extra:
   version:
     provider: mike
+
+extra_css:
+  - stylesheets/extra.css

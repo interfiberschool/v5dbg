@@ -1,5 +1,6 @@
 ---
 description: Install the v5dbg debug server into your PROs project
+icon: octicons/download-24
 ---
 
 # Installation

@@ -1,5 +1,6 @@
 ---
 description: Documentation for the $ntask macro which is used to supervise the current task and allow for debugging functionality
+icon: octicons/diff-added-24
 ---
 
 # `$ntask`
@@ -32,8 +33,8 @@ The `$ntask` macro informs the debug server of a newly spawned thread/task. It s
 void
 opcontrol()
 {
-    $ntask // (1)!
-    $function // (2)!
+    $ntask // (1)
+    $function // (2)
 
     while (true)
     {

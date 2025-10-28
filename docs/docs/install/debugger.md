@@ -1,3 +1,8 @@
+---
+description: Install the debugger component of v5dbg
+icon: octicons/download-24
+---
+
 # Install the v5dbg debugger
 
 ## Downloading the latest archive

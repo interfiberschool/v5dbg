@@ -2,6 +2,7 @@
 description: The only true VEX debugger™
 hide:
     - footer
+    - navigation
 ---
 
 # V5 Debugger
@@ -20,45 +21,31 @@ The only true VEX debugger™
 
 <div class="grid cards" markdown>
 
-- :fontawesome-solid-circle: Set software breakpoints
+- :fontawesome-solid-circle: Breakpoints and stacktraces
 
     ---
-    - Set breakpoints on function entrance/exit, memory allocations, and in manual locations.
-    - Conditional breakpoints `$cbreak`
+
+    Use **breakpoints** to suspend the program at specific points and obtain realtime **stacktraces**.
 
     [:octicons-arrow-right-24: C++ Documentation](cpp/macros/debug/function.md)
 
     [:octicons-arrow-right-24: Debugger Documentation](debugger/commands.md#Breakpoints)
 
-- :fontawesome-solid-microchip: Inspect active threads
-
-
-    ---
-    - View active locks and which threads hold them
-    - View the current callstack for a thread at any time
-    - Easily switch the debuggers active context to another thread
-
-    [:octicons-arrow-right-24: C++ Documentation](cpp/macros/debug/ntask.md)
-
-    [:octicons-arrow-right-24: Debugger Documentation](debugger/commands.md#Threads)
-
-- :fontawesome-solid-memory: Inspect, set, and manage memory
+- :fontawesome-solid-memory: Manage memory
 
     ---
-    - Automatically pretty print variables based on compile-time type information
-    - Set memory value to a constant, variable constant, or temporary value
 
-    [:octicons-arrow-right-24: C++ Documentation](cpp/macros/memory)
+    Print, list, set, and control exposed memory with debugger commands.
+
+    [:octicons-arrow-right-24: C++ Documentation](cpp/macros/debug/expose.md)
 
     [:octicons-arrow-right-24: Debugger Documentation](debugger/commands.md#Memory)
 
-- :fontawesome-brands-usb: Inspect device states
+- :fontawesome-solid-bolt: Inspect device states
 
     ---
-    - Motor information
-    - Battery power
-    - Connected remote information
-    - Radio I/O
+
+    View states of connected motors, radios, rotation sensors, and more.
 
     [:octicons-arrow-right-24: C++ Documentation](macros/device)
 
@@ -66,4 +53,9 @@ The only true VEX debugger™
 
 </div>
 
-[Ready to get started?](install/server.md){ .md-button .md-button--primary }
+<h2 align="center"><strong>and more!</strong></h2>
+
+<!-- Kinda a hack but I want a centered button -->
+<p align="center">
+<a href="/install/server" class="md-button md-button--primary center">Ready to get started? <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"></path></svg></span></a>
+</p>
