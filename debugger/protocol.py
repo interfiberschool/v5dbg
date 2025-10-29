@@ -5,6 +5,7 @@ from enum import IntEnum
 # Version 2: v0.2
 PROTOCOL_VERSION = 2
 
+# See include/v5dbg/protocol.h for documentation for each type
 class DebuggerMessageType(IntEnum):
     OPEN = 0,
     SUSPEND = 1,
@@ -19,6 +20,7 @@ class DebuggerMessageType(IntEnum):
     LMEM_FOR = 10,
     RLMEM = 11,
     LMEM_END = 12
+    BREAK_INVOKED = 13
 
 class DebuggerMessage():
     msg_type: DebuggerMessageType
