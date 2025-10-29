@@ -104,7 +104,7 @@ class DebugServer:
 
     # Check and see if the remote server has hung up if we don't get an OPEN message for over 5 seconds
     def hang_thread(self):
-        while True:
+        while self.proc.poll() != None:
             c_time = int(time.time())
 
             if c_time - self.last_open >= 5:

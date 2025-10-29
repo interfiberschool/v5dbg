@@ -8,8 +8,8 @@ class Type:
     # Template to locate, template to replace
     # Use $template for template arguments from base class
     TYPEDEFS = {
-        "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >": "std::string",
-        "std::vector<$template>": "std::vector<$template>"
+        "std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>": "std::string",
+        "std::vector<$template>": "std::vector<$targs[0]>"
     }
 
     def __init__(self, type_name: str):
@@ -45,7 +45,16 @@ class Type:
     # param: stub = Input typedef stub arguments
     @classmethod
     def eval_typedef(self, template: str, stub: str):
-        return stub.replace("$template", template)        
+        split = template.split(",")
+        result = stub.replace("$template", template)
+
+        x = 0
+        for i in split:
+            result = result.replace(f"$targs[{x}]", i)
+
+            x += 1
+
+        return result
 
     # Simplify typename by reversing back to pre-defined typedefs, this ends up removing allocator info
     def simp(self):
