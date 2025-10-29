@@ -38,7 +38,7 @@ class Type:
         if start_open == -1 or start_close == -1:
             return ""
 
-        return template[start_open+1:start_close-2]
+        return template[start_open+1:start_close-1].replace(" ", "")
 
     # Eval a typedef compression statement
     # param: template = Input template arguments
@@ -50,12 +50,11 @@ class Type:
     # Simplify typename by reversing back to pre-defined typedefs, this ends up removing allocator info
     def simp(self):
         t_args = Type.find_template_args(self.type_name)
-        print(t_args)
         for t, replacement in self.TYPEDEFS.items():
             new_def = Type.eval_typedef(t_args, t)
 
-            if new_def == self.type_name: # Templates match, return the simpler version
-                return replacement
+            if new_def == self.type_name.replace(" ", ""): # Templates match, return the simpler version
+                return Type.eval_typedef(t_args, replacement)
         
         return self.type_name
 
