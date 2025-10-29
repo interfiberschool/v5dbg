@@ -11,6 +11,9 @@ struct v5dbg_code_point_t
 
   /// @brief  Line number which the code point is on
   int lineNumber;
+
+  /// @brief  Function which this code point is located in
+  std::string functionName;
 };
 
 /// @brief  Describes a variable located in the program

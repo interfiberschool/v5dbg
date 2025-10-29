@@ -29,7 +29,8 @@ private:
 #define $function                                                                                                      \
   __v5dbg_func:                                                                                                        \
   static V5DbgStackMemory _v5dbg_stack_func_memory;                                                                                      \
-  V5DbgFunction _v5dbg_stack_func(__PRETTY_FUNCTION__, __FILE__, __LINE__, &&__v5dbg_func, &_v5dbg_stack_func_memory);
+  V5DbgFunction _v5dbg_stack_func(__PRETTY_FUNCTION__, __FILE__, __LINE__, &&__v5dbg_func, &_v5dbg_stack_func_memory); \
+  v5dbg_breakpoint_t *_v5dbg_break_c = nullptr; \
 
 /**
  * @brief  Expose a scoped variable to the debugger.
@@ -49,11 +50,9 @@ private:
   _v5dbg_var_##target->setPtr(&target);                                                                                \
   _v5dbg_stack_func.expose(_v5dbg_var_##target);
 
-#define $_define_break CONCAT(_v5dbg_break_c##, __LINE__)
-
 /// @brief Disabled by default breakpoint
-#define $break \
-  static v5dbg_breakpoint_t $_define_break(); \
-  V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), &_v5dbg_break_c);
+#define $break { static v5dbg_breakpoint_t _v5dbg_break_c = V5Dbg_Breakpoint(false, { .filePath = __FILE__, .lineNumber = __LINE__, .functionName = __PRETTY_FUNCTION__ }); \
+    V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), &_v5dbg_break_c); \
+  }
 
 #define $ntask V5DbgAutoTask _v5dbg_ctask;

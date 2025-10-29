@@ -162,6 +162,8 @@ class DebugServer:
 
             if msg.msg_type == DebuggerMessageType.OPEN:
                 self.last_open = int(time.time())
+            elif msg.msg_type == DebuggerMessageType.BREAK_INVOKED:
+                print(f"Breakpoint tripped at src/main.cpp:45 in void opLoop(const std::string &)")
 
             if msg.msg_type in self.waits:
                 if not msg.msg_type in self.wait_results:

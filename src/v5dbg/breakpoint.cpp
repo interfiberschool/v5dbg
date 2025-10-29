@@ -1,4 +1,5 @@
 #include "v5dbg/breakpoint.h"
+#include "debinfo.h"
 #include "debugger.h"
 #include "protocol.h"
 #include "server.h"
@@ -12,7 +13,7 @@ V5Dbg_BreakpointMain(v5dbg_server_state_t *pState, v5dbg_breakpoint_t *breakpoin
 
   v5dbg_message_t msg{};
   msg.type = DEBUGGER_MESSAGE_BREAK_INVOKED;
-  msg.paramBuffer = "todo";
+  msg.paramBuffer = "BREAKPOINT";
 
   V5Dbg_WriteToOut(V5Dbg_SerializeMessage(msg));
 
@@ -26,4 +27,14 @@ V5Dbg_BreakpointMain(v5dbg_server_state_t *pState, v5dbg_breakpoint_t *breakpoin
   V5Dbg_PushMessage(pState, suspend);
 
   V5Dbg_WaitForSuspend(V5Dbg_GetCurrentServer());
+}
+
+v5dbg_breakpoint_t
+V5Dbg_Breakpoint(bool enabled, const v5dbg_code_point_t &loc)
+{
+  v5dbg_breakpoint_t b{};
+  b.enabled = enabled;
+  b.location = loc;
+
+  return b;
 }

@@ -1,6 +1,13 @@
+from prompt_toolkit import print_formatted_text
+import pygments
 from subargs import subargs_parse
 from protocol import DebuggerMessage, DebuggerMessageType
 from utils import DebugInfo
+from prompt_toolkit.formatted_text import FormattedText, to_formatted_text, PygmentsTokens
+from pygments.token import Token
+from pygments.lexers.c_cpp import CppLexer
+from prompt_toolkit.styles.pygments import style_from_pygments_cls
+from pygments.styles import get_style_by_name
 
 class Type:
     type_name: str
@@ -128,20 +135,25 @@ class RawVariableData:
         self.variables.append(ProgramVariable(name, buffer, deb, Type(type)))
 
     # Get a variable by name
-    def get_variable(self, name: str):
+    def get_variable(self, name: str) -> PygmentsTokens:
+        style = style_from_pygments_cls(get_style_by_name('emacs'))
+
         for v in self.variables:
             if v.name == name:
-                return v
+                return PygmentsTokens(list(pygments.lex(str(v), lexer=CppLexer())))
 
         return None
 
     # Print all variables managed by this class
-    def all(self):
+    def print_all(self) -> FormattedText:
         if len(self.variables) == 0:
-            return "No variables exposed by debug server\n"
+            return to_formatted_text("No variables exposed by debug server")
+        
+        style = style_from_pygments_cls(get_style_by_name('emacs'))
 
-        d = ""
         for mem in self.variables:
-            d += f"  {mem.type} {mem.name} = <Allocated at {mem.location}>\n"
+            memory_fmt = f'{mem.type} {mem.name} = {mem.content}; // Allocated at {mem.location}'
 
-        return d
+            tokens = list(pygments.lex(memory_fmt, lexer=CppLexer()))
+
+            print_formatted_text(PygmentsTokens(tokens), end="", style=style)
