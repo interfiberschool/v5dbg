@@ -49,8 +49,11 @@ private:
   _v5dbg_var_##target->setPtr(&target);                                                                                \
   _v5dbg_stack_func.expose(_v5dbg_var_##target);
 
-#define $breakpoint  \
-  static v5dbg_breakpoint_t _v5dbg_break_c{}; \
+#define $_define_break CONCAT(_v5dbg_break_c##, __LINE__)
+
+/// @brief Disabled by default breakpoint
+#define $break \
+  static v5dbg_breakpoint_t $_define_break(); \
   V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), &_v5dbg_break_c);
 
 #define $ntask V5DbgAutoTask _v5dbg_ctask;

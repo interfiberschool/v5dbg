@@ -27,3 +27,6 @@ void info(const char* format, ...);
  * Print data to the console in preinit
 */
 void info_pre(const char* format, ...);
+
+#define CONCAT_(prefix, suffix) prefix##suffix
+#define CONCAT(prefix, suffix) CONCAT_(prefix, suffix)

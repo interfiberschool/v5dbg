@@ -51,7 +51,8 @@ void opLoop(const std::string &data)
 
     printData(data.c_str());
 
-    $breakpoint
+    static v5dbg_breakpoint_t _v5dbg_break_c54{};
+    V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), &_v5dbg_break_c);
 
     pros::delay(300);
 }
