@@ -1,4 +1,5 @@
 #pragma once
+#include "v5dbg/server.h"
 #include "v5dbg/debinfo.h"
 #include <functional>
 
@@ -12,14 +13,8 @@ struct v5dbg_breakpoint_t
   std::function<bool()> cond;
 
   /// @brief  Will this breakpoint be invoked when it's hit?
-  bool enabled = false;
+  bool enabled = true;
 };
 
-/**
- * Add a breakpoint to the debug server
- * @param Pointer to breakpoint information in memory, should be statically allocated
- */
-void V5Dbg_AddBreak(v5dbg_breakpoint_t *breakpoint);
-
-/// @brief  Invoke a breakpoint if its been enabled & its condition is true
-void V5Dbg_InvokeBreak(v5dbg_breakpoint_t *breakpoint);
+/// @brief  Manage a breakpoint, should only be called by the $break macro
+void V5Dbg_BreakpointMain(v5dbg_server_state_t *pState, v5dbg_breakpoint_t *breakpoint);

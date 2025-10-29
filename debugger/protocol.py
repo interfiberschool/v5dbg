@@ -1,7 +1,9 @@
 # For documentation on these types see include/v5dbg/protocol.h
 from enum import IntEnum
 
-PROTOCOL_VERSION = 1
+# Version 1: v0.1
+# Version 2: v0.2
+PROTOCOL_VERSION = 2
 
 class DebuggerMessageType(IntEnum):
     OPEN = 0,
@@ -63,7 +65,7 @@ class DebuggerMessage():
         parameters[len(parameters) - 1] = parameters[len(parameters) - 1].strip()
 
         if int(parameters[0]) != PROTOCOL_VERSION:
-            raise Exception("Debugger message has invalid protocol version, expected: " + PROTOCOL_VERSION + " and got: " + parameters[0])
+            raise Exception("Debugger message has invalid protocol version, expected: " + str(PROTOCOL_VERSION) + " and got: " + parameters[0])
 
         msg.msg_type = DebuggerMessageType(int(parameters[1]))
         msg.parameters = parameters

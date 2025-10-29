@@ -51,6 +51,8 @@ void opLoop(const std::string &data)
 
     printData(data.c_str());
 
+    $breakpoint
+
     pros::delay(300);
 }
 

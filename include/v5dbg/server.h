@@ -50,6 +50,9 @@ struct v5dbg_server_state_t
   /// @brief  Turned to false when the server needs to be suspended
   bool canRun = true;
 
+  /// @brief  Set to true when the program just comes up from suspension
+  bool justAwoke = false;
+
   /// @brief  Serial file used to send data to the debugger
   FILE* serial;
 };
@@ -102,6 +105,12 @@ v5dbg_thread_t* V5Dbg_ThreadWithID(v5dbg_server_state_t* pState, int id);
 
 /// @brief  Return the v5dbg_thread_t for the given task
 v5dbg_thread_t* V5Dbg_ThreadWithID(int id);
+
+//// @brief  Return the active server state
+v5dbg_server_state_t* V5Dbg_GetCurrentServer();
+
+/// @brief  Busy wait until the program is resumed, used to prevent execution in breakpoints0
+void V5Dbg_WaitForSuspend(v5dbg_server_state_t *pState);
 
 /// @brief  Internal server main function, should never be called manually
 void V5Dbg_ServerMain();

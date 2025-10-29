@@ -255,3 +255,22 @@ V5Dbg_SetWriteMode(v5dbg_server_state_t* pState, v5dbg_server_write_mode_e write
     serctl(SERCTL_DISABLE_COBS, nullptr);
   }
 }
+
+v5dbg_server_state_t*
+V5Dbg_GetCurrentServer()
+{
+  return CURRENT_SERVER;
+}
+
+
+void
+V5Dbg_WaitForSuspend(v5dbg_server_state_t *pState)
+{
+  // Wait for program to enter suspend state
+
+  while (!pState->justAwoke)
+  {
+    info_pre("Waiting for resume...");
+    pros::delay(50);
+  }
+}

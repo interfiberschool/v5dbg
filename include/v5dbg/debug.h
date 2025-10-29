@@ -2,6 +2,7 @@
 #include "v5dbg/debinfo.h"
 #include "v5dbg/server.h"
 #include "v5dbg/stack.h"
+#include "v5dbg/breakpoint.h"
 
 /*
  * Main user-facing API
@@ -47,5 +48,9 @@ private:
   _v5dbg_var_##target->setMemoryType(V5Dbg_MemoryTypeFromType(typeid(target))); \
   _v5dbg_var_##target->setPtr(&target);                                                                                \
   _v5dbg_stack_func.expose(_v5dbg_var_##target);
+
+#define $breakpoint  \
+  static v5dbg_breakpoint_t _v5dbg_break_c{}; \
+  V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), &_v5dbg_break_c);
 
 #define $ntask V5DbgAutoTask _v5dbg_ctask;

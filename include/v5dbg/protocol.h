@@ -7,7 +7,7 @@
  */
 
 /// Server protocol version
-#define V5DBG_SERVER_VERSION 1
+#define V5DBG_SERVER_VERSION 2
 
 #define V5DBG_MSG_SEPERATOR ':'
 
@@ -53,8 +53,11 @@ enum v5dbg_message_type_e
   /// @brief  Stop accepting DEBUGGER_MESSAGE_RLMEM messages
   DEBUGGER_MESSAGE_LMEM_END = 12,
 
+  /// @brief  Sent to the debugger every time a breakpoint is activated and the program is suspended
+  DEBUGGER_MESSAGE_BREAK_INVOKED = 13,
+
   /// @brief  Max debugger message ID
-  DEBUGGER_MESSAGE_MAX = 13
+  DEBUGGER_MESSAGE_MAX = 14
 };
 
 struct v5dbg_message_t

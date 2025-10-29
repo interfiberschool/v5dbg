@@ -17,6 +17,8 @@ V5Dbg_SuspendProgram(v5dbg_server_state_t* pState)
     task.task.suspend();
   }
 
+  pState->justAwoke = false;
+
   info("ProgramSuspend");
 }
 
@@ -34,6 +36,8 @@ V5Dbg_ResumeProgram(v5dbg_server_state_t* pState)
       task.task.resume();
     }
   }
+
+  pState->justAwoke = true;
 
   info("ProgramResume\n");
 }
