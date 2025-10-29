@@ -37,9 +37,12 @@ private:
 #define $expose(target)                                                                                                \
   constexpr int _v5dbg_var_line_##target = __LINE__; \
   static v5dbg_variable_t _v5dbg_var_info_##target{}; \
+  if (_v5dbg_var_info_##target.name.empty()) { \
   _v5dbg_var_info_##target.name = #target; \
+  _v5dbg_var_info_##target.typeName = V5Dbg_Demangle(typeid(target).name());\
   _v5dbg_var_info_##target.allocationPoint.filePath = __FILE__; \
   _v5dbg_var_info_##target.allocationPoint.lineNumber = _v5dbg_var_line_##target; \
+  } \
   static std::shared_ptr<V5DbgMemoryObject> _v5dbg_var_##target = std::make_shared<V5DbgMemoryObject>(_v5dbg_var_info_##target);               \
   _v5dbg_var_##target->setMemoryType(V5Dbg_MemoryTypeFromType(typeid(target))); \
   _v5dbg_var_##target->setPtr(&target);                                                                                \

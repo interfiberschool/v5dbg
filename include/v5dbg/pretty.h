@@ -17,8 +17,11 @@ struct v5dbg_pretty_printed_t
   std::string printBuffer;
 };
 
-/// @brief  Quick constructor for v5dbg_pretty_printed_t
-#define $pretty_print_result(type, name, buf) v5dbg_pretty_printed_t { .typeName = type, .varName = name, .printBuffer = buf }
+/**
+ * @brief  Quick constructor for v5dbg_pretty_printed_t
+ * @note typeName is automatically filled in by the pretty printer function using variable information
+*/
+#define $pretty_print_result(name, buf) v5dbg_pretty_printed_t { .typeName = "void*", .varName = name, .printBuffer = buf }
 
 
 /// @brief  Function pointer to pretty printer impl

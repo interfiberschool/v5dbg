@@ -36,11 +36,22 @@ V5Dbg_RegisterPrettyPrinter(v5dbg_memory_type_e memType, V5Dbg_PrettyPrintMemory
 }
 
 v5dbg_pretty_printed_t
-V5Dbg_PrettyPrint(V5DbgMemoryObject *pMem)
+V5Dbg_PrettyPrint(V5DbgMemoryObject* pMem)
 {
   V5Dbg_PrettyPrintMemoryObj printer = V5Dbg_PrettyPrinterFromType(pMem->getMemoryType());
-  if (printer == nullptr)
-    return $pretty_print_result("void*", pMem->getVariable().name, V5Dbg_FormatPrint("%p (fallback)", pMem->getPtr()));
 
-  return printer(pMem);
+  v5dbg_pretty_printed_t result{};
+
+  if (printer == nullptr)
+  {
+    result = $pretty_print_result(pMem->getVariable().name, V5Dbg_FormatPrint("%p (fallback)", pMem->getPtr()));
+  }
+  else
+  {
+    result = printer(pMem);
+  }
+
+  result.typeName = pMem->getVariable().typeName;
+
+  return result;
 }

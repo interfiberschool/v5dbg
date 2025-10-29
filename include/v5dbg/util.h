@@ -12,6 +12,13 @@ std::string V5Dbg_FormatPrint(const char* format, ...);
 std::string V5Dbg_FormatPrint(const char* format, va_list list);
 
 /**
+ * Demangle the given symbol using the internal GNU G++ ABI functions
+ * @param symbol Symbol to demangle
+ * @return Demangled symbol
+ */
+std::string V5Dbg_Demangle(const char *symbol);
+
+/**
  * Print data to the console in
  */
 void info(const char* format, ...);

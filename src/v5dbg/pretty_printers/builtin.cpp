@@ -7,32 +7,32 @@
 v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintInt(V5DbgMemoryObject *pMemory)
 {
-  return $pretty_print_result("int", pMemory->getVariable().name, V5Dbg_FormatPrint("%i", *((int*) pMemory->getPtr())));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%i", *((int*) pMemory->getPtr())));
 }
 
 v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintPtr(V5DbgMemoryObject *pMemory)
 {
-  return $pretty_print_result("void*", pMemory->getVariable().name, V5Dbg_FormatPrint("%p", pMemory->getPtr()));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%p", pMemory->getPtr()));
 }
 
 v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintFloat(V5DbgMemoryObject *pMemory)
 {
-  return $pretty_print_result("float", pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((float*) pMemory->getPtr())));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((float*) pMemory->getPtr())));
 }
 
 v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintDouble(V5DbgMemoryObject *pMemory)
 {
-  return $pretty_print_result("double", pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((double*) pMemory->getPtr())));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((double*) pMemory->getPtr())));
 }
 
 v5dbg_pretty_printed_t
 V5Dbg_PrettyPrintChar(V5DbgMemoryObject *pMemory)
 {
 
-  return $pretty_print_result("char", pMemory->getVariable().name, V5Dbg_FormatPrint("%c", *((char*) pMemory->getPtr())));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%c", *((char*) pMemory->getPtr())));
 }
 
 $pretty_printer(V5Dbg_PrettyPrintInt, MEMORY_TYPE_BASE_INT);

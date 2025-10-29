@@ -13,7 +13,7 @@
 # Run the subarguments parser on 'buffer' and return the parsed list of parameters
 def subargs_parse(buffer: str):
     parameters = [] # List of final parameters
-    prev = "" # Current parameter we are assembling
+    prev = [] # Current parameter we are assembling
     chunk_counter = 0 # Number of characters in the parameter object
     ignore_sep = False # Ignore ':' characters
 
@@ -23,8 +23,8 @@ def subargs_parse(buffer: str):
         if c == ':' and not ignore_sep and len(prev) != 0:
             chunk_counter = 0
 
-            parameters.append(prev)
-            prev = ""
+            parameters.append("".join(prev))
+            prev.clear()
 
             x += 1
             continue
@@ -36,12 +36,12 @@ def subargs_parse(buffer: str):
         elif c == ']' and x + 1 >= len(buffer) and ignore_sep:
             ignore_sep = False
         else:
-            prev += c
+            prev.append(c)
 
         x += 1
         chunk_counter += 1
     
     if len(prev) > 0:
-        parameters.append(prev)
+        parameters.append("".join(prev))
 
     return parameters

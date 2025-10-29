@@ -5,11 +5,62 @@ from utils import DebugInfo
 class Type:
     type_name: str
 
+    # Template to locate, template to replace
+    # Use $template for template arguments from base class
+    TYPEDEFS = {
+        "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >": "std::string",
+        "std::vector<$template>": "std::vector<$template>"
+    }
+
     def __init__(self, type_name: str):
         self.type_name = type_name
 
-    def __str__(self):
+    @classmethod
+    def find_template_args(self, template: str):
+        start_open = -1
+        start_close = -1
+
+        i = 0
+        for x in template:
+            if x == '<':
+                start_open = i
+                break
+            i += 1
+
+        i = 0
+
+        for x in template:
+            if x == '>':
+                start_close = i
+
+            i += 1
+
+        if start_open == -1 or start_close == -1:
+            return ""
+
+        return template[start_open+1:start_close-2]
+
+    # Eval a typedef compression statement
+    # param: template = Input template arguments
+    # param: stub = Input typedef stub arguments
+    @classmethod
+    def eval_typedef(self, template: str, stub: str):
+        return stub.replace("$template", template)        
+
+    # Simplify typename by reversing back to pre-defined typedefs, this ends up removing allocator info
+    def simp(self):
+        t_args = Type.find_template_args(self.type_name)
+        print(t_args)
+        for t, replacement in self.TYPEDEFS.items():
+            new_def = Type.eval_typedef(t_args, t)
+
+            if new_def == self.type_name: # Templates match, return the simpler version
+                return replacement
+        
         return self.type_name
+
+    def __str__(self):
+        return self.simp()
 
 # Variable exposed to the debug server & debugger via `$expose`
 class ProgramVariable:

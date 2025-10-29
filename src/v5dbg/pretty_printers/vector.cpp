@@ -12,7 +12,6 @@
   { \
   std::vector<typeCpp> v = *(std::vector<typeCpp>*) pMem->getPtr(); \
   v5dbg_pretty_printed_t r{}; \
-  r.typeName = "std::vector<" + std::string(#typeCpp) + ">"; \
   r.varName = pMem->getVariable().name; \
   r.printBuffer = "{"; \
   for (int i = 0; i < v.size(); i++) \

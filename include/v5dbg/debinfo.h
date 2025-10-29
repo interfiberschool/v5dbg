@@ -19,6 +19,9 @@ struct v5dbg_variable_t
   /// @brief  Variable name
   std::string name;
 
+  /// @brief  Variable type name which can be optionally used by the pretty printer
+  std::string typeName;
+
   /// @brief  Allocation point
   v5dbg_code_point_t allocationPoint;
 };
