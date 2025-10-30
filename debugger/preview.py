@@ -61,13 +61,13 @@ class FilePreview:
     line (int): Starting line number
     pad (int): Y axis padding
   """
-  def print_region(self, line: int, pad: int):
-    start = line - pad
-    end = line + pad
+  def print_region(self, line_num: int, pad: int):
+    start = line_num - pad
+    end = line_num + pad
 
     i = start + 1
 
     for line in self.parsed_lines[start:end]:
-      self.print(i, line, i == line)
+      self.print(i, line, line_num == i)
 
       i += 1

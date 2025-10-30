@@ -53,6 +53,9 @@ void opLoop(const std::string &data)
 
     $break
 
+    int x = data.size();
+    $expose(x);
+
     pros::delay(300);
 }
 

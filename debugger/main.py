@@ -122,7 +122,7 @@ while True:
     # print(parsed)
 
     if parsed.debugger == 'bt' or parsed.debugger == 'backtrace' or parsed.debugger == 'stack':
-        stacktrace = client.get_stacktrace()
+        stacktrace = client.get_stacktrace(True)
         if stacktrace == None:
             continue
 
@@ -151,7 +151,7 @@ while True:
           print("Program must be SUSPENDED for file preview to be given")
           continue
 
-        bt = client.active_thread.get_backtrace()
+        bt = client.get_stacktrace(True)
         frame = bt[client.active_thread.frame_index]
 
         preview = FilePreview(frame.file)

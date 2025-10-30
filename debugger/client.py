@@ -105,7 +105,17 @@ class DebuggerClient:
             print("Program must be in the SUSPEND state for a stacktrace to be generated")
             return
 
-        return self.active_thread.get_backtrace()
+        b = self.active_thread.get_backtrace()
+
+        if not inject_breaks or self.active_break == None:
+            return b
+        
+        for frame in b:
+            if frame.name == self.active_break.function and frame.file == self.active_break.location.file:
+                frame.line = self.active_break.location.line
+                break
+
+        return b
 
     # Suspend all supervised threads
     def suspend(self):

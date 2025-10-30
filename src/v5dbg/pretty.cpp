@@ -46,6 +46,11 @@ V5Dbg_PrettyPrint(V5DbgMemoryObject* pMem)
   {
     result = $pretty_print_result(pMem->getVariable().name, V5Dbg_FormatPrint("%p (fallback)", pMem->getPtr()));
   }
+  else if (pMem->memState == MEMORY_STATE_DEALLOCATED)
+  {
+    result.varName = pMem->getVariable().name;
+    result.printBuffer = V5Dbg_FormatPrint("<Unallocated: %p>", pMem->getPtr());
+  }
   else
   {
     result = printer(pMem);
