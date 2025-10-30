@@ -1,17 +1,17 @@
 import argparse
 
 from breakpoint import DebuggerBreakpoint
+from preview import FilePreview
 from protocol import DebuggerMessageType, DebuggerMessage
-from prompt_toolkit import PromptSession, formatted_text, print_formatted_text, prompt
+from prompt_toolkit import PromptSession, formatted_text, print_formatted_text
 from prompt_toolkit.cursor_shapes import CursorShape
 from prompt_toolkit.styles.pygments import style_from_pygments_cls
 from pygments.styles import get_style_by_name
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import NestedCompleter
-import client
+from client import DebuggerClient, DebuggerState
 from colors import Colors
 from comms import DebugServer
-from protocol import PROTOCOL_VERSION
 from prompt_toolkit.history import FileHistory
 
 
@@ -45,6 +45,11 @@ frame.add_argument('frame_index', help='Frame index to set which can be obtained
 
 exit = debugger.add_parser('exit', help='Exit the debugger and disconnect from the comms server', aliases=['q'])
 
+preview = debugger.add_parser('preview', help='Preview the region near the current stack frame\'s', aliases=['pr'])
+
+file_cmd = debugger.add_parser('file', help='Pretty print the contents of a file')
+file_cmd.add_argument('file_path', help='(Optional) Path to the file to display, defaults to the current stack frame', type=str, action="store", nargs="?")
+
 break_cmd = debugger.add_parser('break', help='Manage breakpoints', aliases=['b'])
 break_sub = break_cmd.add_subparsers(help='Breakpoint commands', dest='breakp')
 
@@ -64,7 +69,7 @@ thread_list = thread_sub.add_parser('list', help="List all supervised threads", 
 
 server = DebugServer(not args.no_open_wait)
 
-client = client.DebuggerClient(server)
+client = DebuggerClient(server)
 server.set_breakpoint_trip(client.break_tripped_handler)
 
 # Main command loop
@@ -75,19 +80,14 @@ session = PromptSession(history=FileHistory(".v5dbg_history"))
 completer = NestedCompleter.from_nested_dict({
     # Exit/quit
     "exit": None,
-    "q": None,
     "mem": None,
     "state": None,
     "resume": None,
     "suspend": None,
-    "s": None,
-    "c": None,
-    "r": None,
     "continue": None,
     "help": None,
     "backtrace": None,
     "stack": None,
-    "bt": None,
     "break": {
         "enable": {
             "break_id": None
@@ -96,7 +96,7 @@ completer = NestedCompleter.from_nested_dict({
             "break_id": None
         }
     },
-    "b": None,
+    "preview": None,
     "print": {
         "variable_name": None
     },
@@ -146,6 +146,16 @@ while True:
     elif parsed.debugger == 'exit' or parsed.debugger == 'q':
         print_formatted_text("Bye!")
         break
+    elif parsed.debugger == 'preview' or parsed.debugger == 'pr':
+        if client.state & DebuggerState.RUN:
+          print("Program must be SUSPENDED for file preview to be given")
+          continue
+
+        bt = client.active_thread.get_backtrace()
+        frame = bt[client.active_thread.frame_index]
+
+        preview = FilePreview(frame.file)
+        preview.print_region(frame.line, 8)
 
     if parsed.debugger == 'help' or parsed.debugger == 'h' or parsed.debugger == '?':
         parser.print_help()

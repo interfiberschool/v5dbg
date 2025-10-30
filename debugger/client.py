@@ -18,6 +18,7 @@ class DebuggerState(IntFlag):
 class DebuggerClient:
     state: DebuggerState
     active_thread: DebuggerThread
+    active_break: DebuggerBreakpoint
     server: DebugServer
 
     def __init__(self, server: DebugServer):
@@ -62,7 +63,9 @@ class DebuggerClient:
           if frame.name == b.function:
               print_formatted_text(FormattedText([
                   ('', "Moving to frame "),
-                  (Colors.CYAN, b.function)
+                  (Colors.CYAN, b.function),
+                  ('', ' in '),
+                  (Colors.ORANGE, str(b.location))
               ]))
 
               self.active_thread.frame_index = frame.id
@@ -70,6 +73,8 @@ class DebuggerClient:
               break
 
       print_formatted_text("Program suspended for breakpoint, use 'continue' to resume execution")
+
+      self.active_break = b
 
     """
     Enable/disable a breakpoint by numerical ID
@@ -90,8 +95,10 @@ class DebuggerClient:
     def get_memory(self):
         return self.active_thread.get_memory()
 
-    # Return a list of StackFrame objects for the current thread
-    def get_stacktrace(self) -> list[StackFrame]:
+    """
+    Return the stacktrace for the active thread
+    """
+    def get_stacktrace(self, inject_breaks: bool = False) -> list[StackFrame]:
         # Ask debugger for virtual callstack
 
         if self.state & DebuggerState.RUN:
@@ -120,6 +127,7 @@ class DebuggerClient:
 
         self.state |= DebuggerState.RUN
         self.state = self.state & ~DebuggerState.SUSPEND
+        self.active_break = None
 
         resume = DebuggerMessage(DebuggerMessageType.RESUME)
         self.send_msg(resume)
