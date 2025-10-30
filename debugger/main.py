@@ -1,5 +1,7 @@
 import argparse
 
+from breakpoint import DebuggerBreakpoint
+from protocol import DebuggerMessageType, DebuggerMessage
 from prompt_toolkit import PromptSession, formatted_text, print_formatted_text, prompt
 from prompt_toolkit.cursor_shapes import CursorShape
 from prompt_toolkit.styles.pygments import style_from_pygments_cls
@@ -43,6 +45,8 @@ frame.add_argument('frame_index', help='Frame index to set which can be obtained
 
 exit = debugger.add_parser('exit', help='Exit the debugger and disconnect from the comms server', aliases=['q'])
 
+break_cmd = debugger.add_parser('break', help='Manage breakpoints', aliases=['b'])
+
 thread = debugger.add_parser('thread', help='Manage supervised threads')
 thread_sub = thread.add_subparsers(help='Thread commands', dest="thread")
 
@@ -76,6 +80,8 @@ completer = NestedCompleter.from_nested_dict({
     "backtrace": None,
     "stack": None,
     "bt": None,
+    "break": None,
+    "b": None,
     "print": {
         "variable_name": None
     },
@@ -155,5 +161,18 @@ while True:
             client.active_thread.frame_index = parsed.frame_index
 
             print_formatted_text(f"Switched to frame #{client.active_thread.frame_index}")
+    
+    if parsed.debugger == 'break' or parsed.debugger == 'b':
+        list_breaks = DebuggerMessage(DebuggerMessageType.LBREAKPOINTS)
+
+        client.send_msg(list_breaks)
+
+        msgs = server.get_msg_range(DebuggerMessageType.RBREAKPOINT, DebuggerMessageType.RBREAKPOINT)
+
+        for msg in msgs:
+            if msg.msg_type != DebuggerMessageType.RBREAKPOINT:
+                continue
+
+            DebuggerBreakpoint(msg).print_info()
 
 server.proc.kill()

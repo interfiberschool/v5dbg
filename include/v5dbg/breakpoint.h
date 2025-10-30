@@ -28,7 +28,7 @@ struct v5dbg_breakpoint_manager_t
   uint32_t nextID = 0;
 
   /// @brief  Registered breakpoints
-  std::vector<v5dbg_breakpoint_t*> breakpoints;
+  std::vector<v5dbg_breakpoint_t> breakpoints;
 };
 
 /// @brief  Return the global breakpoint manager instance

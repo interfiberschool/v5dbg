@@ -12,7 +12,7 @@ V5Dbg_LBreakpointsHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& ms
 
     for (auto &breakpoint : V5Dbg_GetBreakpointManager()->breakpoints)
     {
-        rVal.paramBuffer = V5Dbg_FormatPrint("%i:[%s]:%s:%i", breakpoint->id, breakpoint->location.functionName.c_str(), breakpoint->location.filePath.c_str(), breakpoint->location.lineNumber);
+        rVal.paramBuffer = V5Dbg_FormatPrint("%i:[%s]:%s:%i", breakpoint.id, breakpoint.location.functionName.c_str(), breakpoint.location.filePath.c_str(), breakpoint.location.lineNumber);
 
         V5Dbg_WriteToOut(V5Dbg_SerializeMessage(rVal));
     }
