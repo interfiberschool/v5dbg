@@ -32,14 +32,14 @@ V5Dbg_BreakpointMain(v5dbg_server_state_t* pState, v5dbg_breakpoint_t* breakpoin
   V5Dbg_WaitForSuspend(V5Dbg_GetCurrentServer());
 }
 
-v5dbg_breakpoint_t
+v5dbg_breakpoint_t*
 V5Dbg_Breakpoint(bool enabled, const v5dbg_code_point_t& loc)
 {
-  v5dbg_breakpoint_t b{};
-  b.enabled = enabled;
-  b.location = loc;
+  v5dbg_breakpoint_t* b = new v5dbg_breakpoint_t{};
+  b->enabled = enabled;
+  b->location = loc;
 
-  b.id = V5Dbg_GetBreakpointManager()->nextID++;
+  b->id = V5Dbg_GetBreakpointManager()->nextID++;
 
   V5Dbg_GetBreakpointManager()->breakpoints.push_back(b);
 

@@ -1,4 +1,6 @@
 from enum import IntFlag, auto
+
+from prompt_toolkit import print_formatted_text
 from comms import DebugServer
 from stack import StackFrame
 from thread import DebuggerThread
@@ -38,6 +40,21 @@ class DebuggerClient:
 
         if self.state & DebuggerState.SUSPEND:
             print("Program is: SUSPENDED")
+
+    """
+    Enable a breakpoint by numerical ID
+    """
+    def enable_breakpoint(self, id: int):
+      if id < 0:
+          print_formatted_text(f'Breakpoint ID must be positive!')
+          return
+
+      msg = DebuggerMessage(DebuggerMessageType.BREAKPOINT_ENABLE)
+      msg.data = str(id)
+
+      self.send_msg(msg)
+
+      print_formatted_text(f'Breakpoint #{id} enabled')
 
     # Return the current frame's stack memory
     def get_memory(self):

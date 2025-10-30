@@ -28,7 +28,7 @@ struct v5dbg_breakpoint_manager_t
   uint32_t nextID = 0;
 
   /// @brief  Registered breakpoints
-  std::vector<v5dbg_breakpoint_t> breakpoints;
+  std::vector<v5dbg_breakpoint_t*> breakpoints;
 };
 
 /// @brief  Return the global breakpoint manager instance
@@ -39,7 +39,7 @@ inline v5dbg_breakpoint_manager_t* V5Dbg_GetBreakpointManager()
 }
 
 /// @brief  Allocate or get a breakpoint at the given location
-v5dbg_breakpoint_t V5Dbg_Breakpoint(bool enabled, const v5dbg_code_point_t &loc);
+v5dbg_breakpoint_t* V5Dbg_Breakpoint(bool enabled, const v5dbg_code_point_t &loc);
 
 /// @brief  Manage a breakpoint, should only be called by the $break macro
 void V5Dbg_BreakpointMain(v5dbg_server_state_t *pState, v5dbg_breakpoint_t *breakpoint);

@@ -2,8 +2,6 @@
 
 import time
 
-from prompt_toolkit import print_formatted_text
-from prompt_toolkit.formatted_text import FormattedText
 from breakpoint import DebuggerBreakpoint
 from utils import find_server
 from protocol import DebuggerMessage,DebuggerMessageType
@@ -168,6 +166,7 @@ class DebugServer:
                 self.last_open = int(time.time())
             elif msg.msg_type == DebuggerMessageType.BREAK_INVOKED:
                 DebuggerBreakpoint(msg).print_tripped()
+                pass
 
             if msg.msg_type in self.waits:
                 if not msg.msg_type in self.wait_results:

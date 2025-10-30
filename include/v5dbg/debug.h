@@ -51,8 +51,8 @@ private:
   _v5dbg_stack_func.expose(_v5dbg_var_##target);
 
 /// @brief Disabled by default breakpoint
-#define $break { static v5dbg_breakpoint_t _v5dbg_break_c = V5Dbg_Breakpoint(false, { .filePath = __FILE__, .lineNumber = __LINE__, .functionName = __PRETTY_FUNCTION__ }); \
-    V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), &_v5dbg_break_c); \
+#define $break { static v5dbg_breakpoint_t* _v5dbg_break_c = V5Dbg_Breakpoint(false, { .filePath = __FILE__, .lineNumber = __LINE__, .functionName = __PRETTY_FUNCTION__ }); \
+    V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), _v5dbg_break_c); \
   }
 
 #define $ntask V5DbgAutoTask _v5dbg_ctask;

@@ -46,6 +46,10 @@ frame.add_argument('frame_index', help='Frame index to set which can be obtained
 exit = debugger.add_parser('exit', help='Exit the debugger and disconnect from the comms server', aliases=['q'])
 
 break_cmd = debugger.add_parser('break', help='Manage breakpoints', aliases=['b'])
+break_sub = break_cmd.add_subparsers(help='Breakpoint commands', dest='breakp')
+
+break_enable = break_sub.add_parser('enable', help='Enable the given breakpoint by ID')
+break_enable.add_argument("breakpoint_id", help="Breakpoint ID to enable", action="store", type=int)
 
 thread = debugger.add_parser('thread', help='Manage supervised threads')
 thread_sub = thread.add_subparsers(help='Thread commands', dest="thread")
@@ -80,7 +84,9 @@ completer = NestedCompleter.from_nested_dict({
     "backtrace": None,
     "stack": None,
     "bt": None,
-    "break": None,
+    "break": {
+        "enable": None
+    },
     "b": None,
     "print": {
         "variable_name": None
@@ -163,16 +169,19 @@ while True:
             print_formatted_text(f"Switched to frame #{client.active_thread.frame_index}")
     
     if parsed.debugger == 'break' or parsed.debugger == 'b':
-        list_breaks = DebuggerMessage(DebuggerMessageType.LBREAKPOINTS)
+        if parsed.breakp == 'enable':
+            client.enable_breakpoint(parsed.breakpoint_id)
+        else:
+          list_breaks = DebuggerMessage(DebuggerMessageType.LBREAKPOINTS)
 
-        client.send_msg(list_breaks)
+          client.send_msg(list_breaks)
 
-        msgs = server.get_msg_range(DebuggerMessageType.RBREAKPOINT, DebuggerMessageType.RBREAKPOINT)
+          msgs = server.get_msg_range(DebuggerMessageType.RBREAKPOINT, DebuggerMessageType.RBREAKPOINT)
 
-        for msg in msgs:
-            if msg.msg_type != DebuggerMessageType.RBREAKPOINT:
+          for msg in msgs:
+              if msg.msg_type != DebuggerMessageType.RBREAKPOINT:
                 continue
 
-            DebuggerBreakpoint(msg).print_info()
+              DebuggerBreakpoint(msg).print_info()
 
 server.proc.kill()

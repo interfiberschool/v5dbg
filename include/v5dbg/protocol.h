@@ -65,8 +65,11 @@ enum v5dbg_message_type_e
   /// @brief  Stop accepting DEBUGGER_MESSAGE_RBREAKPOINT messages
   DEBUGGER_MESSAGE_END_BREAKPOINTS = 16,
 
+  /// @brief  Sent to the debug server in order to enable a breakpoint by ID
+  DEBUGGER_MESSAGE_BREAKPOINT_ENABLE = 17,
+
   /// @brief  Max debugger message ID
-  DEBUGGER_MESSAGE_MAX = 17
+  DEBUGGER_MESSAGE_MAX = 18
 };
 
 struct v5dbg_message_t
