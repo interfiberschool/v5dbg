@@ -1,6 +1,10 @@
 # Handles debugger -> debug server communication and various utils around messaging
 
 import time
+
+from prompt_toolkit import print_formatted_text
+from prompt_toolkit.formatted_text import FormattedText
+from breakpoint import DebuggerBreakpoint
 from utils import find_server
 from protocol import DebuggerMessage,DebuggerMessageType
 import threading as thread
@@ -163,7 +167,7 @@ class DebugServer:
             if msg.msg_type == DebuggerMessageType.OPEN:
                 self.last_open = int(time.time())
             elif msg.msg_type == DebuggerMessageType.BREAK_INVOKED:
-                print(f"Breakpoint tripped at src/main.cpp:45 in void opLoop(const std::string &)")
+                DebuggerBreakpoint(msg).print_tripped()
 
             if msg.msg_type in self.waits:
                 if not msg.msg_type in self.wait_results:

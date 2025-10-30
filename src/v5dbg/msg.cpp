@@ -38,4 +38,9 @@ void V5Dbg_PrimeServerMessageHandlers(v5dbg_server_state_t *pState) {
     .messageType = DEBUGGER_MESSAGE_LMEM_FOR,
     .handler = V5Dbg_LMemForHandle
   });
+
+  V5Dbg_AddServerMessageHandler(pState, {
+    .messageType = DEBUGGER_MESSAGE_LBREAKPOINTS,
+    .handler = V5Dbg_LBreakpointsHandle
+  });
 }

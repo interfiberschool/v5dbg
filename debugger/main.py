@@ -1,5 +1,4 @@
 import argparse
-from time import sleep
 
 from prompt_toolkit import PromptSession, formatted_text, print_formatted_text, prompt
 from prompt_toolkit.cursor_shapes import CursorShape
@@ -8,6 +7,7 @@ from pygments.styles import get_style_by_name
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.completion import NestedCompleter
 import client
+from colors import Colors
 from comms import DebugServer
 from protocol import PROTOCOL_VERSION
 from prompt_toolkit.history import FileHistory
@@ -108,9 +108,9 @@ while True:
         for s in stacktrace:
             print_formatted_text(formatted_text.FormattedText([
                 ("", f"#{s.id} "),
-                ("#cc5500", f"{s.name} "),
+                (Colors.ORANGE, f"{s.name} "),
                 ("", "from "),
-                ("#00ffff", f"{s.file}:{s.line}")
+                (Colors.CYAN, f"{s.file}:{s.line}")
                 ]))
     elif parsed.debugger == 'suspend' or parsed.debugger == 'halt' or parsed.debugger == 's':
         if client.suspend() == None:

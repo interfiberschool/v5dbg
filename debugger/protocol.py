@@ -21,6 +21,9 @@ class DebuggerMessageType(IntEnum):
     RLMEM = 11,
     LMEM_END = 12
     BREAK_INVOKED = 13
+    LBREAKPOINTS = 14
+    RBREAKPOINT = 15
+    END_BREAKPOINTS = 16
 
 class DebuggerMessage():
     msg_type: DebuggerMessageType

@@ -20,7 +20,11 @@ void V5Dbg_ThreadListHandle(v5dbg_server_state_t *pState, const v5dbg_message_t 
 /// @brief  Handle returning the given virtual callstack to the client
 void V5Dbg_VStackForHandle(v5dbg_server_state_t *pState, const v5dbg_message_t &msg);
 
+/// @brief  Handle returning the given local memory to the client
 void V5Dbg_LMemForHandle(v5dbg_server_state_t *pState, const v5dbg_message_t &msg);
+
+/// @brief  Handle returning all breakpoints to the client
+void V5Dbg_LBreakpointsHandle(v5dbg_server_state_t *pState, const v5dbg_message_t &msg);
 
 /// @brief  Add a new server message handler
 void V5Dbg_AddServerMessageHandler(v5dbg_server_state_t *pState, v5dbg_server_msg_callback_t callback);

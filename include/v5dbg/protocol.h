@@ -56,8 +56,17 @@ enum v5dbg_message_type_e
   /// @brief  Sent to the debugger every time a breakpoint is activated and the program is suspended
   DEBUGGER_MESSAGE_BREAK_INVOKED = 13,
 
+  /// @brief  List all breakpoints registered in the program
+  DEBUGGER_MESSAGE_LBREAKPOINTS = 14,
+
+  /// @brief  Sent for every breakpoint registered with the debug server
+  DEBUGGER_MESSAGE_RBREAKPOINT = 15,
+
+  /// @brief  Stop accepting DEBUGGER_MESSAGE_RBREAKPOINT messages
+  DEBUGGER_MESSAGE_END_BREAKPOINTS = 16,
+
   /// @brief  Max debugger message ID
-  DEBUGGER_MESSAGE_MAX = 14
+  DEBUGGER_MESSAGE_MAX = 17
 };
 
 struct v5dbg_message_t

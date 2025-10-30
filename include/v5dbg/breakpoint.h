@@ -8,8 +8,11 @@
 /// @brief  Debugger breakpoint
 struct v5dbg_breakpoint_t
 {
+  /// @brief  Breakpoint ID
+  uint32_t id = 0;
+
   /// @brief  Location where the breakpoint has been placed
-  v5dbg_code_point_t location;
+  v5dbg_code_point_t location{};
 
   /// @brief  (Optional) conditional breakpoint trigger
   std::function<bool()> cond;
@@ -21,12 +24,15 @@ struct v5dbg_breakpoint_t
 /// @brief  Global breakpoint manager
 struct v5dbg_breakpoint_manager_t
 {
+  /// @brief  Breakpoint ID
+  uint32_t nextID = 0;
+
   /// @brief  Registered breakpoints
-  std::map<uint32_t, v5dbg_breakpoint_t*> breakpoints;
+  std::vector<v5dbg_breakpoint_t*> breakpoints;
 };
 
 /// @brief  Return the global breakpoint manager instance
-static inline v5dbg_breakpoint_manager_t* V5Dbg_GetBreakpointManager()
+inline v5dbg_breakpoint_manager_t* V5Dbg_GetBreakpointManager()
 {
   static v5dbg_breakpoint_manager_t mgr{};
   return &mgr;
