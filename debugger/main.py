@@ -51,6 +51,9 @@ break_sub = break_cmd.add_subparsers(help='Breakpoint commands', dest='breakp')
 break_enable = break_sub.add_parser('enable', help='Enable the given breakpoint by ID')
 break_enable.add_argument("breakpoint_id", help="Breakpoint ID to enable", action="store", type=int)
 
+break_disable = break_sub.add_parser('disable', help='Disable the given breakpoint by ID')
+break_disable.add_argument("breakpoint_id", help="Breakpoint ID to disable", action="store", type=int)
+
 thread = debugger.add_parser('thread', help='Manage supervised threads')
 thread_sub = thread.add_subparsers(help='Thread commands', dest="thread")
 
@@ -62,6 +65,7 @@ thread_list = thread_sub.add_parser('list', help="List all supervised threads", 
 server = DebugServer(not args.no_open_wait)
 
 client = client.DebuggerClient(server)
+server.set_breakpoint_trip(client.break_tripped_handler)
 
 # Main command loop
 
@@ -85,7 +89,12 @@ completer = NestedCompleter.from_nested_dict({
     "stack": None,
     "bt": None,
     "break": {
-        "enable": None
+        "enable": {
+            "break_id": None
+        },
+        "disable": {
+            "break_id": None
+        }
     },
     "b": None,
     "print": {
@@ -171,6 +180,8 @@ while True:
     if parsed.debugger == 'break' or parsed.debugger == 'b':
         if parsed.breakp == 'enable':
             client.enable_breakpoint(parsed.breakpoint_id)
+        elif parsed.breakp == 'disable':
+            client.enable_breakpoint(parsed.breakpoint_id, False)
         else:
           list_breaks = DebuggerMessage(DebuggerMessageType.LBREAKPOINTS)
 

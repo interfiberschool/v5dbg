@@ -49,17 +49,22 @@ class DebugServer:
         self.hang = thread.Thread(target=self.hang_thread, name="DebugServer hang detector")
         self.hang.start()
 
-        print("Waiting for user program execution on target to begin....")
+        print("Waiting from signal from user program...")
 
         if wait_open:
-            print("  * TIP! Your user program must be started after the debugger (this program) is started")
             self.wait_for(DebuggerMessageType.OPEN)
 
-        print("Target has begun execution of a v5dbg compatible program!")
+        print("Connected to remote user program!")
 
     # Return True if we are connected to the remote debug server
     def connected(self):
         return self.proc.poll() == None
+    
+    """
+    Set the handler which executes when a breakpoint is tripped
+    """
+    def set_breakpoint_trip(self, handle):
+        self.breakpoint_tripped = handle
     
     # Write `buffer` to the remote servers incoming data stream and flush
     def write(self, buffer: str):
@@ -165,8 +170,8 @@ class DebugServer:
             if msg.msg_type == DebuggerMessageType.OPEN:
                 self.last_open = int(time.time())
             elif msg.msg_type == DebuggerMessageType.BREAK_INVOKED:
-                DebuggerBreakpoint(msg).print_tripped()
-                pass
+                t = thread.Thread(target=self.breakpoint_tripped, args=(msg,), name="Breakpoint trip handler")
+                t.start()
 
             if msg.msg_type in self.waits:
                 if not msg.msg_type in self.wait_results:

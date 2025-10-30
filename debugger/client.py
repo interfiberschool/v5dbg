@@ -1,12 +1,13 @@
 from enum import IntFlag, auto
 
 from prompt_toolkit import print_formatted_text
+from prompt_toolkit.formatted_text import FormattedText
 from comms import DebugServer
+from breakpoint import DebuggerBreakpoint
+from colors import Colors
 from stack import StackFrame
 from thread import DebuggerThread
-from memory import RawVariableData
 from protocol import DebuggerMessage, DebuggerMessageType
-from utils import print_list
 
 # Debugger state bit flags
 class DebuggerState(IntFlag):
@@ -42,19 +43,48 @@ class DebuggerClient:
             print("Program is: SUSPENDED")
 
     """
-    Enable a breakpoint by numerical ID
+    Callback used when a breakpoint is tripped
     """
-    def enable_breakpoint(self, id: int):
+    def break_tripped_handler(self, msg: DebuggerMessage):
+      b = DebuggerBreakpoint(msg)
+
+      b.print_tripped()
+
+      # Mark program to be in the suspend state
+      self.state |= DebuggerState.SUSPEND
+      self.state = self.state & ~DebuggerState.RUN
+
+      # Find current stack frame
+      bt = self.get_stacktrace()
+
+      # Select the given frame in the backtrace that this breakpoint belongs too
+      for frame in bt:
+          if frame.name == b.function:
+              print_formatted_text(FormattedText([
+                  ('', "Moving to frame "),
+                  (Colors.CYAN, b.function)
+              ]))
+
+              self.active_thread.frame_index = frame.id
+
+              break
+
+      print_formatted_text("Program suspended for breakpoint, use 'continue' to resume execution")
+
+    """
+    Enable/disable a breakpoint by numerical ID
+    """
+    def enable_breakpoint(self, id: int, enabled: bool = True):
       if id < 0:
           print_formatted_text(f'Breakpoint ID must be positive!')
           return
 
-      msg = DebuggerMessage(DebuggerMessageType.BREAKPOINT_ENABLE)
-      msg.data = str(id)
+      msg = DebuggerMessage(DebuggerMessageType.BREAKPOINT_SET_STATUS)
+      msg.data = f'{str(id)}:{int(enabled)}'
 
       self.send_msg(msg)
 
-      print_formatted_text(f'Breakpoint #{id} enabled')
+      print_formatted_text(f'Breakpoint #{id} {"enabled" if enabled else "disabled"}')
 
     # Return the current frame's stack memory
     def get_memory(self):

@@ -25,15 +25,23 @@ V5Dbg_LBreakpointsHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& ms
 }
 
 void
-V5Dbg_EnableBreakpointHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
+V5Dbg_SetBreakpointStatusHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 {
-  int id = std::stoi(msg.paramBuffer);
+  auto split = V5Dbg_SplitString(msg.paramBuffer, ":");
+  if (split.size() != 2)
+  {
+    info("InvalidSize");
+    return;
+  }
+
+  int id = std::stoi(split[0]);
+  bool enabled = (bool) std::stoi(split[1]);
 
   for (auto &breakpoint : V5Dbg_GetBreakpointManager()->breakpoints)
   {
     if (breakpoint->id == id)
     {
-      breakpoint->enabled = true;
+      breakpoint->enabled = enabled;
 
       return;
     }

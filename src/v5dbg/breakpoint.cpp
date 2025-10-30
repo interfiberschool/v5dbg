@@ -11,7 +11,6 @@ V5Dbg_BreakpointMain(v5dbg_server_state_t* pState, v5dbg_breakpoint_t* breakpoin
 {
   if (!breakpoint->enabled)
     return;
-  breakpoint->enabled = false;
 
   v5dbg_message_t msg{};
   msg.type = DEBUGGER_MESSAGE_BREAK_INVOKED;

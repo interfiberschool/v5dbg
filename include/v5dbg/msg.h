@@ -27,7 +27,7 @@ void V5Dbg_LMemForHandle(v5dbg_server_state_t *pState, const v5dbg_message_t &ms
 void V5Dbg_LBreakpointsHandle(v5dbg_server_state_t *pState, const v5dbg_message_t &msg);
 
 /// @brief  Handle enabling a breakpoint
-void V5Dbg_EnableBreakpointHandle(v5dbg_server_state_t *pState, const v5dbg_message_t &msg);
+void V5Dbg_SetBreakpointStatusHandle(v5dbg_server_state_t *pState, const v5dbg_message_t &msg);
 
 /// @brief  Add a new server message handler
 void V5Dbg_AddServerMessageHandler(v5dbg_server_state_t *pState, v5dbg_server_msg_callback_t callback);
