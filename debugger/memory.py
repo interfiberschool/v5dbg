@@ -136,8 +136,6 @@ class RawVariableData:
 
     # Get a variable by name
     def get_variable(self, name: str) -> PygmentsTokens:
-        style = style_from_pygments_cls(get_style_by_name('emacs'))
-
         for v in self.variables:
             if v.name == name:
                 return PygmentsTokens(list(pygments.lex(str(v), lexer=CppLexer())))
@@ -149,7 +147,7 @@ class RawVariableData:
         if len(self.variables) == 0:
             return to_formatted_text("No variables exposed by debug server")
         
-        style = style_from_pygments_cls(get_style_by_name('emacs'))
+        style = style_from_pygments_cls(get_style_by_name('monokai'))
 
         for mem in self.variables:
             memory_fmt = f'{mem.type} {mem.name} = {mem.content}; // Allocated at {mem.location}'

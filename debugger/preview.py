@@ -51,7 +51,7 @@ class FilePreview:
       ]), end=" ")
 
 
-      style = style_from_pygments_cls(get_style_by_name('emacs'))
+      style = style_from_pygments_cls(get_style_by_name('monokai'))
       print_formatted_text(PygmentsTokens(line), end="", style=style)
 
   """

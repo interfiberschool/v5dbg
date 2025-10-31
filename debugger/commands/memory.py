@@ -1,8 +1,11 @@
 from debug import CommandExecutor, Debugger
-from client import DebuggerClient, DebuggerState
+from client import DebuggerClient
 from memory import RawVariableData
 from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit import print_formatted_text
+from prompt_toolkit.styles.pygments import style_from_pygments_cls
+from pygments.styles import get_style_by_name
+from colors import Colors
 
 """
 Print the value of a variable
@@ -32,7 +35,15 @@ class PrintCommand(CommandExecutor):
 
   def execute(self, client: DebuggerClient, debugger: Debugger, command):
     if command.debugger == 'print' or command.debugger == 'p':
-      print_formatted_text(client.get_memory().get_variable(command.variable_id))
+      var = client.get_memory().get_variable(command.variable_id)
+
+      if var == None:
+         print_formatted_text(FormattedText([
+            (Colors.RED, f'No variable in current scope with name \'{command.variable_id}\'')
+         ]))
+      else:
+        style = style_from_pygments_cls(get_style_by_name('monokai'))
+        print_formatted_text(var, end="", style=style)
 
 """
 Displays memory within the current stack frame

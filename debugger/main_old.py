@@ -176,7 +176,7 @@ while True:
         if var == None:
             print_formatted_text(f"No variable with name '{parsed.variable_id}' is current scope")
         else:
-            style = style_from_pygments_cls(get_style_by_name('emacs'))
+            style = style_from_pygments_cls(get_style_by_name('monokai'))
             print_formatted_text(var, style=style, end="")
 
     if parsed.debugger == 'frame':
