@@ -3,9 +3,9 @@ import argparse
 from colors import Colors
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from client import DebuggerClient
+from client import DebuggerClient, DebuggerState
 from debug import CommandExecutor, Debugger
-from protocol import DebuggerMessage,DebuggerMessageType
+from protocol import DebuggerMessage, DebuggerMessageType
 
 """
 Suspend state command
@@ -19,15 +19,19 @@ class SuspendCommand(CommandExecutor):
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         if command.debugger == 'suspend' or command == 'halt' or command.debugger == 's':
+            if client.state & DebuggerState.SUSPEND:
+                print_formatted_text(FormattedText([
+                    ('', "Program is not in the "),
+                    (Colors.RED, "RUN "),
+                    ('', 'state')
+                ]))
+                return
 
-            # Send message to suspend program
-            suspend = DebuggerMessage(DebuggerMessageType.SUSPEND)
-
-            client.send_msg(suspend)
+            client.suspend()
 
             print_formatted_text(FormattedText([
-                ('', "Program has been "),
-                (Colors.STEEL, "SUSPENDED")
+                ('', "Program state: "),
+                (Colors.STEEL, "SUSPEND")
             ]))
 
 """
@@ -41,13 +45,20 @@ class ResumeCommand(CommandExecutor):
         parser.add_parser('resume', help='Resume the execution of all supervised tasks', aliases=['continue', 'c'])
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
-        if command.debugger == 'c' or command.debugger == 'continue':
-        # Send message to suspend program
-        suspend = DebuggerMessage(DebuggerMessageType.SUSPEND)
+        if command.debugger == 'resume' or command.debugger == 'c' or command.debugger == 'continue':
 
-        client.send_msg(suspend)
+            if client.state & DebuggerState.RUN:
+                print_formatted_text(FormattedText([
+                    ('', "Program is not in the "),
+                    (Colors.RED, "SUSPEND "),
+                    ('', 'state')
+                ]))
+                return
+            
+            # Resume program
+            client.resume()
 
-        print_formatted_text(FormattedText([
-            ('', "Program has been "),
-            (Colors.STEEL, "SUSPENDED")
-        ]))
+            print_formatted_text(FormattedText([
+                ('', "Program state: "),
+                (Colors.STEEL, "RUN")
+            ]))

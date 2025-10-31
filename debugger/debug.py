@@ -6,6 +6,7 @@ Interactive debugger options
 import argparse
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit import PromptSession
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from client import DebuggerClient
 
 class DebuggerOptions:
@@ -62,7 +63,7 @@ class Debugger:
     """
     def ask_execute(self, client: DebuggerClient):
         try:
-            cmd = self.session.prompt(self.opts.prompt)
+            cmd = self.session.prompt(self.opts.prompt, vi_mode=True, auto_suggest=AutoSuggestFromHistory(),)
         except EOFError:
             exit(0)
         except:
@@ -71,7 +72,7 @@ class Debugger:
         try:
             parsed = self.parser.parse_args(cmd.split())
         except:
-            return True
+            return False
 
         for exe in self.commands:
             exe.execute(client, self, parsed)
