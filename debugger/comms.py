@@ -2,9 +2,11 @@
 
 import time
 
-from breakpoint import DebuggerBreakpoint
+from prompt_toolkit import print_formatted_text
+from prompt_toolkit.formatted_text import FormattedText
 from utils import find_server
 from protocol import DebuggerMessage,DebuggerMessageType
+from colors import Colors
 import threading as thread
 import subprocess
 
@@ -68,8 +70,13 @@ class DebugServer:
     
     # Write `buffer` to the remote servers incoming data stream and flush
     def write(self, buffer: str):
-        self.proc.stdin.write(buffer.encode())
-        self.proc.stdin.flush()
+        try:
+            self.proc.stdin.write(buffer.encode())
+            self.proc.stdin.flush()
+        except:
+            print_formatted_text(FormattedText([
+                (Colors.RED, 'Failed to write commands to debug server pipe!')
+            ]))
 
     # Stockpile messages until msg_type is found
     # NOTE: This function blocks until completion, use carefully
@@ -149,8 +156,6 @@ class DebugServer:
     def io_thread(self):
         while self.proc.poll() == None:
             b = self.proc.stdout.readline()
-
-            # print(b)
 
             # All messages should be written without COBS & stream multiplexing, so we can just read it raw here
             data = b.decode()
