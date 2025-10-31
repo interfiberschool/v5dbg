@@ -119,10 +119,6 @@ class DebuggerClient:
 
     # Suspend all supervised threads
     def suspend(self):
-        if self.state & DebuggerState.SUSPEND:
-            print("Program is not in the RUN state")
-            return False
-
         self.state |= DebuggerState.SUSPEND
         self.state = self.state & ~DebuggerState.RUN
 
@@ -131,10 +127,6 @@ class DebuggerClient:
     
     # Resume all supervised threads
     def resume(self):
-        if self.state & DebuggerState.RUN:
-            print("Program is not in the SUSPEND state")
-            return False
-
         self.state |= DebuggerState.RUN
         self.state = self.state & ~DebuggerState.SUSPEND
         self.active_break = None

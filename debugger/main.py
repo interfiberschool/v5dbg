@@ -1,4 +1,4 @@
-from commands.run_state import SuspendCommand
+from commands.run_state import SuspendCommand, ResumeCommand
 from comms import DebugServer
 from debug import Debugger, DebuggerOptions
 from client import DebuggerClient
@@ -11,7 +11,9 @@ client = DebuggerClient(server)
 opts = DebuggerOptions()
 debugger = Debugger(opts)
 
+# Register all debugger commands
 debugger.register(SuspendCommand())
+debugger.register(ResumeCommand())
 
 while True:
     if debugger.ask_execute(client):
