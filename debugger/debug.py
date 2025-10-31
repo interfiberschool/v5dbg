@@ -5,6 +5,7 @@ Interactive debugger options
 
 import argparse
 from prompt_toolkit.history import FileHistory
+from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit import PromptSession
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from client import DebuggerClient
@@ -28,15 +29,17 @@ class DebuggerOptions:
 """
 Main v5dbg interactive class
 """
-class Debugger:
+class Debugger(Completer):
     opts: DebuggerOptions
     session: PromptSession
     commands: list
     parser: argparse.ArgumentParser
+    client: DebuggerClient
 
-    def __init__(self, options: DebuggerOptions):
+    def __init__(self, options: DebuggerOptions, client: DebuggerClient):
         self.opts = options
         self.commands = []
+        self.client = client
 
         self.parser = argparse.ArgumentParser(
             prog='v5dbg',
@@ -58,12 +61,28 @@ class Debugger:
 
         executor.register(self.parser_debugger)
 
+    def get_completions(self, document, complete_event):
+      split = document.text.split(" ")
+
+      for command in self.commands:
+        i = 0
+        while True:
+          result = command.next_completion(split[0], len(split) - 1, split[len(split) - 1], i, self.client)
+
+          if result != None:
+            yield Completion(result, start_position=0)
+          else:
+            break
+
+          i += 1
+      
+
     """
     Ask for a debugger command and execute it
     """
-    def ask_execute(self, client: DebuggerClient):
+    def ask_execute(self):
         try:
-            cmd = self.session.prompt(self.opts.prompt, vi_mode=True, auto_suggest=AutoSuggestFromHistory(),)
+            cmd = self.session.prompt(self.opts.prompt, vi_mode=True, auto_suggest=AutoSuggestFromHistory(), completer=self)
         except EOFError:
             exit(0)
         except:
@@ -75,7 +94,7 @@ class Debugger:
             return False
 
         for exe in self.commands:
-            exe.execute(client, self, parsed)
+            exe.execute(self.client, self, parsed)
 
         return False
 
@@ -93,3 +112,9 @@ class CommandExecutor:
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         raise NotImplementedError("Subclass should implement execute(...)") 
+    
+    """
+    Generate the next completion item for this command
+    """
+    def next_completion(self, command: str, current_arg: int, current_text: str, c_index: int, client: DebuggerClient) -> str:
+       return None

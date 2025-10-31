@@ -24,6 +24,7 @@ class DebuggerClient:
     def __init__(self, server: DebugServer):
         self.server = server
         self.state = DebuggerState.RUN
+        self.active_break = None
 
         self.active_thread = DebuggerThread(0, self.server)
 
