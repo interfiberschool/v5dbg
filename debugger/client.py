@@ -101,15 +101,12 @@ class DebuggerClient:
     def get_stacktrace(self, inject_breaks: bool = False) -> list[StackFrame]:
         # Ask debugger for virtual callstack
 
-        if self.state & DebuggerState.RUN:
-            print("Program must be in the SUSPEND state for a stacktrace to be generated")
-            return
-
         b = self.active_thread.get_backtrace()
 
         if not inject_breaks or self.active_break == None:
             return b
         
+        # Inject breakpoints by changing the frame information where the breakpoint is located
         for frame in b:
             if frame.name == self.active_break.function and frame.file == self.active_break.location.file:
                 frame.line = self.active_break.location.line
