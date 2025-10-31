@@ -3,6 +3,7 @@ from comms import DebugServer
 from debug import Debugger, DebuggerOptions
 from client import DebuggerClient
 from commands.backtrace import BacktraceCommand
+from commands.memory import MemoryCommand
 
 # Construct the debugger
 
@@ -16,6 +17,7 @@ debugger = Debugger(opts)
 debugger.register(SuspendCommand())
 debugger.register(ResumeCommand())
 debugger.register(BacktraceCommand())
+debugger.register(MemoryCommand())
 
 while True:
     if debugger.ask_execute(client):
