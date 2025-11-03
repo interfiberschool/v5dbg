@@ -14,9 +14,11 @@ Print the value of a variable
 
 class PrintCommand(CommandExecutor):
     cached_memory: RawVariableData
+    cached_frame: int
 
     def __init__(self):
         self.cached_memory = None
+        self.cached_frame = 0
 
     def get_name(self):
         return "print"
@@ -42,8 +44,10 @@ class PrintCommand(CommandExecutor):
             return None
         if current_arg != 1:
             return None
-
-        if self.cached_memory == None:
+        
+        # Update cache if needed
+        if self.cached_frame != client.active_thread.frame_index or self.cached_memory == None:
+            self.cached_frame = client.active_thread.frame_index # Don't repeat ourselves
             self.cached_memory = client.get_memory()
 
         if c_index >= len(self.cached_memory.variables):
