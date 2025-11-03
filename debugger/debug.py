@@ -72,7 +72,7 @@ class Debugger(Completer):
         if len(split) == 1:
             for command in self.commands:
                 if command.get_name().startswith(split[0]):
-                  yield Completion(command.get_name(), start_position=0)
+                    yield Completion(command.get_name(), start_position=0)
         else:
             for command in self.commands:
                 i = 0
@@ -133,7 +133,7 @@ class CommandExecutor:
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         raise NotImplementedError("Subclass should implement execute(...)")
-    
+
     def get_name(self) -> str:
         raise NotImplementedError("subclass should implement get_name(...)")
 

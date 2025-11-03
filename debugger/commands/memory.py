@@ -49,11 +49,15 @@ class PrintCommand(CommandExecutor):
         if c_index >= len(self.cached_memory.variables):
             return None
 
-        return self.cached_memory.variables[c_index].name
+        if current_text in self.cached_memory.variables[c_index].name:
+          return self.cached_memory.variables[c_index].name
+        else:
+            return ""
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         if command.debugger == "print" or command.debugger == "p":
-            var = client.get_memory().get_variable(command.variable_id)
+            self.cached_memory = client.get_memory()
+            var = self.cached_memory.get_variable(command.variable_id)
 
             if var == None:
                 print_formatted_text(
