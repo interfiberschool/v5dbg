@@ -82,7 +82,9 @@ class Debugger(Completer):
                     )
 
                     if result != None:
-                        yield Completion(result, start_position=0)
+                        # Empty items won't get pushed
+                        if result != "":
+                            yield Completion(result, start_position=0)
                     else:
                         break
 
@@ -139,6 +141,8 @@ class CommandExecutor:
 
     """
     Generate the next completion item for this command
+
+    Returning None will stop calling this function, returning an empty string will call again without pushing a new completion item
     """
 
     def next_completion(
