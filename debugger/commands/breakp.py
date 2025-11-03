@@ -12,7 +12,7 @@ Enable and list breakpoints
 """
 
 
-class FrameCommand(CommandExecutor):
+class BreakCommand(CommandExecutor):
     cached_stack: list[StackFrame]
 
     def __init__(self):
@@ -27,18 +27,7 @@ class FrameCommand(CommandExecutor):
         c_index: int,
         client: DebuggerClient,
     ) -> str:
-        if command != "break":
-            return None
-        if current_arg != 1:
-            return None
-
-        if self.cached_stack == None:
-            self.cached_stack = client.get_stacktrace()
-
-        if c_index >= len(self.cached_stack):
-            return None
-
-        return str(self.cached_stack[c_index].id)
+        return None
 
     def register(self, parser):
         break_cmd = parser.add_parser("break", help="Manage breakpoints", aliases=["b"])
@@ -61,25 +50,27 @@ class FrameCommand(CommandExecutor):
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         if command.debugger == "break":
             if command.breakp == "enable":
-                client.enable_breakpoint(int(command.breakpoint_id), True)
+                if client.enable_breakpoint(int(command.breakpoint_id), True) == None:
+                    return
 
                 print_formatted_text(
                     FormattedText(
                         [
                             ("", "Enabled breakpoint "),
-                            (Colors.STEEL, f"#{id(command.breakpoint_id)}"),
+                            (Colors.STEEL, f"#{command.breakpoint_id}"),
                         ]
                     )
                 )
 
             elif command.breakp == "disable":
-                client.enable_breakpoint(int(command.breakpoint_id), False)
+                if client.enable_breakpoint(command.breakpoint_id, False) == None:
+                    return
 
                 print_formatted_text(
                     FormattedText(
                         [
                             ("", "Disabled breakpoint "),
-                            (Colors.STEEL, f"#{id(command.breakpoint_id)}"),
+                            (Colors.STEEL, f"#{command.breakpoint_id}"),
                         ]
                     )
                 )

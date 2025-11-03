@@ -83,14 +83,14 @@ class DebuggerClient:
     def enable_breakpoint(self, id: int, enabled: bool = True):
       if id < 0:
           print_formatted_text(f'Breakpoint ID must be positive!')
-          return
+          return None
 
       msg = DebuggerMessage(DebuggerMessageType.BREAKPOINT_SET_STATUS)
       msg.data = f'{str(id)}:{int(enabled)}'
 
       self.send_msg(msg)
 
-      print_formatted_text(f'Breakpoint #{id} {"enabled" if enabled else "disabled"}')
+      return True
 
     # Return the current frame's stack memory
     def get_memory(self):
