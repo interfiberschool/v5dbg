@@ -11,3 +11,8 @@
  * @note Functions the exact same as 'void exit(int code)'
  */
 extern "C" void vexSystemExitRequest( void );
+
+/**
+ * Trigger a software interrupt
+*/
+extern "C" void vexSystemSWInterrupt( void );

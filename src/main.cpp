@@ -49,6 +49,7 @@ void opLoop(const std::string &data)
     $expose(data);
 
     const void* buffer = &data;
+    $expose(buffer);
 
     printData(data.c_str());
 
@@ -73,7 +74,7 @@ opcontrol(void)
 
     std::vector<double> dataHist;
     $expose(dataHist);
-
+	
     while (true)
     {
         int test = x * 2;

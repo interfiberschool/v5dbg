@@ -21,6 +21,9 @@ class PreviewCommand(CommandExecutor):
             aliases=["pr"],
         )
 
+    def get_name(self):
+        return "preview"
+
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         if command.debugger == "preview" or command.debugger == "pr":
             # Only allow preview during suspend

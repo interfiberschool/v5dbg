@@ -15,9 +15,17 @@ Enable and list breakpoints
 class BreakCommand(CommandExecutor):
     cached_stack: list[StackFrame]
 
+    COMMANDS: list[str] = [
+        "enable",
+        "disable"
+    ]
+
     def __init__(self):
         self.cached_stack = None
         pass
+    
+    def get_name(self):
+      return "break"
 
     def next_completion(
         self,
@@ -27,6 +35,9 @@ class BreakCommand(CommandExecutor):
         c_index: int,
         client: DebuggerClient,
     ) -> str:
+        if current_arg == 1 and c_index < len(self.COMMANDS):
+          return self.COMMANDS[c_index - 1]
+
         return None
 
     def register(self, parser):

@@ -18,6 +18,9 @@ class PrintCommand(CommandExecutor):
     def __init__(self):
         self.cached_memory = None
 
+    def get_name(self):
+        return "print"
+
     def register(self, parser):
         p = parser.add_parser("print", help="Print a variable by name", aliases=["p"])
         p.add_argument(
@@ -76,6 +79,9 @@ Displays memory within the current stack frame
 class MemoryCommand(CommandExecutor):
     def __init__(self):
         pass
+    
+    def get_name(self):
+        return "mem"
 
     def register(self, parser):
         parser.add_parser(

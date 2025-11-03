@@ -17,6 +17,9 @@ class SuspendCommand(CommandExecutor):
     def register(self, parser): 
         parser.add_parser('suspend', help='Suspend the execution of all supervised tasks', aliases=['halt', 's'])
 
+    def get_name(self):
+        return "suspend"
+
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         if command.debugger == 'suspend' or command == 'halt' or command.debugger == 's':
             if client.state & DebuggerState.SUSPEND:
@@ -40,6 +43,9 @@ Resume state command
 class ResumeCommand(CommandExecutor):
     def __init__(self):
         pass
+    
+    def get_name(self):
+        return "resume"
 
     def register(self, parser): 
         parser.add_parser('resume', help='Resume the execution of all supervised tasks', aliases=['continue', 'c'])

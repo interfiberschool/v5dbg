@@ -11,6 +11,9 @@ class BacktraceCommand(CommandExecutor):
     def __init__(self):
         pass
 
+    def get_name(self):
+      return "backtrace"
+
     def register(self, parser): 
         parser.add_parser('backtrace', help='Print the backtrace for the active thread', aliases=['bt', 'stack'])
 

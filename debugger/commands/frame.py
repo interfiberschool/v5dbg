@@ -15,6 +15,9 @@ class FrameCommand(CommandExecutor):
         self.cached_stack = None
         pass
     
+    def get_name(self):
+       return "frame"
+    
     def next_completion(self, command: str, current_arg: int, current_text: str, c_index: int, client: DebuggerClient) -> str:
       if command != 'frame': return None
       if current_arg != 1: return None
