@@ -35,6 +35,8 @@ class BreakCommand(CommandExecutor):
         c_index: int,
         client: DebuggerClient,
     ) -> str:
+        if command != "break": return None
+
         if current_arg == 1 and c_index < len(self.COMMANDS):
           return self.COMMANDS[c_index - 1]
 
