@@ -5,6 +5,7 @@
 #include "pros/llemu.hpp"
 #include "v5dbg/debug.h"
 #include "v5dbg/server.h"
+#include "v5dbg/sdk_api.h"
 
 v5dbg_server_state_t sState{};
 
