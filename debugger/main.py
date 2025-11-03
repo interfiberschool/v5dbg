@@ -5,6 +5,7 @@ from client import DebuggerClient
 from commands.backtrace import BacktraceCommand
 from commands.memory import MemoryCommand, PrintCommand
 from commands.frame import FrameCommand
+from commands.preview import PreviewCommand
 
 # Construct the debugger
 
@@ -21,6 +22,7 @@ debugger.register(BacktraceCommand())
 debugger.register(MemoryCommand())
 debugger.register(PrintCommand())
 debugger.register(FrameCommand())
+debugger.register(PreviewCommand())
 
 while True:
     if debugger.ask_execute():
