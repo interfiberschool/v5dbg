@@ -10,7 +10,7 @@ from commands.breakp import BreakCommand
 
 # Construct the debugger
 
-server = DebugServer(False)
+server = DebugServer()
 client = DebuggerClient(server)
 
 # Setup breakpoint tripped handler

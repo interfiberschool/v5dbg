@@ -9,10 +9,12 @@ from stack import StackFrame
 from thread import DebuggerThread
 from protocol import DebuggerMessage, DebuggerMessageType
 
+
 # Debugger state bit flags
 class DebuggerState(IntFlag):
     RUN = auto()
     SUSPEND = auto()
+
 
 # Local debugger client class
 class DebuggerClient:
@@ -31,7 +33,7 @@ class DebuggerClient:
     # Send a message to the remote server
     def send_msg(self, message: DebuggerMessage):
         self.server.write(message.serialize())
-    
+
     # Switch the active thread to `thread_id`
     def switch_thread(self, thread_id: int):
         self.active_thread = DebuggerThread(thread_id, self.server)
@@ -47,50 +49,61 @@ class DebuggerClient:
     """
     Callback used when a breakpoint is tripped
     """
+
     def break_tripped_handler(self, msg: DebuggerMessage):
-      b = DebuggerBreakpoint(msg)
+        b = DebuggerBreakpoint(msg)
 
-      b.print_tripped()
+        b.print_tripped()
 
-      # Mark program to be in the suspend state
-      self.state |= DebuggerState.SUSPEND
-      self.state = self.state & ~DebuggerState.RUN
+        # Mark program to be in the suspend state
+        self.state |= DebuggerState.SUSPEND
+        self.state = self.state & ~DebuggerState.RUN
 
-      # Find current stack frame
-      bt = self.get_stacktrace()
+        # Find current stack frame
+        bt = self.get_stacktrace()
 
-      # Select the given frame in the backtrace that this breakpoint belongs too
-      for frame in bt:
-          if frame.name == b.function:
-              print_formatted_text(FormattedText([
-                  ('', "Moving to frame "),
-                  (Colors.CYAN, b.function),
-                  ('', ' in '),
-                  (Colors.ORANGE, str(b.location))
-              ]))
+        # Plus sign is used to indicate extra data
+        backtrace_func = b.function.split("+")
 
-              self.active_thread.frame_index = frame.id
+        # Select the given frame in the backtrace that this breakpoint belongs too
+        for frame in bt:
+            if frame.name == backtrace_func[0]:
+                print_formatted_text(
+                    FormattedText(
+                        [
+                            ("", "Moving to frame "),
+                            (Colors.CYAN, backtrace_func[0]),
+                            ("", " in "),
+                            (Colors.ORANGE, str(b.location)),
+                        ]
+                    )
+                )
 
-              break
+                self.active_thread.frame_index = frame.id
 
-      print_formatted_text("Program suspended for breakpoint, use 'continue' to resume execution")
+                break
 
-      self.active_break = b
+        print_formatted_text(
+            "Program suspended for breakpoint, use 'continue' to resume execution"
+        )
+
+        self.active_break = b
 
     """
     Enable/disable a breakpoint by numerical ID
     """
+
     def enable_breakpoint(self, id: int, enabled: bool = True):
-      if id < 0:
-          print_formatted_text(f'Breakpoint ID must be positive!')
-          return None
+        if id < 0:
+            print_formatted_text(f"Breakpoint ID must be positive!")
+            return None
 
-      msg = DebuggerMessage(DebuggerMessageType.BREAKPOINT_SET_STATUS)
-      msg.data = f'{str(id)}:{int(enabled)}'
+        msg = DebuggerMessage(DebuggerMessageType.BREAKPOINT_SET_STATUS)
+        msg.data = f"{str(id)}:{int(enabled)}"
 
-      self.send_msg(msg)
+        self.send_msg(msg)
 
-      return True
+        return True
 
     # Return the current frame's stack memory
     def get_memory(self):
@@ -99,6 +112,7 @@ class DebuggerClient:
     """
     Return the stacktrace for the active thread
     """
+
     def get_stacktrace(self, inject_breaks: bool = False) -> list[StackFrame]:
         # Ask debugger for virtual callstack
 
@@ -106,10 +120,13 @@ class DebuggerClient:
 
         if not inject_breaks or self.active_break == None:
             return b
-        
+
         # Inject breakpoints by changing the frame information where the breakpoint is located
         for frame in b:
-            if frame.name == self.active_break.function and frame.file == self.active_break.location.file:
+            if (
+                frame.name == self.active_break.function.split("+")[0] # Get name before the + which denotes extra data
+                and frame.file == self.active_break.location.file
+            ):
                 frame.line = self.active_break.location.line
                 break
 
@@ -122,7 +139,7 @@ class DebuggerClient:
 
         suspend = DebuggerMessage(DebuggerMessageType.SUSPEND)
         self.send_msg(suspend)
-    
+
     # Resume all supervised threads
     def resume(self):
         self.state |= DebuggerState.RUN
@@ -171,5 +188,3 @@ class DebuggerClient:
                     c_thread = False
 
                 i += 1
-
-

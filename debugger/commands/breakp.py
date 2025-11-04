@@ -93,7 +93,7 @@ class BreakCommand(CommandExecutor):
                 client.send_msg(list_breaks)
 
                 msgs = client.server.get_msg_range(
-                    DebuggerMessageType.RBREAKPOINT, DebuggerMessageType.RBREAKPOINT
+                    DebuggerMessageType.RBREAKPOINT, DebuggerMessageType.END_BREAKPOINTS
                 )
 
                 for msg in msgs:

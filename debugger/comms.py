@@ -1,4 +1,4 @@
-# Handles debugger -> debug server communication and various utils around messaging
+# Handles debugger <-> debug server communication and various utils around messaging
 
 import time
 
@@ -118,13 +118,21 @@ class DebugServer:
 
     # Check and see if the remote server has hung up if we don't get an OPEN message for over 5 seconds
     def hang_thread(self):
-        while self.proc.poll() != None:
+        self.last_open = int(time.time())
+
+        while self.proc.poll() == None:
             c_time = int(time.time())
 
             if c_time - self.last_open >= 5:
                 print("Warning! DebugServer (local) has not gotten any OPEN messages from the debug server in over 5s, did the debug server freeze?")
 
             time.sleep(2)
+        
+        print_formatted_text(FormattedText([
+            (Colors.RED, 'Disconnected from communications server, process exited!')
+        ]))
+
+        exit(0)
 
     # Wait for the next message of the given type to arrive
     def wait_for(self, msg_type: DebuggerMessageType, count: int = -1):

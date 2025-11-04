@@ -30,7 +30,7 @@ private:
   __v5dbg_func:                                                                                                        \
   static V5DbgStackMemory _v5dbg_stack_func_memory;                                                                                      \
   V5DbgFunction _v5dbg_stack_func(__PRETTY_FUNCTION__, __FILE__, __LINE__, &&__v5dbg_func, &_v5dbg_stack_func_memory); \
-  v5dbg_breakpoint_t *_v5dbg_break_c = nullptr; \
+
 
 /**
  * @brief  Expose a scoped variable to the debugger.
@@ -48,7 +48,8 @@ private:
   static std::shared_ptr<V5DbgMemoryObject> _v5dbg_var_##target = std::make_shared<V5DbgMemoryObject>(_v5dbg_var_info_##target);               \
   _v5dbg_var_##target->setMemoryType(V5Dbg_MemoryTypeFromType(typeid(target))); \
   _v5dbg_var_##target->setPtr(&target);                                                                                \
-  _v5dbg_stack_func.expose(_v5dbg_var_##target);
+  static v5dbg_breakpoint_t* _v5dbg_var_alloc_##target = V5Dbg_Breakpoint(false, { .filePath = __FILE__, .lineNumber = _v5dbg_var_line_##target, .functionName = std::string(__PRETTY_FUNCTION__) + "+alloc:" + std::string(#target) }); \
+  _v5dbg_stack_func.expose(_v5dbg_var_##target, _v5dbg_var_alloc_##target);
 
 /// @brief Disabled by default breakpoint
 #define $break { static v5dbg_breakpoint_t* _v5dbg_break_c = V5Dbg_Breakpoint(false, { .filePath = __FILE__, .lineNumber = __LINE__, .functionName = __PRETTY_FUNCTION__ }); \

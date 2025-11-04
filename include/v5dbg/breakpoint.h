@@ -8,6 +8,9 @@
 /// @brief  Debugger breakpoint
 struct v5dbg_breakpoint_t
 {
+  /// @brief  Custom breakpoint name appended after the function name like `void main()+alloc:x`
+  std::string name;
+
   /// @brief  Breakpoint ID
   uint32_t id = 0;
 
@@ -42,4 +45,4 @@ inline v5dbg_breakpoint_manager_t* V5Dbg_GetBreakpointManager()
 v5dbg_breakpoint_t* V5Dbg_Breakpoint(bool enabled, const v5dbg_code_point_t &loc);
 
 /// @brief  Manage a breakpoint, should only be called by the $break macro
-void V5Dbg_BreakpointMain(v5dbg_server_state_t *pState, v5dbg_breakpoint_t *breakpoint);
+void V5Dbg_BreakpointMain(v5dbg_server_state_t *pState, const v5dbg_breakpoint_t *breakpoint);

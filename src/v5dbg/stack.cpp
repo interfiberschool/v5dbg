@@ -1,5 +1,6 @@
 #include "v5dbg/stack.h"
 #include <mutex>
+#include "breakpoint.h"
 #include "memory.h"
 #include "stack.h"
 #include "v5dbg/debinfo.h"
@@ -29,9 +30,12 @@ V5DbgFunction::V5DbgFunction(const std::string& name, const char* file, int line
 }
 
 void
-V5DbgFunction::expose(const std::shared_ptr<V5DbgMemoryObject>& memObject)
+V5DbgFunction::expose(const std::shared_ptr<V5DbgMemoryObject>& memObject, const v5dbg_breakpoint_t *pBreak)
 {
   m_memory->expose(memObject);
+
+  // Handle breakpoints
+  V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), pBreak);
 }
 
 V5DbgFunction::~V5DbgFunction()
