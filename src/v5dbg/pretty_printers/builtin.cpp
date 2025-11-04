@@ -1,6 +1,7 @@
 // Pretty printers for builtin types like int, char, etc
 #include <string>
 #include "memory.h"
+#include "v5dbg/memory.h"
 #include "v5dbg/util.h"
 #include "v5dbg/pretty.h"
 
@@ -35,6 +36,12 @@ V5Dbg_PrettyPrintChar(V5DbgMemoryObject *pMemory)
   return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%c", *((char*) pMemory->getPtr())));
 }
 
+v5dbg_pretty_printed_t
+V5Dbg_PrettyPrintCStr(V5DbgMemoryObject *pMemory)
+{
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("\"%s\"", *(const char**) pMemory->getPtr()));
+}
+
 $pretty_printer(V5Dbg_PrettyPrintInt, MEMORY_TYPE_BASE_INT);
 $link_type_db(int, MEMORY_TYPE_BASE_INT);
 
@@ -49,3 +56,6 @@ $link_type_db(void*, MEMORY_TYPE_PTR);
 
 $pretty_printer(V5Dbg_PrettyPrintChar, MEMORY_TYPE_CHAR);
 $link_type_db(char, MEMORY_TYPE_CHAR);
+
+$pretty_printer(V5Dbg_PrettyPrintCStr, MEMORY_TYPE_CSTR);
+$link_type_db(const char*, MEMORY_TYPE_CSTR);
