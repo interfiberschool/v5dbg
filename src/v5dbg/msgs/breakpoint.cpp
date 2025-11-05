@@ -7,11 +7,28 @@
 void
 V5Dbg_LBreakpointsHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 {
+
+  // Debugger can request to view hidden breakpoints by setting the data parameter to either zero or one
+
+  bool hidden = false;
+
+  if (msg.paramBuffer == "0")
+  {
+    hidden = false;
+  }
+  else
+  {
+    hidden = true;
+  }
+
   v5dbg_message_t rVal{};
   rVal.type = DEBUGGER_MESSAGE_RBREAKPOINT;
 
   for (auto& breakpoint : V5Dbg_GetBreakpointManager()->breakpoints)
   {
+    if (breakpoint->hidden != hidden) // Filter out breakpoints
+      continue;
+
     rVal.paramBuffer = V5Dbg_FormatPrint("%i:[%s]:%s:%i", breakpoint->id, breakpoint->location.functionName.c_str(),
                                          breakpoint->location.filePath.c_str(), breakpoint->location.lineNumber);
 
@@ -35,9 +52,9 @@ V5Dbg_SetBreakpointStatusHandle(v5dbg_server_state_t* pState, const v5dbg_messag
   }
 
   int id = std::stoi(split[0]);
-  bool enabled = (bool) std::stoi(split[1]);
+  bool enabled = (bool)std::stoi(split[1]);
 
-  for (auto &breakpoint : V5Dbg_GetBreakpointManager()->breakpoints)
+  for (auto& breakpoint : V5Dbg_GetBreakpointManager()->breakpoints)
   {
     if (breakpoint->id == id)
     {

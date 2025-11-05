@@ -22,6 +22,9 @@ struct v5dbg_breakpoint_t
 
   /// @brief  Will this breakpoint be invoked when it's hit?
   bool enabled = true;
+
+  /// @brief  Will this breakpoint show up in a breakpoint listing, usually enabled for allocation breakpoints
+  bool hidden = false;
 };
 
 /// @brief  Global breakpoint manager

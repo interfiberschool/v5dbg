@@ -50,54 +50,81 @@ class BreakCommand(CommandExecutor):
             "enable", help="Enable the given breakpoint by ID"
         )
         break_enable.add_argument(
-            "breakpoint_id", help="Breakpoint ID to enable", action="store", type=int
+            "breakpoint_id", help="Breakpoint ID to enable", action="store", type=str
         )
 
         break_disable = break_sub.add_parser(
             "disable", help="Disable the given breakpoint by ID"
         )
         break_disable.add_argument(
-            "breakpoint_id", help="Breakpoint ID to disable", action="store", type=int
+            "breakpoint_id", help="Breakpoint ID to disable", action="store", type=str
         )
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         if command.debugger == "break":
             if command.breakp == "enable":
-                if client.enable_breakpoint(int(command.breakpoint_id), True) == None:
+                breakp_id = -1
+
+                if command.breakpoint_id.isnumeric():
+                    breakp_id = int(command.breakpoint_id)
+                else:
+                    new_name = client.get_stack_frame().name + command.breakpoint_id
+
+                    # Find location information
+                    split = command.breakpoint_id.split(":")
+                    file = split[0]
+                    line = 0
+                    if len(split) == 2:
+                        line = int(split[1])
+
+                    for bpoint in client.get_breakpoints(True):
+                        if bpoint.function == new_name or (bpoint.location.file == file and bpoint.location.line == line):
+                            breakp_id = bpoint.id
+                            break
+
+                if client.enable_breakpoint(breakp_id, True) == None:
                     return
 
                 print_formatted_text(
                     FormattedText(
                         [
                             ("", "Enabled breakpoint "),
-                            (Colors.STEEL, f"#{command.breakpoint_id}"),
+                            (Colors.STEEL, f"#{breakp_id}"),
                         ]
                     )
                 )
 
             elif command.breakp == "disable":
-                if client.enable_breakpoint(command.breakpoint_id, False) == None:
+                breakp_id = -1
+
+                if command.breakpoint_id.isnumeric():
+                    breakp_id = int(command.breakpoint_id)
+                else:
+                    new_name = client.get_stack_frame().name + command.breakpoint_id
+
+                    # Find location information
+                    split = command.breakpoint_id.split(":")
+                    file = split[0]
+                    line = 0
+                    if len(split) == 2:
+                        line = int(split[1])
+
+                    for bpoint in client.get_breakpoints(True):
+                        if bpoint.function == new_name or (bpoint.location.file == file and bpoint.location.line == line):
+                            breakp_id = bpoint.id
+                            break
+
+                if client.enable_breakpoint(breakp_id, False) == None:
                     return
 
                 print_formatted_text(
                     FormattedText(
                         [
                             ("", "Disabled breakpoint "),
-                            (Colors.STEEL, f"#{command.breakpoint_id}"),
+                            (Colors.STEEL, f"#{breakp_id}"),
                         ]
                     )
                 )
             else:
-                list_breaks = DebuggerMessage(DebuggerMessageType.LBREAKPOINTS)
-
-                client.send_msg(list_breaks)
-
-                msgs = client.server.get_msg_range(
-                    DebuggerMessageType.RBREAKPOINT, DebuggerMessageType.END_BREAKPOINTS
-                )
-
-                for msg in msgs:
-                    if msg.msg_type != DebuggerMessageType.RBREAKPOINT:
-                        continue
-
-                    DebuggerBreakpoint(msg).print_info()
+              for b in client.get_breakpoints():
+                b.print_info()

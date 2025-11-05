@@ -124,7 +124,10 @@ class DebuggerClient:
         # Inject breakpoints by changing the frame information where the breakpoint is located
         for frame in b:
             if (
-                frame.name == self.active_break.function.split("+")[0] # Get name before the + which denotes extra data
+                frame.name
+                == self.active_break.function.split("+")[
+                    0
+                ]  # Get name before the + which denotes extra data
                 and frame.file == self.active_break.location.file
             ):
                 frame.line = self.active_break.location.line
@@ -188,3 +191,32 @@ class DebuggerClient:
                     c_thread = False
 
                 i += 1
+
+    """
+    Return the active stack frame
+    """
+
+    def get_stack_frame(self) -> StackFrame:
+        return self.get_stacktrace()[self.active_thread.frame_index]
+
+    """
+    List all breakpoints found so far in the program
+
+    Args:
+      list_hidden (bool): If enabled hidden breakpoints are also listed
+    """
+    def get_breakpoints(self, list_hidden: bool = False):
+        list_breaks = DebuggerMessage(DebuggerMessageType.LBREAKPOINTS)
+        list_breaks.data = "1" if list_hidden else "0"
+
+        self.send_msg(list_breaks)
+
+        msgs = self.server.get_msg_range(
+            DebuggerMessageType.RBREAKPOINT, DebuggerMessageType.END_BREAKPOINTS
+        )
+
+        for msg in msgs:
+            if msg.msg_type != DebuggerMessageType.RBREAKPOINT:
+                continue
+
+            yield DebuggerBreakpoint(msg)

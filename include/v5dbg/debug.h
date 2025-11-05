@@ -49,6 +49,7 @@ private:
   _v5dbg_var_##target->setMemoryType(V5Dbg_MemoryTypeFromType(typeid(target))); \
   _v5dbg_var_##target->setPtr(&target);                                                                                \
   static v5dbg_breakpoint_t* _v5dbg_var_alloc_##target = V5Dbg_Breakpoint(false, { .filePath = __FILE__, .lineNumber = _v5dbg_var_line_##target, .functionName = std::string(__PRETTY_FUNCTION__) + "+alloc:" + std::string(#target) }); \
+  _v5dbg_var_alloc_##target->hidden = true; \
   _v5dbg_stack_func.expose(_v5dbg_var_##target, _v5dbg_var_alloc_##target);
 
 /// @brief Disabled by default breakpoint
