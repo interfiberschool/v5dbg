@@ -35,6 +35,11 @@ V5Dbg_RegisterPrettyPrinter(v5dbg_memory_type_e memType, V5Dbg_PrettyPrintMemory
   V5Dbg_GetPrettyPrinterState()->printers.insert({ memType, func });
 }
 
+void V5Dbg_RegisterPrettyPrinter(v5dbg_memory_type_e memType, V5Dbg_PrettyPrinterAllocateBuffer func)
+{
+  V5Dbg_GetPrettyPrinterState()->allocators.insert({ memType, func });
+}
+
 v5dbg_pretty_printed_t
 V5Dbg_PrettyPrint(V5DbgMemoryObject* pMem)
 {

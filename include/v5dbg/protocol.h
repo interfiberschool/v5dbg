@@ -68,6 +68,9 @@ enum v5dbg_message_type_e
   /// @brief  Sent to the debug server in order to disable/enable a breakpoint by ID
   DEBUGGER_MESSAGE_BREAKPOINT_SET_STATUS = 17,
 
+  /// @brief  Set the contents of the memory which is backing a variable
+  DEBUGGER_MESSAGE_MEMORY_SET = 18,
+
   /// @brief  Max debugger message ID
   DEBUGGER_MESSAGE_MAX = 18
 };

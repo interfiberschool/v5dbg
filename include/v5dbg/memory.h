@@ -83,8 +83,9 @@ class V5DbgMemoryObject
 public:
   /**
    * Create a memory object from variable information
+   * @param memSize Memory block size
    */
-  explicit V5DbgMemoryObject(const v5dbg_variable_t &variable);
+  explicit V5DbgMemoryObject(const v5dbg_variable_t &variable, size_t memSize);
 
   static uint32_t getNextID()
   {
@@ -128,6 +129,12 @@ public:
     m_memoryType = memType;
   }
 
+  /**
+   * Set the memory backing this object with the data from pBuffer
+   * @param pBuffer Memory source to copy from
+   */
+  void setBuffer(void *pBuffer);
+
   /// @brief  Memory state
   v5dbg_memory_state_e memState = MEMORY_STATE_ALLOCATED;
 
@@ -136,5 +143,6 @@ private:
   v5dbg_variable_t m_variable;
 
   const void* m_memory;
+  size_t m_memSize = 0;
   v5dbg_memory_type_e m_memoryType;
 };
