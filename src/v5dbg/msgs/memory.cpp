@@ -64,7 +64,8 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
         result.paramBuffer = V5Dbg_FormatPrint("[%s]:%s", prettyPrint.typeName.c_str(), prettyPrint.varName.c_str());
 
         // debug info location
-        result.paramBuffer += V5Dbg_FormatPrint(":%s:%i:[%s]", cPoint.filePath.c_str(), cPoint.lineNumber, prettyPrint.printBuffer.c_str());
+        result.paramBuffer += V5Dbg_FormatPrint(":%s:%i:[%s]", cPoint.filePath.c_str(), cPoint.lineNumber,
+                                                prettyPrint.printBuffer.c_str());
 
         V5Dbg_WriteToOut(V5Dbg_SerializeMessage(result));
       }
@@ -79,4 +80,10 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
   result.type = DEBUGGER_MESSAGE_LMEM_END;
 
   V5Dbg_WriteToOut(V5Dbg_SerializeMessage(result));
+}
+
+void
+V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
+{
+  // TODO: Work on this after subargument parsing can be done debug server side
 }

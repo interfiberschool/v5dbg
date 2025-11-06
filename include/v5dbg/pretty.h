@@ -29,7 +29,7 @@ struct v5dbg_pretty_printed_t
 typedef v5dbg_pretty_printed_t (*V5Dbg_PrettyPrintMemoryObj)(V5DbgMemoryObject* pMemory);
 
 /// @brief  Return a heap-allocated buffer which contains the properly casted memory for the incoming data type
-typedef void* (*V5Dbg_PrettyPrinterAllocateBuffer)(V5DbgMemoryObject* pMemory, const std::string& buffer);
+typedef void* (*V5Dbg_PrettyPrinterAllocateBuffer)(const std::string& buffer);
 
 struct v5dbg_pretty_printer_state_t
 {

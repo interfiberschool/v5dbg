@@ -2,44 +2,69 @@
 #include <string>
 #include "memory.h"
 #include "v5dbg/memory.h"
-#include "v5dbg/util.h"
 #include "v5dbg/pretty.h"
+#include "v5dbg/util.h"
 
 v5dbg_pretty_printed_t
-V5Dbg_PrettyPrintInt(V5DbgMemoryObject *pMemory)
+V5Dbg_PrettyPrintInt(V5DbgMemoryObject* pMemory)
 {
-  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%i", *((int*) pMemory->getPtr())));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%i", *((int*)pMemory->getPtr())));
 }
 
+void*
+V5Dbg_AllocateInt(const std::string& value)
+{
+  // Allocate our integer on the heap
+  int* buffer = new int;
+
+  try
+  {
+    *buffer = std::stoi(value);
+  }
+  catch (std::exception& e)
+  {
+    info("Failed to cast string down to integer");
+
+    delete buffer; // Bye
+
+    return nullptr;
+  }
+
+  return buffer;
+}
+
+$pretty_printer_allocator(V5Dbg_AllocateInt, MEMORY_TYPE_BASE_INT);
+
 v5dbg_pretty_printed_t
-V5Dbg_PrettyPrintPtr(V5DbgMemoryObject *pMemory)
+V5Dbg_PrettyPrintPtr(V5DbgMemoryObject* pMemory)
 {
   return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%p", pMemory->getPtr()));
 }
 
 v5dbg_pretty_printed_t
-V5Dbg_PrettyPrintFloat(V5DbgMemoryObject *pMemory)
+V5Dbg_PrettyPrintFloat(V5DbgMemoryObject* pMemory)
 {
-  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((float*) pMemory->getPtr())));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((float*)pMemory->getPtr())));
 }
 
 v5dbg_pretty_printed_t
-V5Dbg_PrettyPrintDouble(V5DbgMemoryObject *pMemory)
+V5Dbg_PrettyPrintDouble(V5DbgMemoryObject* pMemory)
 {
-  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((double*) pMemory->getPtr())));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%f", *((double*)pMemory->getPtr())));
 }
 
 v5dbg_pretty_printed_t
-V5Dbg_PrettyPrintChar(V5DbgMemoryObject *pMemory)
+V5Dbg_PrettyPrintChar(V5DbgMemoryObject* pMemory)
 {
 
-  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%c", *((char*) pMemory->getPtr())));
+  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("%c", *((char*)pMemory->getPtr())));
 }
 
 v5dbg_pretty_printed_t
-V5Dbg_PrettyPrintCStr(V5DbgMemoryObject *pMemory)
+V5Dbg_PrettyPrintCStr(V5DbgMemoryObject* pMemory)
 {
-  return $pretty_print_result(pMemory->getVariable().name, V5Dbg_FormatPrint("\"%s\"", *(const char**) pMemory->getPtr()));
+  return $pretty_print_result(pMemory->getVariable().name,
+                              V5Dbg_FormatPrint("\"%s\"", *(const char**)pMemory->getPtr()));
 }
 
 $pretty_printer(V5Dbg_PrettyPrintInt, MEMORY_TYPE_BASE_INT);

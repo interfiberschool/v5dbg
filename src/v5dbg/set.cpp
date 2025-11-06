@@ -12,7 +12,7 @@ bool V5Dbg_SetVariable(const std::shared_ptr<V5DbgMemoryObject> &mem, const std:
     {
       // Found our buffer allocator, now we can invoke it to allocate our memory
 
-      void* buffer = alloc.second(mem.get(), pSet);
+      void* buffer = alloc.second(pSet); // Allocate our buffer!
 
       if (buffer == nullptr)
       {
