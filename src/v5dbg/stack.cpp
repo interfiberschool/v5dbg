@@ -29,13 +29,15 @@ V5DbgFunction::V5DbgFunction(const std::string& name, const char* file, int line
   thread->stack.push_back(frame);
 }
 
-void
+V5DbgDeallocator
 V5DbgFunction::expose(const std::shared_ptr<V5DbgMemoryObject>& memObject, const v5dbg_breakpoint_t *pBreak)
 {
   m_memory->expose(memObject);
 
   // Handle breakpoints
   V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), pBreak);
+
+  return V5DbgDeallocator(memObject);
 }
 
 V5DbgFunction::~V5DbgFunction()
@@ -47,9 +49,6 @@ V5DbgFunction::~V5DbgFunction()
   }
 
   thread->stack.pop_back();
-
-  // Deallocate
-  m_memory->deallocateAll();
 
   // When the program is paused before a stack pop we can inspect each threads
   // virtual stack in order to determine the current execution location down to

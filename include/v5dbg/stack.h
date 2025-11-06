@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "breakpoint.h"
+#include "memory.h"
 #include "v5dbg/debinfo.h"
 #include "v5dbg/pretty.h"
 
@@ -78,7 +79,7 @@ public:
    * Expose a memory object to the debug server
    * @param mem Memory object to expose
    */
-  void expose(const std::shared_ptr<V5DbgMemoryObject> &memObject, const v5dbg_breakpoint_t *pBreak = nullptr);
+  V5DbgDeallocator expose(const std::shared_ptr<V5DbgMemoryObject> &memObject, const v5dbg_breakpoint_t *pBreak = nullptr);
 
 private:
   V5DbgStackMemory* m_memory{};

@@ -1,3 +1,4 @@
+#include "memory.h"
 #include "debinfo.h"
 #include "v5dbg/pretty.h"
 
@@ -11,4 +12,10 @@ void
 V5DbgMemoryObject::setPtr(const void* ptr)
 {
   m_memory = ptr;
+}
+
+V5DbgDeallocator::~V5DbgDeallocator()
+{
+  m_obj->memState = MEMORY_STATE_DEALLOCATED;
+  m_obj->setPtr(nullptr);
 }

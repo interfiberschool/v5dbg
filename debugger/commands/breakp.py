@@ -74,7 +74,7 @@ class BreakCommand(CommandExecutor):
                     split = command.breakpoint_id.split(":")
                     file = split[0]
                     line = 0
-                    if len(split) == 2:
+                    if len(split) == 2 and split[1].isnumeric():
                         line = int(split[1])
 
                     for bpoint in client.get_breakpoints(True):
@@ -106,7 +106,7 @@ class BreakCommand(CommandExecutor):
                     split = command.breakpoint_id.split(":")
                     file = split[0]
                     line = 0
-                    if len(split) == 2:
+                    if len(split) == 2 and split[1].isnumeric():
                         line = int(split[1])
 
                     for bpoint in client.get_breakpoints(True):

@@ -60,6 +60,21 @@ enum v5dbg_memory_state_e
   MEMORY_STATE_DEALLOCATED = 1
 };
 
+class V5DbgMemoryObject;
+
+/**
+ * Handles deallocation of stack objects
+ */
+class V5DbgDeallocator
+{
+public:
+  V5DbgDeallocator(const std::shared_ptr<V5DbgMemoryObject> &obj) : m_obj(obj) {}
+  ~V5DbgDeallocator();
+
+private:
+  std::shared_ptr<V5DbgMemoryObject> m_obj;
+};
+
 /**
  * Raw memory object which also manages the V5DbgPrettyPrinter
  */
