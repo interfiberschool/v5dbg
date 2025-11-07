@@ -53,8 +53,6 @@ void opLoop(const std::string &data)
 
     printData(data.c_str());
 
-    $break
-
     int x = data.size();
     $expose(x);
 
@@ -68,15 +66,21 @@ opcontrol(void)
     $function
 
     int x = 0;
+    $expose(x);
 
     std::vector<int> data;
     $expose(data);
 
     std::vector<double> dataHist;
     $expose(dataHist);
+
+    int incrementor = 5;
+    $expose(incrementor);
 	
     while (true)
     {
+        $break
+
         int test = x * 2;
         $expose(test);
 
@@ -93,6 +97,6 @@ opcontrol(void)
 
         opLoop("Hello World");
 
-        x++;
+        x += incrementor;
     }
 }

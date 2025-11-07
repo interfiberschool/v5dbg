@@ -71,8 +71,11 @@ enum v5dbg_message_type_e
   /// @brief  Set the contents of the memory which is backing a variable
   DEBUGGER_MESSAGE_MEMORY_SET = 18,
 
+  /// @brief  Used to return information and state of a memory set call
+  DEBUGGER_MESSAGE_RMEMORY_SET = 19,
+
   /// @brief  Max debugger message ID
-  DEBUGGER_MESSAGE_MAX = 19
+  DEBUGGER_MESSAGE_MAX = 20
 };
 
 struct v5dbg_message_t

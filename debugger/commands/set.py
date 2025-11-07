@@ -57,7 +57,30 @@ class SetCommand(CommandExecutor):
 
         client.send_msg(set_msg)
 
-        # TODO: Wait for response
+        # Wait for the debug server response
+        response = client.server.wait_for(DebuggerMessageType.RMEMORY_SET)
+        response_code = response[0].data
+
+        if response_code == "AllocatorFailure":
+            print_formatted_text(FormattedText([
+                (Colors.RED, 'The debug server buffer allocator failed to convert and allocate your input data')
+            ]))
+            return
+        elif response_code == "ConversionFailure":
+            print_formatted_text(FormattedText([
+                (Colors.RED, 'The debug server buffer allocator failed to convert your input string')
+            ]))
+            return
+        elif response_code == "NoAllocator":
+            print_formatted_text(FormattedText([
+                (Colors.RED, 'The debug server could not find a suitable allocator registered with $pretty_printer_allocator')
+            ]))
+            return
+        elif response_code == "NoVariable":
+            print_formatted_text(FormattedText([
+                (Colors.RED, f'No variable in the current scope with the name \'{name}\'')
+            ]))
+            return
 
         print_formatted_text(FormattedText([
             ('', 'Set value of variable '),

@@ -110,7 +110,7 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
   int stackFrame = std::stoi(arguments[2]);
   int threadID = std::stoi(arguments[3]);
 
-  // Set memory 
+  // Set memory
 
   v5dbg_thread_t* thread = V5Dbg_ThreadWithID(pState, threadID);
   if (thread == nullptr)
@@ -128,11 +128,26 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
       {
         if (obj->getVariable().name == name)
         {
-          V5Dbg_SetVariable(obj, buf);
+          if (v5dbg_variable_set_result_e result = V5Dbg_SetVariable(obj, buf); result != MEMORY_SET_COMPLETE)
+          {
+            v5dbg_message_t msg{};
+            msg.type = DEBUGGER_MESSAGE_RMEMORY_SET;
+            msg.paramBuffer = result == MEMORY_SET_ALLOCATOR_FAILURE ? "AllocatorFailure" : "ConversionFailure";
 
-          info("VariableSet");
+            V5Dbg_WriteToOut(V5Dbg_SerializeMessage(msg));
 
-          // TODO: Return valid set command
+            return;
+          }
+          else
+          {
+            // Tell the debugger that we've set the variables memory
+
+            v5dbg_message_t msg{};
+            msg.type = DEBUGGER_MESSAGE_RMEMORY_SET;
+            msg.paramBuffer = "MemorySet";
+
+            V5Dbg_WriteToOut(V5Dbg_SerializeMessage(msg));
+          }
         }
       }
 
@@ -142,5 +157,9 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
     stackID--;
   }
 
-  // TODO: Return invalid set command
+  v5dbg_message_t result{};
+  result.type = DEBUGGER_MESSAGE_RMEMORY_SET;
+  result.paramBuffer = "NoVariable";
+
+  V5Dbg_WriteToOut(V5Dbg_SerializeMessage(result));
 }

@@ -23,8 +23,6 @@ V5Dbg_AllocateInt(const std::string& value)
   }
   catch (std::exception& e)
   {
-    info("Failed to cast string down to integer");
-
     delete buffer; // Bye
 
     return nullptr;

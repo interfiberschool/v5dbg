@@ -1,7 +1,7 @@
 #include "v5dbg/set.h"
 #include "pretty.h"
 
-bool V5Dbg_SetVariable(const std::shared_ptr<V5DbgMemoryObject> &mem, const std::string &pSet)
+v5dbg_variable_set_result_e V5Dbg_SetVariable(const std::shared_ptr<V5DbgMemoryObject> &mem, const std::string &pSet)
 {
   v5dbg_pretty_printer_state_t *state = V5Dbg_GetPrettyPrinterState();
 
@@ -15,20 +15,15 @@ bool V5Dbg_SetVariable(const std::shared_ptr<V5DbgMemoryObject> &mem, const std:
       void* buffer = alloc.second(pSet); // Allocate our buffer!
 
       if (buffer == nullptr)
-      {
-        info("Buffer allocation failed!");
-        break;
-      }
+        return MEMORY_SET_ALLOCATOR_FAILURE;
 
       mem->setBuffer(buffer);
 
       free(buffer);
 
-      return true;
+      return MEMORY_SET_COMPLETE;
     }
   }
 
-  info("Variable set failed due to no valid buffer allocator found");
-
-  return false;
+  return MEMORY_SET_NO_ALLOCATOR;
 }
