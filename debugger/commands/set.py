@@ -1,0 +1,67 @@
+from prompt_toolkit import print_formatted_text
+from prompt_toolkit.formatted_text import FormattedText
+from debug import CommandExecutor, Debugger
+from client import DebuggerClient
+from colors import Colors
+from protocol import DebuggerMessage, DebuggerMessageType
+
+
+"""
+Handles setting memory within the local frame context
+"""
+
+
+class SetCommand(CommandExecutor):
+    def __init__(self):
+        pass
+
+    def get_name(self):
+        return "set"
+
+    def register(self, parser):
+        p = parser.add_parser("set", help="Set the value of a variable")
+        p.add_argument(
+            "variable_id",
+            help="Name of the local variable to set the value of",
+            type=str,
+            action="store",
+        )
+
+        p.add_argument(
+            "value_buffer",
+            help="Value to set the variable to",
+            type=str,
+            action="store",
+        )
+
+    def next_completion(
+        self,
+        command: str,
+        current_arg: int,
+        current_text: str,
+        c_index: int,
+        client: DebuggerClient,
+    ) -> str:
+        return None
+
+
+    def execute(self, client: DebuggerClient, debugger: Debugger, command):
+        if command.debugger != "set": 
+            return
+        
+        name = command.variable_id
+        buffer = command.value_buffer
+
+        set_msg = DebuggerMessage(DebuggerMessageType.MEMORY_SET)
+        set_msg.data = f"[{name}]:[{buffer}]:{client.active_thread.frame_index}:{client.active_thread.id}"
+
+        client.send_msg(set_msg)
+
+        # TODO: Wait for response
+
+        print_formatted_text(FormattedText([
+            ('', 'Set value of variable '),
+            (Colors.ORANGE, name),
+            ('', ' to '),
+            (Colors.STEEL, buffer)
+        ]))

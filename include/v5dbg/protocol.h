@@ -72,7 +72,7 @@ enum v5dbg_message_type_e
   DEBUGGER_MESSAGE_MEMORY_SET = 18,
 
   /// @brief  Max debugger message ID
-  DEBUGGER_MESSAGE_MAX = 18
+  DEBUGGER_MESSAGE_MAX = 19
 };
 
 struct v5dbg_message_t

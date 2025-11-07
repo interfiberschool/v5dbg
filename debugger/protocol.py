@@ -25,6 +25,7 @@ class DebuggerMessageType(IntEnum):
     RBREAKPOINT = 15
     END_BREAKPOINTS = 16
     BREAKPOINT_SET_STATUS = 17
+    MEMORY_SET = 18
 
 class DebuggerMessage():
     msg_type: DebuggerMessageType

@@ -33,7 +33,7 @@ private:
 
 
 /**
- * @brief  Expose a scoped variable to the debugger.
+ * @brief  Expose a scoped variable to the debugger, also handles pretty printer and pretty buffer allocation handles 
  * @note Can only be called within a debuggable function
  */
 #define $expose(target)                                                                                                \

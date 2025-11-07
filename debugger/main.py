@@ -7,6 +7,7 @@ from commands.memory import MemoryCommand, PrintCommand
 from commands.frame import FrameCommand
 from commands.preview import PreviewCommand
 from commands.breakp import BreakCommand
+from commands.set import SetCommand
 
 # Construct the debugger
 
@@ -28,6 +29,7 @@ debugger.register(PrintCommand())
 debugger.register(FrameCommand())
 debugger.register(PreviewCommand())
 debugger.register(BreakCommand())
+debugger.register(SetCommand())
 
 while True:
     if debugger.ask_execute():

@@ -4,7 +4,9 @@
 #include "v5dbg/pretty.h"
 #include "v5dbg/protocol.h"
 #include "v5dbg/server.h"
+#include "v5dbg/set.h"
 #include "v5dbg/stack.h"
+#include "v5dbg/subargs.h"
 #include "v5dbg/util.h"
 
 void
@@ -85,5 +87,60 @@ V5Dbg_LMemForHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 void
 V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 {
-  // TODO: Work on this after subargument parsing can be done debug server side
+  // Get parameters
+
+  // 0: Variable name
+  // 1: Buffer contents
+  // 2: Stack frame
+  // 3: Thread ID
+
+  const std::vector<std::string> arguments = V5Dbg_ParseSubargs(msg.paramBuffer);
+
+  if (arguments.size() != 4)
+  {
+    info("Invalid argument count of: %zu, expected 4!", arguments.size());
+    return;
+  }
+
+  // Pull out info
+
+  std::string name = arguments[0];
+  std::string buf = arguments[1];
+
+  int stackFrame = std::stoi(arguments[2]);
+  int threadID = std::stoi(arguments[3]);
+
+  // Set memory 
+
+  v5dbg_thread_t* thread = V5Dbg_ThreadWithID(pState, threadID);
+  if (thread == nullptr)
+  {
+    info("NoThread");
+    return;
+  }
+
+  int stackID = thread->stack.size() - 1;
+  for (int i = 0; i < thread->stack.size(); i++)
+  {
+    if (stackID == stackFrame)
+    {
+      for (auto& obj : thread->stack[i].pMemory->local)
+      {
+        if (obj->getVariable().name == name)
+        {
+          V5Dbg_SetVariable(obj, buf);
+
+          info("VariableSet");
+
+          // TODO: Return valid set command
+        }
+      }
+
+      break;
+    }
+
+    stackID--;
+  }
+
+  // TODO: Return invalid set command
 }
