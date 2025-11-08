@@ -23,14 +23,17 @@ V5DbgDeallocator::~V5DbgDeallocator()
   m_obj->setPtr(nullptr);
 }
 
-void
+bool
 V5DbgMemoryObject::setBuffer(void* pBuffer)
 {
-  if (m_memory == nullptr)
+  if (memState == MEMORY_STATE_DEALLOCATED || m_memory == nullptr)
   {
     info("Cannot setBuffer on unallocated object!");
+    return false;
   }
 
   // C++ blackmagic fuckery to convert a immutable pointer to a mutable one
   memcpy(const_cast<void*>(m_memory), pBuffer, m_memSize);
+
+  return true;
 }

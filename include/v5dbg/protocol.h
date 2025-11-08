@@ -11,6 +11,13 @@
 
 #define V5DBG_MSG_SEPERATOR ':'
 
+// Response values used for a memory set operation
+
+#define V5DBG_MEMORY_SET "MemorySet"
+#define V5DBG_MEMORY_ALLOCATOR_FAILURE "AllocatorFailure"
+#define V5DBG_MEMORY_CONVERSION_FAILURE "ConversionFailure"
+#define V5DBG_MEMORY_NO_VARIABLE "NoVariable"
+
 enum v5dbg_message_type_e
 {
   /// @brief  Connection opened

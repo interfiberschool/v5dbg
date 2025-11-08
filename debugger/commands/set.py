@@ -63,7 +63,7 @@ class SetCommand(CommandExecutor):
 
         if response_code == "AllocatorFailure":
             print_formatted_text(FormattedText([
-                (Colors.RED, 'The debug server buffer allocator failed to convert and allocate your input data')
+                (Colors.RED, 'The debug server buffer allocator failed to allocate your input data')
             ]))
             return
         elif response_code == "ConversionFailure":

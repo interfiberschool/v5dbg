@@ -11,7 +11,10 @@ enum v5dbg_variable_set_result_e
   MEMORY_SET_ALLOCATOR_FAILURE = 1,
 
   /// @brief  Memory set operation completed with no errors and temporary buffers have been freed
-  MEMORY_SET_COMPLETE = 2
+  MEMORY_SET_COMPLETE = 2,
+
+  /// @brief  Memory could not be converted to the target type
+  MEMORY_SET_CONVERSION_FAILURE = 3
 };
 
 

@@ -132,8 +132,9 @@ public:
   /**
    * Set the memory backing this object with the data from pBuffer
    * @param pBuffer Memory source to copy from
+   * @return true if the operator was a success, false if otherwise
    */
-  void setBuffer(void *pBuffer);
+  bool setBuffer(void *pBuffer);
 
   /// @brief  Memory state
   v5dbg_memory_state_e memState = MEMORY_STATE_ALLOCATED;

@@ -15,9 +15,16 @@ v5dbg_variable_set_result_e V5Dbg_SetVariable(const std::shared_ptr<V5DbgMemoryO
       void* buffer = alloc.second(pSet); // Allocate our buffer!
 
       if (buffer == nullptr)
-        return MEMORY_SET_ALLOCATOR_FAILURE;
+        return MEMORY_SET_CONVERSION_FAILURE;
 
-      mem->setBuffer(buffer);
+      if (!mem->setBuffer(buffer))
+      {
+        // Something failed with our memcpy operation! Free our temp buffer and move on...
+
+        free(buffer);
+
+        return MEMORY_SET_ALLOCATOR_FAILURE;
+      }
 
       free(buffer);
 

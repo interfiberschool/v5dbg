@@ -132,7 +132,15 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
           {
             v5dbg_message_t msg{};
             msg.type = DEBUGGER_MESSAGE_RMEMORY_SET;
-            msg.paramBuffer = result == MEMORY_SET_ALLOCATOR_FAILURE ? "AllocatorFailure" : "ConversionFailure";
+
+            if (result == MEMORY_SET_NO_ALLOCATOR || result == MEMORY_SET_ALLOCATOR_FAILURE)
+            {
+              msg.paramBuffer = V5DBG_MEMORY_ALLOCATOR_FAILURE;
+            }
+            else if (result == MEMORY_SET_CONVERSION_FAILURE)
+            {
+              msg.paramBuffer = V5DBG_MEMORY_CONVERSION_FAILURE;
+            }
 
             V5Dbg_WriteToOut(V5Dbg_SerializeMessage(msg));
 
@@ -144,7 +152,7 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 
             v5dbg_message_t msg{};
             msg.type = DEBUGGER_MESSAGE_RMEMORY_SET;
-            msg.paramBuffer = "MemorySet";
+            msg.paramBuffer = V5DBG_MEMORY_SET;
 
             V5Dbg_WriteToOut(V5Dbg_SerializeMessage(msg));
           }
@@ -159,7 +167,7 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 
   v5dbg_message_t result{};
   result.type = DEBUGGER_MESSAGE_RMEMORY_SET;
-  result.paramBuffer = "NoVariable";
+  result.paramBuffer = V5DBG_MEMORY_NO_VARIABLE;
 
   V5Dbg_WriteToOut(V5Dbg_SerializeMessage(result));
 }
