@@ -18,6 +18,7 @@ temp.errors
 .d/
 
 v5dbg-server/target/*
+debugger/__pycache__/*
 docs/site/*
 docs/lib64/*
 docs/lib/*
