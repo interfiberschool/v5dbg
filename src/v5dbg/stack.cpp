@@ -63,8 +63,8 @@ V5DbgStackMemory::expose(const std::shared_ptr<V5DbgMemoryObject>& obj)
   {
     if (v->getID() == obj->getID())
     {
-      v->setPtr(obj->getPtr());
       v->memState = MEMORY_STATE_ALLOCATED;
+      v->setPtr(obj->getPtr());
 
       return;
     }

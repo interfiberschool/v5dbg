@@ -61,13 +61,13 @@ class DebugServer:
     # Return True if we are connected to the remote debug server
     def connected(self):
         return self.proc.poll() == None
-    
+
     """
     Set the handler which executes when a breakpoint is tripped
     """
     def set_breakpoint_trip(self, handle):
         self.breakpoint_tripped = handle
-    
+
     # Write `buffer` to the remote servers incoming data stream and flush
     def write(self, buffer: str):
         try:
@@ -97,9 +97,9 @@ class DebugServer:
         for t in trace_reversed:
             if t.msg_type == end:
                 end_index = x # Keep improving until we find the latest
-            
+
             x += 1
-        
+
         x = 0
 
         for t in trace_reversed:
@@ -127,7 +127,7 @@ class DebugServer:
                 print("Warning! DebugServer (local) has not gotten any OPEN messages from the debug server in over 5s, did the debug server freeze?")
 
             time.sleep(2)
-        
+
         print_formatted_text(FormattedText([
             (Colors.RED, 'Disconnected from communications server, process exited!')
         ]))
@@ -177,7 +177,7 @@ class DebugServer:
 
             if len(self.message_trace) + 1 > self.MESSAGE_TRACE_MAX:
                 self.message_trace.clear()
-            
+
             self.message_trace.append(msg)
 
             if msg.msg_type == DebuggerMessageType.OPEN:

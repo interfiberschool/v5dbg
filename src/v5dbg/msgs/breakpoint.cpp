@@ -8,18 +8,8 @@ void
 V5Dbg_LBreakpointsHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 {
 
-  // Debugger can request to view hidden breakpoints by setting the data parameter to either zero or one
-
-  bool hidden = false;
-
-  if (msg.paramBuffer == "0")
-  {
-    hidden = false;
-  }
-  else
-  {
-    hidden = true;
-  }
+  // Debugger can request to view hidden breakpoints by setting the data parameter to true
+  const bool hidden = (bool) std::stoi(msg.paramBuffer);
 
   v5dbg_message_t rVal{};
   rVal.type = DEBUGGER_MESSAGE_RBREAKPOINT;

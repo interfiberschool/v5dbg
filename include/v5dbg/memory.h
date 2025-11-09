@@ -136,6 +136,12 @@ public:
    */
   bool setBuffer(void *pBuffer);
 
+  /**
+   * Set the re-copy buffer which is used to override the contents of the underlying memory object every time setPtr is called
+   * *@param pBuffer Input buffer, use nullptr to disable the re-copy buffer
+   */
+  void setRecopyBuffer(void *pBuffer);
+
   /// @brief  Memory state
   v5dbg_memory_state_e memState = MEMORY_STATE_ALLOCATED;
 
@@ -144,6 +150,7 @@ private:
   v5dbg_variable_t m_variable;
 
   const void* m_memory;
+  void *m_recopy = nullptr;
   size_t m_memSize = 0;
   v5dbg_memory_type_e m_memoryType;
 };

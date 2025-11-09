@@ -76,7 +76,7 @@ opcontrol(void)
 
     int incrementor = 5;
     $expose(incrementor);
-	
+
     while (true)
     {
         $break
@@ -93,7 +93,8 @@ opcontrol(void)
         data.push_back(x);
         dataHist.push_back(other);
 
-        pros::lcd::print(3, "%i", x);
+        pros::lcd::print(3, "%i", test);
+        $break
 
         opLoop("Hello World");
 

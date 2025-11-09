@@ -15,6 +15,15 @@ void
 V5DbgMemoryObject::setPtr(const void* ptr)
 {
   m_memory = ptr;
+
+  // Copy constant data to override this memory object
+  if (m_recopy != nullptr)
+  {
+      if (!setBuffer(m_recopy))
+      {
+          info("SetBuffer failed to recopy!");
+      }
+  }
 }
 
 V5DbgDeallocator::~V5DbgDeallocator()
@@ -36,4 +45,10 @@ V5DbgMemoryObject::setBuffer(void* pBuffer)
   memcpy(const_cast<void*>(m_memory), pBuffer, m_memSize);
 
   return true;
+}
+
+void
+V5DbgMemoryObject::setRecopyBuffer(void* pBuffer)
+{
+    m_recopy = pBuffer;
 }

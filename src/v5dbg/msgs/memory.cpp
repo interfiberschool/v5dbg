@@ -93,12 +93,13 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
   // 1: Buffer contents
   // 2: Stack frame
   // 3: Thread ID
+  // 4: Set mode converted from v5dbg_variable_set_mode_e
 
   const std::vector<std::string> arguments = V5Dbg_ParseSubargs(msg.paramBuffer);
 
-  if (arguments.size() != 4)
+  if (arguments.size() != 5)
   {
-    info("Invalid argument count of: %zu, expected 4!", arguments.size());
+    info("Invalid argument count of: %zu, expected 5!", arguments.size());
     return;
   }
 
@@ -109,6 +110,10 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
 
   int stackFrame = std::stoi(arguments[2]);
   int threadID = std::stoi(arguments[3]);
+  v5dbg_variable_set_mode_e setMode = VARIABLE_SET_MODE_SINGLE;
+
+  // enum can be converted from an int, v5dbg_variable_set_mode_e is included in the spec document
+  setMode = (v5dbg_variable_set_mode_e) std::stoi(arguments[4]);
 
   // Set memory
 
@@ -128,11 +133,13 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
       {
         if (obj->getVariable().name == name)
         {
-          if (v5dbg_variable_set_result_e result = V5Dbg_SetVariable(obj, buf); result != MEMORY_SET_COMPLETE)
+          if (v5dbg_variable_set_result_e result = V5Dbg_SetVariable(obj, buf, setMode); result != MEMORY_SET_COMPLETE)
           {
             v5dbg_message_t msg{};
             msg.type = DEBUGGER_MESSAGE_RMEMORY_SET;
 
+            // Convert error enum to string
+            // TODO: Just send the enum as an integer to save space
             if (result == MEMORY_SET_NO_ALLOCATOR || result == MEMORY_SET_ALLOCATOR_FAILURE)
             {
               msg.paramBuffer = V5DBG_MEMORY_ALLOCATOR_FAILURE;

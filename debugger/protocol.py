@@ -2,8 +2,14 @@
 from enum import IntEnum
 
 # Version 1: v0.1
-# Version 2: v0.2
+# Version 2: v0.2 - Introduced: breakpoints, and setting memory
+#
 PROTOCOL_VERSION = 2
+
+# See include/v5dbg/set.h for documentation
+class DebuggerVariableSetMode(IntEnum):
+    SINGLE = 0
+    CONST = 1
 
 # See include/v5dbg/protocol.h for documentation for each type
 class DebuggerMessageType(IntEnum):
@@ -63,10 +69,10 @@ class DebuggerMessage():
                 message = ""
             else:
                 message += c
-        
+
         if collectedArguments < 2:
             raise Exception("Not enough parameters for message! Expected 2 and got " + collectedArguments)
-        
+
         parameters.append(message)
 
         parameters[0] = parameters[0][1:]
