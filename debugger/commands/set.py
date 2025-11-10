@@ -125,7 +125,7 @@ class SetCommand(CommandExecutor, SetCommandBase):
         if command.debugger != "set":
             return
         
-        self.run_set(DebuggerVariableSetMode.SINGLE, client, debugger.variable_id, debugger.variable_buffer)
+        self.run_set(DebuggerVariableSetMode.SINGLE, client, debugger.variable_id, debugger.value_buffer)
     
 
 """
@@ -169,4 +169,4 @@ class SetConstantCommand(CommandExecutor, SetCommandBase):
         if command.debugger != "setc":
             return
         
-        self.run_set(DebuggerVariableSetMode.CONST, client, debugger.variable_id, debugger.variable_buffer)
+        self.run_set(DebuggerVariableSetMode.CONST, client, command.variable_id, command.value_buffer)

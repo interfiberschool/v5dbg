@@ -9,35 +9,44 @@ PROTOCOL_VERSION = 2
 """
 Results from a DebuggerMessageType.MEMORY_SET call
 """
+
+
 class DebuggerVariableSetResult(StrEnum):
     ALLOCATION_FAILURE = "AllocatorFailure"
     CONVERSION_FAILURE = "ConversionFailure"
     NO_ALLOCATOR = "NoAllocator"
     NO_VARIABLE = "NoVariable"
+    MEMORY_SET = "MemorySet"
+
 
 """
 See include/v5dbg/set.h for documentation
 """
+
+
 class DebuggerVariableSetMode(IntEnum):
     SINGLE = 0
     CONST = 1
 
+
 """
 See include/v5dbg/protocol.h for documentation for each type
 """
+
+
 class DebuggerMessageType(IntEnum):
-    OPEN = 0,
-    SUSPEND = 1,
-    CLOSE = 2,
-    ALLOC_STRING = 3,
-    RESUME = 4,
-    THREADS = 5,
-    RTHREADS = 6,
-    VSTACK_FOR = 7,
-    RVSTACK = 8,
-    VSTACK_END = 9,
-    LMEM_FOR = 10,
-    RLMEM = 11,
+    OPEN = (0,)
+    SUSPEND = (1,)
+    CLOSE = (2,)
+    ALLOC_STRING = (3,)
+    RESUME = (4,)
+    THREADS = (5,)
+    RTHREADS = (6,)
+    VSTACK_FOR = (7,)
+    RVSTACK = (8,)
+    VSTACK_END = (9,)
+    LMEM_FOR = (10,)
+    RLMEM = (11,)
     LMEM_END = 12
     BREAK_INVOKED = 13
     LBREAKPOINTS = 14
@@ -47,9 +56,12 @@ class DebuggerMessageType(IntEnum):
     MEMORY_SET = 18
     RMEMORY_SET = 19
 
+
 """
 Message from the debug server
 """
+
+
 class DebuggerMessage:
     msg_type: DebuggerMessageType
     parameters: list
@@ -66,7 +78,9 @@ class DebuggerMessage:
     def deserialize(self, data: str):
         msg = DebuggerMessage(0)
 
-        if data[0] != '%': # Should never executed since the DebugServer checks for this to determine messages
+        if (
+            data[0] != "%"
+        ):  # Should never executed since the DebugServer checks for this to determine messages
             raise Exception("Incoming debugger message does not start with a '%'")
 
         # Most of this code was ported from src/v5dbg/protocol.cpp/V5Dbg_DeserializeMessage
@@ -78,7 +92,7 @@ class DebuggerMessage:
         message = ""
 
         for c in data:
-            if c == ':' and collectedArguments < 2:
+            if c == ":" and collectedArguments < 2:
                 collectedArguments += 1
 
                 parameters.append(message)
@@ -87,7 +101,10 @@ class DebuggerMessage:
                 message += c
 
         if collectedArguments < 2:
-            raise Exception("Not enough parameters for message! Expected 2 and got " + collectedArguments)
+            raise Exception(
+                "Not enough parameters for message! Expected 2 and got "
+                + collectedArguments
+            )
 
         parameters.append(message)
 
@@ -95,7 +112,12 @@ class DebuggerMessage:
         parameters[len(parameters) - 1] = parameters[len(parameters) - 1].strip()
 
         if int(parameters[0]) != PROTOCOL_VERSION:
-            raise Exception("Debugger message has invalid protocol version, expected: " + str(PROTOCOL_VERSION) + " and got: " + parameters[0])
+            raise Exception(
+                "Debugger message has invalid protocol version, expected: "
+                + str(PROTOCOL_VERSION)
+                + " and got: "
+                + parameters[0]
+            )
 
         msg.msg_type = DebuggerMessageType(int(parameters[1]))
         msg.parameters = parameters
