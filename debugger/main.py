@@ -8,6 +8,7 @@ from commands.frame import FrameCommand
 from commands.preview import PreviewCommand
 from commands.breakp import BreakCommand
 from commands.set import SetCommand, SetConstantCommand, SetConstantDisableCommand
+from commands.exit import ExitCommand
 
 # Construct the debugger
 
@@ -32,6 +33,7 @@ debugger.register(BreakCommand())
 debugger.register(SetCommand())
 debugger.register(SetConstantCommand())
 debugger.register(SetConstantDisableCommand())
+debugger.register(ExitCommand())
 
 while True:
     if debugger.ask_execute():
