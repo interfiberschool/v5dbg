@@ -1,15 +1,9 @@
 #include "v5dbg/server.h"
-#include <iostream>
-#include <mutex>
-#include <stdio.h>
-#include "pros/apix.h" // Kernel API
-#include "pros/llemu.hpp"
+#include "v5dbg/debinfo.h"
 #include "pros/rtos.h"
 #include "pros/rtos.hpp"
-#include "protocol.h"
 #include "v5dbg/state.h"
-#include "v5dbg/msg.h"
-#include "v5dbg/stack.h"
+#include "v5dbg/stack.h" // We need this otherwise v5dbg_server_state_t objects cannot be created due to them containing stack frame objects
 #include "v5dbg/util.h"
 
 using namespace pros::c;
@@ -40,13 +34,13 @@ V5Dbg_StartServer(v5dbg_server_state_t* pState)
   CURRENT_SERVER = pState;
 
   // Default to serial IO
-  if (CURRENT_SERVER->serial == nullptr)
+  if (V5Dbg_GetCurrentServer()->serial == nullptr)
   {
     V5Dbg_SetWriteMode(pState, WRITE_MODE_SERIAL);
   }
 
   pros::rtos::Task* serverTask
-    = new pros::rtos::Task([]() { V5Dbg_ServerMain(); }, TASK_PRIORITY_MAX, TASK_STACK_DEPTH_DEFAULT, "v5dbg Server");
+    = new pros::rtos::Task([pState]() { V5Dbg_ServerMain(pState); }, TASK_PRIORITY_MAX, TASK_STACK_DEPTH_DEFAULT, "v5dbg Server");
 
   pState->serverTask = serverTask;
 }

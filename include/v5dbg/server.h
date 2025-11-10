@@ -110,7 +110,7 @@ v5dbg_thread_t* V5Dbg_ThreadWithID(int id);
 v5dbg_server_state_t* V5Dbg_GetCurrentServer();
 
 /// @brief  Internal server main function, should never be called manually
-void V5Dbg_ServerMain();
+void V5Dbg_ServerMain(v5dbg_server_state_t *pState);
 
 /// @brief  Debug server IO thread
 void V5Dbg_ServerIOMain(v5dbg_server_state_t *pState);

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "v5dbg/server.h"
 #include "v5dbg/util.h"
+#include "pros/apix.h"
 
 void
 V5Dbg_ServerIOMain(v5dbg_server_state_t *pState)
@@ -33,7 +34,7 @@ V5Dbg_SetWriteMode(v5dbg_server_state_t* pState, v5dbg_server_write_mode_e write
     }
 
     // Disables COBS when writing to stdout, makes reading data on the debugger end much simpler
-    serctl(SERCTL_DISABLE_COBS, nullptr);
+    pros::c::serctl(SERCTL_DISABLE_COBS, nullptr);
   }
 }
 
@@ -42,18 +43,18 @@ V5Dbg_WriteToOut(const std::string& msg)
 {
   // This function used to handle writing to the actual serial device file but disabling COBS for all write operations
   // seems to be better and it replaces fwrite/fflush with printf
-  if (CURRENT_SERVER == nullptr)
+  if (V5Dbg_GetCurrentServer() == nullptr)
   {
     info("V5Dbg_WriteToOut(...): Must have a server allocated!");
     return;
   }
 
-  if (CURRENT_SERVER->serial == nullptr)
+  if (V5Dbg_GetCurrentServer()->serial == nullptr)
   {
     info("V5Dbg_WriteToOut(...): V5Dbg_SetWriteMode(...) was never called, or failed!");
   }
 
   std::string buf = msg + "\n";
 
-  fwrite(buf.c_str(), buf.size(), 1, CURRENT_SERVER->serial);
+  fwrite(buf.c_str(), buf.size(), 1, V5Dbg_GetCurrentServer()->serial);
 }

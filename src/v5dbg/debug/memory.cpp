@@ -1,7 +1,7 @@
-#include "memory.h"
+#include "v5dbg/memory.h"
 #include <cstring>
-#include "debinfo.h"
-#include "util.h"
+#include "v5dbg/debinfo.h"
+#include "v5dbg/util.h"
 
 V5DbgMemoryObject::V5DbgMemoryObject(const v5dbg_variable_t& var, size_t memSize)
 {

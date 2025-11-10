@@ -1,8 +1,8 @@
 #include "v5dbg/stack.h"
 #include <mutex>
-#include "breakpoint.h"
-#include "memory.h"
-#include "stack.h"
+#include "v5dbg/breakpoint.h"
+#include "v5dbg/memory.h"
+#include "v5dbg/stack.h"
 #include "v5dbg/debinfo.h"
 #include "v5dbg/server.h"
 

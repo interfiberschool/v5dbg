@@ -1,5 +1,5 @@
 #include "v5dbg/set.h"
-#include "pretty.h"
+#include "v5dbg/pretty.h"
 
 v5dbg_variable_set_result_e V5Dbg_SetVariable(const std::shared_ptr<V5DbgMemoryObject> &mem, const std::string &pSet, v5dbg_variable_set_mode_e setMode)
 {

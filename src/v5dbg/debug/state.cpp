@@ -1,9 +1,9 @@
 #include "v5dbg/state.h"
 #include <mutex>
 #include "pros/rtos.hpp"
-#include "util.h"
+#include "v5dbg/debinfo.h"
+#include "v5dbg/util.h"
 #include "v5dbg/server.h"
-#include "v5dbg/stack.h"
 
 void
 V5Dbg_SuspendProgram(v5dbg_server_state_t* pState)

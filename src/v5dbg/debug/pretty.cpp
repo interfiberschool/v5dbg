@@ -1,7 +1,7 @@
 #include "v5dbg/pretty.h"
 #include <typeinfo>
-#include "memory.h"
-#include "util.h"
+#include "v5dbg/memory.h"
+#include "v5dbg/util.h"
 
 v5dbg_memory_type_e
 V5Dbg_MemoryTypeFromType(const std::type_info& typeInfo)

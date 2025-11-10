@@ -1,9 +1,9 @@
 #include "v5dbg/breakpoint.h"
-#include "debinfo.h"
-#include "state.h"
-#include "protocol.h"
-#include "server.h"
-#include "util.h"
+#include "v5dbg/debinfo.h"
+#include "v5dbg/state.h"
+#include "v5dbg/protocol.h"
+#include "v5dbg/server.h"
+#include "v5dbg/util.h"
 
 
 void

@@ -1,7 +1,7 @@
 #include "v5dbg/msg.h"
 #include <mutex>
 #include "pros/rtos.hpp"
-#include "protocol.h"
+#include "v5dbg/protocol.h"
 
 void
 V5Dbg_AddServerMessageHandler(v5dbg_server_state_t* pState, v5dbg_server_msg_callback_t callback)
