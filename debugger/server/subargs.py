@@ -1,16 +1,21 @@
-# Sub argument parser
-# Sub arguments are data included in the 3rd field of a message object.
-# It extends upon the message parser but introduces ways for controlling of the processor 
-# to disable argument pushing on ':' characters
-# 
-# Example 1 (BAD) :
+"""
+Sub argument parser
+Sub arguments are data included in the 3rd field of a message object.
+It extends upon the message parser but introduces ways for controlling of the processor to disable argument pushing on ':' characters
+
+Example 1 (BAD) :
 # std::vector<int>:bob
 # Arguments: std,:vector<int>,bob
-# Example 2 (GOOD) :
+
+Example 2 (GOOD) :
 # [std::vector<int>]:bob
 # Arguments: std::vector<int>,bob
 
-# Run the subarguments parser on 'buffer' and return the parsed list of parameters
+Run the subarguments parser on 'buffer' and return the parsed list of parameters
+
+Args:
+    buffer (str): Input buffer
+"""
 def subargs_parse(buffer: str):
     parameters = [] # List of final parameters
     prev = [] # Current parameter we are assembling
