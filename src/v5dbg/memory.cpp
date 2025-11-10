@@ -2,7 +2,6 @@
 #include <cstring>
 #include "debinfo.h"
 #include "util.h"
-#include "v5dbg/pretty.h"
 
 V5DbgMemoryObject::V5DbgMemoryObject(const v5dbg_variable_t& var, size_t memSize)
 {

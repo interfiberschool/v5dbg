@@ -1,7 +1,7 @@
 from commands.run_state import SuspendCommand, ResumeCommand
-from comms import DebugServer
-from debug import Debugger, DebuggerOptions
-from client import DebuggerClient
+from server.comms import DebugServer
+from cli.debug import Debugger, DebuggerOptions
+from client.client import DebuggerClient
 from commands.backtrace import BacktraceCommand
 from commands.memory import MemoryCommand, PrintCommand
 from commands.frame import FrameCommand

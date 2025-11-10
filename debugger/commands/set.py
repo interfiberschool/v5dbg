@@ -1,9 +1,9 @@
-from client import DebuggerClient
-from colors import Colors
-from debug import CommandExecutor, Debugger
+from client.client import DebuggerClient
+from cli.colors import Colors
+from cli.debug import CommandExecutor, Debugger
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from protocol import DebuggerMessage, DebuggerMessageType, DebuggerVariableSetMode
+from server.protocol import DebuggerMessage, DebuggerMessageType, DebuggerVariableSetMode
 
 """
 Handles setting memory within the local frame context

@@ -1,7 +1,7 @@
 from prompt_toolkit import print_formatted_text
 import pygments
-from subargs import subargs_parse
-from protocol import DebuggerMessage, DebuggerMessageType
+from server.subargs import subargs_parse
+from server.protocol import DebuggerMessage, DebuggerMessageType
 from utils import DebugInfo
 from prompt_toolkit.formatted_text import (
     FormattedText,

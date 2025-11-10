@@ -9,7 +9,7 @@ from pygments.lexers.c_cpp import CppLexer
 from pygments.token import Token
 from prompt_toolkit.formatted_text import PygmentsTokens, FormattedText
 
-from colors import Colors
+from cli.colors import Colors
 
 """
 Preview the syntax highlighted contents of files within the debugger

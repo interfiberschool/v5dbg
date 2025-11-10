@@ -1,8 +1,8 @@
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from colors import Colors
-from client import DebuggerClient, DebuggerState
-from debug import CommandExecutor, Debugger
+from cli.colors import Colors
+from client.client import DebuggerClient, DebuggerState
+from cli.debug import CommandExecutor, Debugger
 
 """
 Program backtrace command
@@ -14,7 +14,7 @@ class BacktraceCommand(CommandExecutor):
     def get_name(self):
       return "backtrace"
 
-    def register(self, parser): 
+    def register(self, parser):
         parser.add_parser('backtrace', help='Print the backtrace for the active thread', aliases=['bt', 'stack'])
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
@@ -27,7 +27,7 @@ class BacktraceCommand(CommandExecutor):
                     ('', 'state')
                 ]))
                 return
-            
+
             stacktrace = client.get_stacktrace(True)
 
             for s in stacktrace:

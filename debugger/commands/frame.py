@@ -1,9 +1,9 @@
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from client import DebuggerClient
-from debug import CommandExecutor, Debugger
-from stack import StackFrame
-from colors import Colors
+from client.client import DebuggerClient
+from cli.debug import CommandExecutor, Debugger
+from client.stack import StackFrame
+from cli.colors import Colors
 
 """
 Set and get the current stack frame
@@ -14,10 +14,10 @@ class FrameCommand(CommandExecutor):
     def __init__(self):
         self.cached_stack = None
         pass
-    
+
     def get_name(self):
        return "frame"
-    
+
     def next_completion(self, command: str, current_arg: int, current_text: str, c_index: int, client: DebuggerClient) -> str:
       if command != 'frame': return None
       if current_arg != 1: return None
@@ -27,10 +27,10 @@ class FrameCommand(CommandExecutor):
 
       if c_index >= len(self.cached_stack):
         return None
-        
+
       return str(self.cached_stack[c_index].id)
 
-    def register(self, parser): 
+    def register(self, parser):
       f = parser.add_parser('frame', help='Set and get the current stack frame')
       f.add_argument('frame_id', help='ID of the frame to make active', type=int, action="store", nargs="?")
 
@@ -59,5 +59,3 @@ class FrameCommand(CommandExecutor):
                 ('', 'New frame ID: '),
                 (Colors.STEEL, f'#{frame_id}')
               ]))
-
-

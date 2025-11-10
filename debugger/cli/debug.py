@@ -8,7 +8,7 @@ from prompt_toolkit.history import FileHistory
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit import PromptSession
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-from client import DebuggerClient
+from client.client import DebuggerClient
 
 
 class DebuggerOptions:

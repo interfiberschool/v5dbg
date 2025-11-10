@@ -1,9 +1,9 @@
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from client import DebuggerClient, DebuggerState
-from debug import CommandExecutor, Debugger
-from colors import Colors
-from preview import FilePreview
+from client.client import DebuggerClient, DebuggerState
+from cli.debug import CommandExecutor, Debugger
+from cli.colors import Colors
+from cli.preview import FilePreview
 
 """
 Preview the code around the current frames file and line
@@ -39,11 +39,11 @@ class PreviewCommand(CommandExecutor):
                     )
                 )
                 return
-            
+
             st = client.get_stacktrace(True)
             if len(st) == 0:
                 return
-            
+
             # Obtain last stack frame
             last_frame = st[client.active_thread.frame_index]
 

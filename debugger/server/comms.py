@@ -6,8 +6,8 @@ import sys
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
 from utils import find_server
-from protocol import DebuggerMessage,DebuggerMessageType
-from colors import Colors
+from server.protocol import DebuggerMessage,DebuggerMessageType
+from cli.colors import Colors
 import threading as thread
 import subprocess
 

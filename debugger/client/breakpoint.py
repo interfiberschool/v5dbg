@@ -1,9 +1,9 @@
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from colors import Colors
+from cli.colors import Colors
 from utils import DebugInfo
-from subargs import subargs_parse
-from protocol import DebuggerMessage
+from server.subargs import subargs_parse
+from server.protocol import DebuggerMessage
 
 class DebuggerBreakpoint:
   id: int

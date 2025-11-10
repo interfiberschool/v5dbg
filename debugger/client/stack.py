@@ -1,5 +1,5 @@
 # Handles stack frames captured by the debug server
-from subargs import subargs_parse
+from server.subargs import subargs_parse
 
 
 class StackFrame:
@@ -22,15 +22,15 @@ class StackFrame:
         self.id = id
 
     # Create a StackFrame object using the data of a RVSTACK message
-    # Encoding should be: ID:NAME:FILE:LINE_NUMBER 
+    # Encoding should be: ID:NAME:FILE:LINE_NUMBER
     @classmethod
     def from_msg(self, buffer: str):
         bsplit = subargs_parse(buffer)
-        
+
         # If we fail to cast any of these then we just die, we trust the debug server with our life tho...
 
         id = int(bsplit[0])
-        name = bsplit[1] 
+        name = bsplit[1]
         loc_file = bsplit[2]
         loc_line = int(bsplit[3])
 

@@ -1,11 +1,11 @@
-from debug import CommandExecutor, Debugger
-from client import DebuggerClient
-from memory import RawVariableData
+from cli.debug import CommandExecutor, Debugger
+from client.client import DebuggerClient
+from client.memory import RawVariableData
 from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.styles.pygments import style_from_pygments_cls
 from pygments.styles import get_style_by_name
-from colors import Colors
+from cli.colors import Colors
 
 """
 Print the value of a variable
@@ -44,7 +44,7 @@ class PrintCommand(CommandExecutor):
             return None
         if current_arg != 1:
             return None
-        
+
         # Update cache if needed
         if self.cached_frame != client.active_thread.frame_index or self.cached_memory == None:
             self.cached_frame = client.active_thread.frame_index # Don't repeat ourselves
@@ -87,7 +87,7 @@ Displays memory within the current stack frame
 class MemoryCommand(CommandExecutor):
     def __init__(self):
         pass
-    
+
     def get_name(self):
         return "mem"
 

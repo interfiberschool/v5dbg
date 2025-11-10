@@ -1,11 +1,11 @@
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from client import DebuggerClient
-from debug import CommandExecutor, Debugger
-from stack import StackFrame
-from protocol import DebuggerMessage, DebuggerMessageType
-from breakpoint import DebuggerBreakpoint
-from colors import Colors
+from client.client import DebuggerClient
+from cli.debug import CommandExecutor, Debugger
+from client.stack import StackFrame
+from server.protocol import DebuggerMessage, DebuggerMessageType
+from client.breakpoint import DebuggerBreakpoint
+from cli.colors import Colors
 
 """
 Enable and list breakpoints
@@ -23,7 +23,7 @@ class BreakCommand(CommandExecutor):
     def __init__(self):
         self.cached_stack = None
         pass
-    
+
     def get_name(self):
       return "break"
 

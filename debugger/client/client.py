@@ -2,12 +2,12 @@ from enum import IntFlag, auto
 
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from comms import DebugServer
-from breakpoint import DebuggerBreakpoint
-from colors import Colors
-from stack import StackFrame
-from thread import DebuggerThread
-from protocol import DebuggerMessage, DebuggerMessageType
+from server.comms import DebugServer
+from client.breakpoint import DebuggerBreakpoint
+from cli.colors import Colors
+from client.stack import StackFrame
+from client.thread import DebuggerThread
+from server.protocol import DebuggerMessage, DebuggerMessageType
 
 
 # Debugger state bit flags

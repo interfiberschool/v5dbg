@@ -1,9 +1,9 @@
 # Handles debugger program thread objects
 
-from comms import DebugServer
-from memory import RawVariableData
-from protocol import DebuggerMessageType, DebuggerMessage
-from stack import StackFrame
+from server.comms import DebugServer
+from client.memory import RawVariableData
+from server.protocol import DebuggerMessageType, DebuggerMessage
+from client.stack import StackFrame
 
 class DebuggerThread:
   id: int

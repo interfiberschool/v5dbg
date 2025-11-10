@@ -1,11 +1,11 @@
 import argparse
 
-from colors import Colors
+from cli.colors import Colors
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from client import DebuggerClient, DebuggerState
-from debug import CommandExecutor, Debugger
-from protocol import DebuggerMessage, DebuggerMessageType
+from client.client import DebuggerClient, DebuggerState
+from cli.debug import CommandExecutor, Debugger
+from server.protocol import DebuggerMessage, DebuggerMessageType
 
 """
 Suspend state command
@@ -14,7 +14,7 @@ class SuspendCommand(CommandExecutor):
     def __init__(self):
         pass
 
-    def register(self, parser): 
+    def register(self, parser):
         parser.add_parser('suspend', help='Suspend the execution of all supervised tasks', aliases=['halt', 's'])
 
     def get_name(self):
@@ -43,11 +43,11 @@ Resume state command
 class ResumeCommand(CommandExecutor):
     def __init__(self):
         pass
-    
+
     def get_name(self):
         return "resume"
 
-    def register(self, parser): 
+    def register(self, parser):
         parser.add_parser('resume', help='Resume the execution of all supervised tasks', aliases=['continue', 'c'])
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
@@ -60,7 +60,7 @@ class ResumeCommand(CommandExecutor):
                     ('', 'state')
                 ]))
                 return
-            
+
             # Resume program
             client.resume()
 
