@@ -2,6 +2,7 @@
 
 import time
 
+import sys
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
 from utils import find_server
@@ -43,7 +44,7 @@ class DebugServer:
         if self.proc.poll() != None:
             print("Failed to start and communicate with v5dbg comms server!")
             print("Exit data: " + self.proc.stderr.readline().decode())
-            exit(-1)
+            sys.exit(-1)
 
         self.io = thread.Thread(target=self.io_thread, name="DebugServer IO thread")
         self.io.start()
@@ -51,7 +52,7 @@ class DebugServer:
         self.hang = thread.Thread(target=self.hang_thread, name="DebugServer hang detector")
         self.hang.start()
 
-        print("Waiting from signal from user program...")
+        print("Waiting for signal from user program...")
 
         if wait_open:
             self.wait_for(DebuggerMessageType.OPEN)
@@ -132,7 +133,7 @@ class DebugServer:
             (Colors.RED, 'Disconnected from communications server, process exited!')
         ]))
 
-        exit(0)
+        sys.exit(0)
 
     # Wait for the next message of the given type to arrive
     def wait_for(self, msg_type: DebuggerMessageType, count: int = -1):

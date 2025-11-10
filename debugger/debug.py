@@ -3,6 +3,7 @@ Interactive debugger options
 """
 
 import argparse
+import sys
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit import PromptSession
@@ -103,7 +104,7 @@ class Debugger(Completer):
                 completer=self,
             )
         except EOFError:
-            exit(0)
+            sys.exit(0)
         except:
             return True
 
