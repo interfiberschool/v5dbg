@@ -1,6 +1,6 @@
 #include "v5dbg/breakpoint.h"
 #include "debinfo.h"
-#include "debugger.h"
+#include "state.h"
 #include "protocol.h"
 #include "server.h"
 #include "util.h"

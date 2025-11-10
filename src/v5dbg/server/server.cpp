@@ -7,7 +7,7 @@
 #include "pros/rtos.h"
 #include "pros/rtos.hpp"
 #include "protocol.h"
-#include "v5dbg/debugger.h"
+#include "v5dbg/state.h"
 #include "v5dbg/msg.h"
 #include "v5dbg/stack.h"
 #include "v5dbg/util.h"
@@ -260,17 +260,4 @@ v5dbg_server_state_t*
 V5Dbg_GetCurrentServer()
 {
   return CURRENT_SERVER;
-}
-
-
-void
-V5Dbg_WaitForSuspend(v5dbg_server_state_t *pState)
-{
-  // Wait for program to enter suspend state
-
-  while (!pState->justAwoke)
-  {
-    info_pre("Waiting for resume...");
-    pros::delay(50);
-  }
 }

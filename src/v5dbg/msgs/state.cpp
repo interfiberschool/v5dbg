@@ -1,4 +1,4 @@
-#include "v5dbg/debugger.h"
+#include "v5dbg/state.h"
 #include "v5dbg/msg.h"
 
 void
