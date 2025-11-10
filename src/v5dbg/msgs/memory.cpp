@@ -148,6 +148,10 @@ V5Dbg_SetMemoryHandle(v5dbg_server_state_t* pState, const v5dbg_message_t& msg)
             {
               msg.paramBuffer = V5DBG_MEMORY_CONVERSION_FAILURE;
             }
+            else if (result == MEMORY_SET_RESET_COPY_BUFFER)
+            {
+              msg.paramBuffer = V5DBG_MEMORY_RESET_COPY_BUFFER;
+            }
 
             V5Dbg_WriteToOut(V5Dbg_SerializeMessage(msg));
 

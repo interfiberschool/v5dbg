@@ -17,6 +17,7 @@
 #define V5DBG_MEMORY_ALLOCATOR_FAILURE "AllocatorFailure"
 #define V5DBG_MEMORY_CONVERSION_FAILURE "ConversionFailure"
 #define V5DBG_MEMORY_NO_VARIABLE "NoVariable"
+#define V5DBG_MEMORY_RESET_COPY_BUFFER "ResetCopyBuffer"
 
 enum v5dbg_message_type_e
 {

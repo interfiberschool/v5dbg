@@ -12,6 +12,13 @@ v5dbg_variable_set_result_e V5Dbg_SetVariable(const std::shared_ptr<V5DbgMemoryO
     {
       // Found our buffer allocator, now we can invoke it to allocate our memory
 
+      if (pSet == "0x0") // 0x0 disables future recopies
+      {
+        mem->setRecopyBuffer(nullptr);
+
+        return MEMORY_SET_RESET_COPY_BUFFER;
+      }
+
       void* buffer = alloc.second(pSet); // Allocate our buffer!
 
       if (buffer == nullptr) // We failed to convert the input data to the target data type

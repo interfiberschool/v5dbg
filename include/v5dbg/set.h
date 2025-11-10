@@ -17,7 +17,10 @@ enum v5dbg_variable_set_result_e
   MEMORY_SET_COMPLETE = 2,
 
   /// @brief  Memory could not be converted to the target type
-  MEMORY_SET_CONVERSION_FAILURE = 3
+  MEMORY_SET_CONVERSION_FAILURE = 3,
+
+  /// @brief  The recopy buffer for the memory has been reset
+  MEMORY_SET_RESET_COPY_BUFFER = 4
 };
 
 /**

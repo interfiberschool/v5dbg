@@ -17,6 +17,7 @@ class DebuggerVariableSetResult(StrEnum):
     NO_ALLOCATOR = "NoAllocator"
     NO_VARIABLE = "NoVariable"
     MEMORY_SET = "MemorySet"
+    RESET_COPY_BUFFER = "ResetCopyBuffer"
 
 
 """
