@@ -3,8 +3,11 @@ from cli.colors import Colors
 from cli.debug import CommandExecutor, Debugger
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from server.protocol import DebuggerMessage, DebuggerMessageType, DebuggerVariableSetMode, DebuggerVariableSetResult
+from server.protocol import DebuggerVariableSetMode, DebuggerVariableSetResult
 
+"""
+Base class for all set-based commands
+"""
 class SetCommandBase:
     """
     Handle a return code from the debug server
@@ -82,7 +85,7 @@ class SetCommandBase:
         )
 
 """
-Handles setting memory within the local frame context
+Handles setting memory within the local frame context (Single)
 """
 class SetCommand(CommandExecutor, SetCommandBase):
     def __init__(self):
@@ -93,24 +96,20 @@ class SetCommand(CommandExecutor, SetCommandBase):
 
     def register(self, parser):
         p = parser.add_parser("set", help="Set the value of a variable")
-        p2 = parser.add_parser("setc", help="Set the value of a variable across reallocations")
 
-        parsers = [p, p2]
+        p.add_argument(
+            "variable_id",
+            help="Name of the local variable to set the value of",
+            type=str,
+            action="store",
+        )
 
-        for p_parser in parsers:
-            p_parser.add_argument(
-                "variable_id",
-                help="Name of the local variable to set the value of",
-                type=str,
-                action="store",
-            )
-
-            p_parser.add_argument(
-                "value_buffer",
-                help="Value to set the variable to",
-                type=str,
-                action="store",
-            )
+        p.add_argument(
+            "value_buffer",
+            help="Value to set the variable to",
+            type=str,
+            action="store",
+        )
 
     def next_completion(
         self,
@@ -123,9 +122,51 @@ class SetCommand(CommandExecutor, SetCommandBase):
         return None
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
-        if command.debugger != "set" and command.debugger != "setc":
+        if command.debugger != "set":
             return
         
         self.run_set(DebuggerVariableSetMode.SINGLE, client, debugger.variable_id, debugger.variable_buffer)
+    
 
+"""
+Handles setting memory within the local frame context (Constant)
+"""
+class SetConstantCommand(CommandExecutor, SetCommandBase):
+    def __init__(self):
+        pass
+
+    def get_name(self):
+        return "setc"
+
+    def register(self, parser):
+        p = parser.add_parser("setc", help="Set the value of a variable across reallocations")
+
+        p.add_argument(
+            "variable_id",
+            help="Name of the local variable to set the value of",
+            type=str,
+            action="store",
+        )
+
+        p.add_argument(
+            "value_buffer",
+            help="Value to set the variable to",
+            type=str,
+            action="store",
+        )
+
+    def next_completion(
+        self,
+        command: str,
+        current_arg: int,
+        current_text: str,
+        c_index: int,
+        client: DebuggerClient,
+    ) -> str:
+        return None
+
+    def execute(self, client: DebuggerClient, debugger: Debugger, command):
+        if command.debugger != "setc":
+            return
         
+        self.run_set(DebuggerVariableSetMode.CONST, client, debugger.variable_id, debugger.variable_buffer)

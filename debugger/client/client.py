@@ -15,7 +15,9 @@ class DebuggerState(IntFlag):
     RUN = auto()
     SUSPEND = auto()
 
-# Local debugger client class
+"""
+Wrapper over a DebugServer to provide an easy way to perform common operations without dealing with message data
+"""
 class DebuggerClient:
     state: DebuggerState
     active_thread: DebuggerThread
