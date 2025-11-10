@@ -3,14 +3,88 @@ from cli.colors import Colors
 from cli.debug import CommandExecutor, Debugger
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from server.protocol import DebuggerMessage, DebuggerMessageType, DebuggerVariableSetMode
+from server.protocol import DebuggerMessage, DebuggerMessageType, DebuggerVariableSetMode, DebuggerVariableSetResult
+
+class SetCommandBase:
+    """
+    Handle a return code from the debug server
+
+    Return True if the return code is a failure, False if otherwise
+    """
+    def handle_return_code(exit_code: DebuggerVariableSetResult) -> bool:
+        if exit_code == DebuggerVariableSetResult.ALLOCATION_FAILURE:
+            print_formatted_text(
+                FormattedText(
+                    [
+                        (
+                            Colors.RED,
+                            "The debug server buffer allocator failed to allocate your input data",
+                        )
+                    ]
+                )
+            )
+        elif exit_code == DebuggerVariableSetResult.CONVERSION_FAILURE:
+            print_formatted_text(
+                FormattedText(
+                    [
+                        (
+                            Colors.RED,
+                            "The debug server buffer allocator failed to convert your input string",
+                        )
+                    ]
+                )
+            )
+        elif exit_code == DebuggerVariableSetResult.NO_ALLOCATOR:
+            print_formatted_text(
+                FormattedText(
+                    [
+                        (
+                            Colors.RED,
+                            "The debug server could not find a suitable allocator registered with $pretty_printer_allocator",
+                        )
+                    ]
+                )
+            )
+        elif exit_code == DebuggerVariableSetResult.NO_VARIABLE:
+            print_formatted_text(
+                FormattedText(
+                    [
+                        (
+                            Colors.RED,
+                            f"No variable in the current scope with that name, try changing your scope with the `frame` command",
+                        )
+                    ]
+                )
+            )           
+        else:
+            return False
+        
+        return True
+
+    """
+    Generic variable set handling
+    """
+    def run_set(self, mode: DebuggerVariableSetMode, client: DebuggerClient, name: str, buffer: str):
+        response_code = client.set_variable(mode, name, buffer)
+
+        if SetCommandBase.handle_return_code(response_code):
+            return
+        
+        print_formatted_text(
+            FormattedText(
+                [
+                    ("", "Set value of variable "),
+                    (Colors.ORANGE, name),
+                    ("", " to "),
+                    (Colors.STEEL, buffer),
+                ]
+            )
+        )
 
 """
 Handles setting memory within the local frame context
 """
-
-
-class SetCommand(CommandExecutor):
+class SetCommand(CommandExecutor, SetCommandBase):
     def __init__(self):
         pass
 
@@ -51,77 +125,7 @@ class SetCommand(CommandExecutor):
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
         if command.debugger != "set" and command.debugger != "setc":
             return
+        
+        self.run_set(DebuggerVariableSetMode.SINGLE, client, debugger.variable_id, debugger.variable_buffer)
 
-        set_mode = DebuggerVariableSetMode.SINGLE if command.debugger == "set" else DebuggerVariableSetMode.CONST
-
-        name = command.variable_id
-        buffer = command.value_buffer
-
-        set_msg = DebuggerMessage(DebuggerMessageType.MEMORY_SET)
-        set_msg.data = f"[{name}]:[{buffer}]:{client.active_thread.frame_index}:{client.active_thread.id}:{set_mode}"
-
-        client.send_msg(set_msg)
-
-        # Wait for the debug server response
-        response = client.server.wait_for(DebuggerMessageType.RMEMORY_SET)
-        response_code = response[0].data
-
-        if response_code == "AllocatorFailure":
-            print_formatted_text(
-                FormattedText(
-                    [
-                        (
-                            Colors.RED,
-                            "The debug server buffer allocator failed to allocate your input data",
-                        )
-                    ]
-                )
-            )
-            return
-        elif response_code == "ConversionFailure":
-            print_formatted_text(
-                FormattedText(
-                    [
-                        (
-                            Colors.RED,
-                            "The debug server buffer allocator failed to convert your input string",
-                        )
-                    ]
-                )
-            )
-            return
-        elif response_code == "NoAllocator":
-            print_formatted_text(
-                FormattedText(
-                    [
-                        (
-                            Colors.RED,
-                            "The debug server could not find a suitable allocator registered with $pretty_printer_allocator",
-                        )
-                    ]
-                )
-            )
-            return
-        elif response_code == "NoVariable":
-            print_formatted_text(
-                FormattedText(
-                    [
-                        (
-                            Colors.RED,
-                            f"No variable in the current scope with the name '{name}'",
-                        )
-                    ]
-                )
-            )
-            return
-
-        print_formatted_text(
-            FormattedText(
-                [
-                    ("", "Set value of variable "),
-                    (Colors.ORANGE, name),
-                    ("", " to "),
-                    (Colors.STEEL, buffer),
-                ]
-            )
-        )
+        

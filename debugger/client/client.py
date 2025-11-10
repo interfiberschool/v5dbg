@@ -6,15 +6,14 @@ from server.comms import DebugServer
 from client.breakpoint import DebuggerBreakpoint
 from cli.colors import Colors
 from client.stack import StackFrame
-from client.thread import DebuggerThread
-from server.protocol import DebuggerMessage, DebuggerMessageType
+from client.thread import DebuggerThread, RawVariableData
+from server.protocol import DebuggerMessage, DebuggerMessageType, DebuggerVariableSetMode, DebuggerVariableSetResult
 
 
 # Debugger state bit flags
 class DebuggerState(IntFlag):
     RUN = auto()
     SUSPEND = auto()
-
 
 # Local debugger client class
 class DebuggerClient:
@@ -33,18 +32,6 @@ class DebuggerClient:
     # Send a message to the remote server
     def send_msg(self, message: DebuggerMessage):
         self.server.write(message.serialize())
-
-    # Switch the active thread to `thread_id`
-    def switch_thread(self, thread_id: int):
-        self.active_thread = DebuggerThread(thread_id, self.server)
-
-    # Print debugger state
-    def print_state(self):
-        if self.state & DebuggerState.RUN:
-            print("Program is: RUNNING")
-
-        if self.state & DebuggerState.SUSPEND:
-            print("Program is: SUSPENDED")
 
     """
     Callback used when a breakpoint is tripped
@@ -91,6 +78,10 @@ class DebuggerClient:
 
     """
     Enable/disable a breakpoint by numerical ID
+
+    Args:
+        id (int): ID of the breakpoint, must be positive
+        enabled (bool): True to enable the breakpoint, false if otherwise
     """
 
     def enable_breakpoint(self, id: int, enabled: bool = True):
@@ -105,14 +96,18 @@ class DebuggerClient:
 
         return True
 
-    # Return the current frame's stack memory
-    def get_memory(self):
+    """
+    Return the active threads memory object
+    """
+    def get_memory(self) -> RawVariableData:
         return self.active_thread.get_memory()
 
     """
     Return the stacktrace for the active thread
-    """
 
+    Args:
+        inject_breaks (bool): If True any stack frames which match an active breakpoint will be modified to be the breakpoint location
+    """
     def get_stacktrace(self, inject_breaks: bool = False) -> list[StackFrame]:
         # Ask debugger for virtual callstack
 
@@ -135,7 +130,9 @@ class DebuggerClient:
 
         return b
 
-    # Suspend all supervised threads
+    """
+    Suspend program execution
+    """
     def suspend(self):
         self.state |= DebuggerState.SUSPEND
         self.state = self.state & ~DebuggerState.RUN
@@ -143,7 +140,9 @@ class DebuggerClient:
         suspend = DebuggerMessage(DebuggerMessageType.SUSPEND)
         self.send_msg(suspend)
 
-    # Resume all supervised threads
+    """
+    Resume program execution
+    """
     def resume(self):
         self.state |= DebuggerState.RUN
         self.state = self.state & ~DebuggerState.SUSPEND
@@ -152,7 +151,9 @@ class DebuggerClient:
         resume = DebuggerMessage(DebuggerMessageType.RESUME)
         self.send_msg(resume)
 
-    # Print out the list of supervised threads to the console
+    """
+    Print out the list of all active threads
+    """
     def print_threads(self):
         # Ask for thread listing
 
@@ -220,3 +221,22 @@ class DebuggerClient:
                 continue
 
             yield DebuggerBreakpoint(msg)
+    
+    """
+    Set the value of a variable within the current stack frame
+
+    Args:
+        mode (DebuggerVariableSetMode): Variable set mode to use
+        name (str): Name of the variable to set
+        buffer (str): Value to set the variable too, this will be converted into the proper data type by the debug server
+    """
+    def set_variable(self, mode: DebuggerVariableSetMode, name: str, buffer: str) -> DebuggerVariableSetResult:
+        set_msg = DebuggerMessage(DebuggerMessageType.MEMORY_SET)
+        set_msg.data = f"[{name}]:[{buffer}]:{self.active_thread.frame_index}:{self.active_thread.id}:{mode}"
+
+        self.send_msg(set_msg)
+
+        # Wait for the debug server response
+        response = self.server.wait_for(DebuggerMessageType.RMEMORY_SET)
+        
+        return DebuggerVariableSetResult(response[0].data)
