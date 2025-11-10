@@ -1,17 +1,30 @@
 # For documentation on these types see include/v5dbg/protocol.h
-from enum import IntEnum
+from enum import IntEnum, StrEnum
 
 # Version 1: v0.1
 # Version 2: v0.2 - Introduced: breakpoints, and setting memory
 #
 PROTOCOL_VERSION = 2
 
-# See include/v5dbg/set.h for documentation
+"""
+Results from a DebuggerMessageType.MEMORY_SET call
+"""
+class DebuggerVariableSetResult(StrEnum):
+    ALLOCATION_FAILURE = "AllocatorFailure"
+    CONVERSION_FAILURE = "ConversionFailure"
+    NO_ALLOCATOR = "NoAllocator"
+    NO_VARIABLE = "NoVariable"
+
+"""
+See include/v5dbg/set.h for documentation
+"""
 class DebuggerVariableSetMode(IntEnum):
     SINGLE = 0
     CONST = 1
 
-# See include/v5dbg/protocol.h for documentation for each type
+"""
+See include/v5dbg/protocol.h for documentation for each type
+"""
 class DebuggerMessageType(IntEnum):
     OPEN = 0,
     SUSPEND = 1,
@@ -34,7 +47,10 @@ class DebuggerMessageType(IntEnum):
     MEMORY_SET = 18
     RMEMORY_SET = 19
 
-class DebuggerMessage():
+"""
+Message from the debug server
+"""
+class DebuggerMessage:
     msg_type: DebuggerMessageType
     parameters: list
 

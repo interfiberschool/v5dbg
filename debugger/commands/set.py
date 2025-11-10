@@ -3,14 +3,91 @@ from cli.colors import Colors
 from cli.debug import CommandExecutor, Debugger
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from server.protocol import DebuggerMessage, DebuggerMessageType, DebuggerVariableSetMode
+from server.protocol import DebuggerVariableSetMode, DebuggerVariableSetResult
 
 """
-Handles setting memory within the local frame context
+Base class for all set-based commands
 """
+class SetCommandBase:
+    """
+    Handle a return code from the debug server
 
+    Return True if the return code is a failure, False if otherwise
+    """
+    def handle_return_code(exit_code: DebuggerVariableSetResult) -> bool:
+        if exit_code == DebuggerVariableSetResult.ALLOCATION_FAILURE:
+            print_formatted_text(
+                FormattedText(
+                    [
+                        (
+                            Colors.RED,
+                            "The debug server buffer allocator failed to allocate your input data",
+                        )
+                    ]
+                )
+            )
+        elif exit_code == DebuggerVariableSetResult.CONVERSION_FAILURE:
+            print_formatted_text(
+                FormattedText(
+                    [
+                        (
+                            Colors.RED,
+                            "The debug server buffer allocator failed to convert your input string",
+                        )
+                    ]
+                )
+            )
+        elif exit_code == DebuggerVariableSetResult.NO_ALLOCATOR:
+            print_formatted_text(
+                FormattedText(
+                    [
+                        (
+                            Colors.RED,
+                            "The debug server could not find a suitable allocator registered with $pretty_printer_allocator",
+                        )
+                    ]
+                )
+            )
+        elif exit_code == DebuggerVariableSetResult.NO_VARIABLE:
+            print_formatted_text(
+                FormattedText(
+                    [
+                        (
+                            Colors.RED,
+                            f"No variable in the current scope with that name, try changing your scope with the `frame` command",
+                        )
+                    ]
+                )
+            )           
+        else:
+            return False
+        
+        return True
 
-class SetCommand(CommandExecutor):
+    """
+    Generic variable set handling
+    """
+    def run_set(self, mode: DebuggerVariableSetMode, client: DebuggerClient, name: str, buffer: str):
+        response_code = client.set_variable(mode, name, buffer)
+
+        if SetCommandBase.handle_return_code(response_code):
+            return
+        
+        print_formatted_text(
+            FormattedText(
+                [
+                    ("", "Set value of variable "),
+                    (Colors.ORANGE, name),
+                    ("", " to "),
+                    (Colors.STEEL, buffer),
+                ]
+            )
+        )
+
+"""
+Handles setting memory within the local frame context (Single)
+"""
+class SetCommand(CommandExecutor, SetCommandBase):
     def __init__(self):
         pass
 
@@ -19,24 +96,20 @@ class SetCommand(CommandExecutor):
 
     def register(self, parser):
         p = parser.add_parser("set", help="Set the value of a variable")
-        p2 = parser.add_parser("setc", help="Set the value of a variable across reallocations")
 
-        parsers = [p, p2]
+        p.add_argument(
+            "variable_id",
+            help="Name of the local variable to set the value of",
+            type=str,
+            action="store",
+        )
 
-        for p_parser in parsers:
-            p_parser.add_argument(
-                "variable_id",
-                help="Name of the local variable to set the value of",
-                type=str,
-                action="store",
-            )
-
-            p_parser.add_argument(
-                "value_buffer",
-                help="Value to set the variable to",
-                type=str,
-                action="store",
-            )
+        p.add_argument(
+            "value_buffer",
+            help="Value to set the variable to",
+            type=str,
+            action="store",
+        )
 
     def next_completion(
         self,
@@ -49,79 +122,51 @@ class SetCommand(CommandExecutor):
         return None
 
     def execute(self, client: DebuggerClient, debugger: Debugger, command):
-        if command.debugger != "set" and command.debugger != "setc":
+        if command.debugger != "set":
             return
+        
+        self.run_set(DebuggerVariableSetMode.SINGLE, client, debugger.variable_id, debugger.variable_buffer)
+    
 
-        set_mode = DebuggerVariableSetMode.SINGLE if command.debugger == "set" else DebuggerVariableSetMode.CONST
+"""
+Handles setting memory within the local frame context (Constant)
+"""
+class SetConstantCommand(CommandExecutor, SetCommandBase):
+    def __init__(self):
+        pass
 
-        name = command.variable_id
-        buffer = command.value_buffer
+    def get_name(self):
+        return "setc"
 
-        set_msg = DebuggerMessage(DebuggerMessageType.MEMORY_SET)
-        set_msg.data = f"[{name}]:[{buffer}]:{client.active_thread.frame_index}:{client.active_thread.id}:{set_mode}"
+    def register(self, parser):
+        p = parser.add_parser("setc", help="Set the value of a variable across reallocations")
 
-        client.send_msg(set_msg)
-
-        # Wait for the debug server response
-        response = client.server.wait_for(DebuggerMessageType.RMEMORY_SET)
-        response_code = response[0].data
-
-        if response_code == "AllocatorFailure":
-            print_formatted_text(
-                FormattedText(
-                    [
-                        (
-                            Colors.RED,
-                            "The debug server buffer allocator failed to allocate your input data",
-                        )
-                    ]
-                )
-            )
-            return
-        elif response_code == "ConversionFailure":
-            print_formatted_text(
-                FormattedText(
-                    [
-                        (
-                            Colors.RED,
-                            "The debug server buffer allocator failed to convert your input string",
-                        )
-                    ]
-                )
-            )
-            return
-        elif response_code == "NoAllocator":
-            print_formatted_text(
-                FormattedText(
-                    [
-                        (
-                            Colors.RED,
-                            "The debug server could not find a suitable allocator registered with $pretty_printer_allocator",
-                        )
-                    ]
-                )
-            )
-            return
-        elif response_code == "NoVariable":
-            print_formatted_text(
-                FormattedText(
-                    [
-                        (
-                            Colors.RED,
-                            f"No variable in the current scope with the name '{name}'",
-                        )
-                    ]
-                )
-            )
-            return
-
-        print_formatted_text(
-            FormattedText(
-                [
-                    ("", "Set value of variable "),
-                    (Colors.ORANGE, name),
-                    ("", " to "),
-                    (Colors.STEEL, buffer),
-                ]
-            )
+        p.add_argument(
+            "variable_id",
+            help="Name of the local variable to set the value of",
+            type=str,
+            action="store",
         )
+
+        p.add_argument(
+            "value_buffer",
+            help="Value to set the variable to",
+            type=str,
+            action="store",
+        )
+
+    def next_completion(
+        self,
+        command: str,
+        current_arg: int,
+        current_text: str,
+        c_index: int,
+        client: DebuggerClient,
+    ) -> str:
+        return None
+
+    def execute(self, client: DebuggerClient, debugger: Debugger, command):
+        if command.debugger != "setc":
+            return
+        
+        self.run_set(DebuggerVariableSetMode.CONST, client, debugger.variable_id, debugger.variable_buffer)

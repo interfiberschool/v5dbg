@@ -109,9 +109,6 @@ v5dbg_thread_t* V5Dbg_ThreadWithID(int id);
 //// @brief  Return the active server state
 v5dbg_server_state_t* V5Dbg_GetCurrentServer();
 
-/// @brief  Busy wait until the program is resumed, used to prevent execution in breakpoints0
-void V5Dbg_WaitForSuspend(v5dbg_server_state_t *pState);
-
 /// @brief  Internal server main function, should never be called manually
 void V5Dbg_ServerMain();
 

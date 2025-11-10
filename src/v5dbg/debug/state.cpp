@@ -1,4 +1,4 @@
-#include "v5dbg/debugger.h"
+#include "v5dbg/state.h"
 #include <mutex>
 #include "pros/rtos.hpp"
 #include "util.h"
@@ -10,8 +10,6 @@ V5Dbg_SuspendProgram(v5dbg_server_state_t* pState)
 {
   std::lock_guard<pros::rtos::Mutex> g(*pState->threadListLock);
 
-  info("SuspendState: %p", pState);
-
   for (auto& task : pState->threads)
   {
     task.task.suspend();
@@ -19,15 +17,13 @@ V5Dbg_SuspendProgram(v5dbg_server_state_t* pState)
 
   pState->justAwoke = false;
 
-  info("ProgramSuspend");
+  info("Program suspended");
 }
 
 void
 V5Dbg_ResumeProgram(v5dbg_server_state_t* pState)
 {
   std::lock_guard<pros::rtos::Mutex> g(*pState->threadListLock);
-
-  info("ResumeState: %p\n", pState);
 
   for (auto& task : pState->threads)
   {
@@ -39,5 +35,17 @@ V5Dbg_ResumeProgram(v5dbg_server_state_t* pState)
 
   pState->justAwoke = true;
 
-  info("ProgramResume\n");
+  info("Program resumed\n");
+}
+
+void
+V5Dbg_WaitForSuspend(v5dbg_server_state_t *pState)
+{
+  // Wait for program to enter suspend state
+
+  while (!pState->justAwoke)
+  {
+    info_pre("Waiting for resume...");
+    pros::delay(50);
+  }
 }

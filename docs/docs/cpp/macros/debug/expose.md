@@ -28,7 +28,7 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
     The `$expose` macro allows you to expose memory which **should be marked as const**. For example the following code is valid:
 
     ```c++
-    #include "v5dbg/debug.h"
+    #include "v5dbg/state.h"
 
     void funcWithParams(const std::string &data)
     {
@@ -55,7 +55,7 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
 === "Single scope"
 
     ```c++ hl_lines="11 12 17" linenums="1"
-    #include "v5dbg/debug.h"
+    #include "v5dbg/state.h"
 
     void
     opcontrol()
@@ -85,7 +85,7 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
 === "Multiple scopes"
 
     ```c++ hl_lines="8 22" linenums="1"
-    #include "v5dbg/debug.h"
+    #include "v5dbg/state.h"
 
     void
     printAndSleep(const std::string &p)

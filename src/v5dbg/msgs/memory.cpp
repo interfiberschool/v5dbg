@@ -1,5 +1,5 @@
 #include "v5dbg/debinfo.h"
-#include "v5dbg/debugger.h"
+#include "v5dbg/state.h"
 #include "v5dbg/msg.h"
 #include "v5dbg/pretty.h"
 #include "v5dbg/protocol.h"
