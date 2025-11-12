@@ -57,4 +57,10 @@ private:
     V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), _v5dbg_break_c); \
   }
 
+/// @brief  Enabled by default conditional breakpoint
+#define $cbreak(...) { \
+  static v5dbg_breakpoint_t* _v5dbg_break_c = V5Dbg_BreakpointCond(true, { .filePath = __FILE__, .lineNumber = __LINE__, .functionName = __PRETTY_FUNCTION__ }, [&] () { return __VA_ARGS__; }); \
+  V5Dbg_BreakpointMain(V5Dbg_GetCurrentServer(), _v5dbg_break_c); \
+}
+
 #define $ntask V5DbgAutoTask _v5dbg_ctask;

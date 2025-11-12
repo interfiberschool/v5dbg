@@ -5,7 +5,6 @@
 void
 V5Dbg_ServerMain(v5dbg_server_state_t *pState)
 {
-  printf("%p\n", pState);
 
   pState->ioTask = new pros::rtos::Task([pState]() { V5Dbg_ServerIOMain(pState); }, TASK_PRIORITY_MAX,
                                                 TASK_STACK_DEPTH_DEFAULT, "v5dbg IO server");
@@ -42,7 +41,6 @@ V5Dbg_ServerMain(v5dbg_server_state_t *pState)
       pros::delay(10);
       continue;
     }
-
 
     try
     {

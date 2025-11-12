@@ -5,6 +5,7 @@ from utils import DebugInfo
 from server.subargs import subargs_parse
 from server.protocol import DebuggerMessage
 
+
 class DebuggerBreakpoint:
   id: int
   location: DebugInfo

@@ -1,27 +1,23 @@
 #include "main.h"
-#include <cerrno>
-#include <cstdio>
-#include "liblvgl/llemu.hpp"
-#include "pros/llemu.hpp"
 #include "v5dbg/debug.h"
-#include "v5dbg/server.h"
-#include "v5dbg/sdk_api.h"
 
+// Global debug server state
 v5dbg_server_state_t sState{};
 
 void
 autonomous(void)
 {
+	$ntask
+	$function
 }
 
 void
 initialize(void)
 {
-    sState = V5Dbg_AllocateServerState();
-
-    V5Dbg_StartServer(&sState);
-
-    pros::lcd::initialize();
+	// Start debug server
+	
+	sState = V5Dbg_AllocateServerState();
+	V5Dbg_StartServer(&sState);
 }
 
 void
@@ -34,70 +30,21 @@ competition_initialize(void)
 {
 }
 
-void printData(const char* s)
-{
-    $function
-
-    $expose(s);
-
-    pros::lcd::print(0, "%s", s);
-}
-
-void opLoop(const std::string &data)
-{
-    $function
-    $expose(data);
-
-    const void* buffer = &data;
-    $expose(buffer);
-
-    printData(data.c_str());
-
-    int x = data.size();
-    $expose(x);
-
-    pros::delay(300);
-}
-
 void
 opcontrol(void)
 {
-    $ntask
-    $function
+	$ntask
+	$function
+	
+  int x = 0;
+  $expose(x);
 
-    int x = 0;
-    $expose(x);
+	while (true)
+	{
 
-    std::vector<int> data;
-    $expose(data);
+    $cbreak(x % 2 == 0);
+		pros::delay(300);
 
-    std::vector<double> dataHist;
-    $expose(dataHist);
-
-    int incrementor = 5;
-    $expose(incrementor);
-
-    while (true)
-    {
-        $break
-
-        int test = x * 2;
-        $expose(test);
-
-        double other = x * 2.344;
-        $expose(other);
-
-        std::string myName = "Hunter - Lead programer for 8568T";
-        $expose(myName);
-
-        data.push_back(x);
-        dataHist.push_back(other);
-
-        pros::lcd::print(3, "%i", test);
-        $break
-
-        opLoop("Hello World");
-
-        x += incrementor;
-    }
+    x++;
+	}
 }

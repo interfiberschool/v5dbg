@@ -33,6 +33,7 @@ class DebugServer:
 
     def __init__(self, wait_open: bool = True):
         self.server_path = find_server()
+        self.breakpoint_tripped = None
 
         self.last_open = 0
 
@@ -183,7 +184,7 @@ class DebugServer:
 
             if msg.msg_type == DebuggerMessageType.OPEN:
                 self.last_open = int(time.time())
-            elif msg.msg_type == DebuggerMessageType.BREAK_INVOKED:
+            elif msg.msg_type == DebuggerMessageType.BREAK_INVOKED and self.breakpoint_tripped != None:
                 t = thread.Thread(target=self.breakpoint_tripped, args=(msg,), name="Breakpoint trip handler")
                 t.start()
 
