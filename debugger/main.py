@@ -1,4 +1,5 @@
 from commands.run_state import SuspendCommand, ResumeCommand
+from commands.eval import EvalCommand
 from server.comms import DebugServer
 from cli.debug import Debugger, DebuggerOptions
 from client.client import DebuggerClient
@@ -34,6 +35,7 @@ debugger.register(SetCommand())
 debugger.register(SetConstantCommand())
 debugger.register(SetConstantDisableCommand())
 debugger.register(ExitCommand())
+debugger.register(EvalCommand())
 
 while True:
     if debugger.ask_execute():

@@ -151,8 +151,8 @@ class SetCommand(CommandExecutor, SetCommandBase):
         self.run_set(
             DebuggerVariableSetMode.SINGLE,
             client,
-            debugger.variable_id,
-            debugger.value_buffer,
+            command.variable_id,
+            command.value_buffer,
         )
 
 

@@ -108,9 +108,28 @@ class Debugger(Completer):
             sys.exit(0)
         except:
             return True
+        
+        # Crude argument splitter
+
+        arguments = []
+        arg = ""
+        skip_mode = False
+
+        for c in cmd.strip():
+            if c == " " and not skip_mode:
+                arguments.append(arg)
+                arg = ""
+                continue
+            elif c == "\"":
+                skip_mode = not skip_mode
+                continue
+
+            arg += c
+
+        arguments.append(arg)
 
         try:
-            parsed = self.parser.parse_args(cmd.split())
+            parsed = self.parser.parse_args(arguments)
         except:
             return False
 
