@@ -43,6 +43,8 @@ opcontrol(void)
 	{
         $cbreak(x % 4 == 0);
 
+        printf("%i\n", x);
+
         x++;
 		pros::delay(300);
 	}

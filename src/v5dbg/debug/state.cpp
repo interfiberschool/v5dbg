@@ -35,7 +35,7 @@ V5Dbg_ResumeProgram(v5dbg_server_state_t* pState)
 
   pState->justAwoke = true;
 
-  info("Program resumed\n");
+  info("Program resumed");
 }
 
 void
@@ -45,7 +45,6 @@ V5Dbg_WaitForSuspend(v5dbg_server_state_t *pState)
 
   while (!pState->justAwoke)
   {
-    info_pre("Waiting for resume...");
     pros::delay(50);
   }
 }

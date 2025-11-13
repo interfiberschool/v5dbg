@@ -82,7 +82,7 @@ class DebuggerClient:
     Enable/disable a breakpoint by numerical ID
 
     Args:
-        id (int): ID of the breakpoint, must be positive
+
         enabled (bool): True to enable the breakpoint, false if otherwise
     """
 
@@ -223,7 +223,7 @@ class DebuggerClient:
                 continue
 
             yield DebuggerBreakpoint(msg)
-    
+
     """
     Set the value of a variable within the current stack frame
 
@@ -240,5 +240,5 @@ class DebuggerClient:
 
         # Wait for the debug server response
         response = self.server.wait_for(DebuggerMessageType.RMEMORY_SET)
-        
+
         return DebuggerVariableSetResult(response[0].data)
