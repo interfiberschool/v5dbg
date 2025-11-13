@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "memory.h"
+#include "v5dbg/memory.h"
 
 /**
  * Used as the result of a V5Dbg_SetVariable call

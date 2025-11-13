@@ -3,7 +3,7 @@
 import time
 
 import sys
-from prompt_toolkit import print_formatted_text
+from prompt_toolkit import ANSI, print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
 from utils import find_server
 from server.protocol import DebuggerMessage,DebuggerMessageType
@@ -22,6 +22,9 @@ class DebugServer:
     # Check if the connection to the remote server hung up
     hang: thread.Thread
 
+    # Have we received an OPEN message
+    is_open: bool
+
     # Timestamp of the last OPEN message
     last_open: int
 
@@ -34,6 +37,7 @@ class DebugServer:
     def __init__(self, wait_open: bool = True):
         self.server_path = find_server()
         self.breakpoint_tripped = None
+        self.is_open = False
 
         self.last_open = 0
 
@@ -53,16 +57,16 @@ class DebugServer:
         self.hang = thread.Thread(target=self.hang_thread, name="DebugServer hang detector")
         self.hang.start()
 
-        print("Waiting for signal from user program...")
+        print(">> Waiting for signal from user program...")
 
         if wait_open:
             self.wait_for(DebuggerMessageType.OPEN)
 
-        print("Connected to remote user program!")
+        print(">> Connected to remote user program!")
 
     # Return True if we are connected to the remote debug server
     def connected(self):
-        return self.proc.poll() == None
+        return self.proc.poll() is None
 
     """
     Set the handler which executes when a breakpoint is tripped
@@ -173,6 +177,10 @@ class DebugServer:
                 continue
 
             if data[0] != '%':
+                # Ignore v5dbg log messages (for now...)
+                if not data.startswith("(v5dbg)") and not data.startswith("(v5dbg-sys-init)") and self.is_open:
+                    print_formatted_text(ANSI(f"stdout >> {data}"), end="")
+
                 continue
 
             msg = DebuggerMessage.deserialize(data)
@@ -184,6 +192,7 @@ class DebugServer:
 
             if msg.msg_type == DebuggerMessageType.OPEN:
                 self.last_open = int(time.time())
+                self.is_open = True
             elif msg.msg_type == DebuggerMessageType.BREAK_INVOKED and self.breakpoint_tripped != None:
                 t = thread.Thread(target=self.breakpoint_tripped, args=(msg,), name="Breakpoint trip handler")
                 t.start()

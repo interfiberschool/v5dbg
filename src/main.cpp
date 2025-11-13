@@ -15,7 +15,7 @@ void
 initialize(void)
 {
 	// Start debug server
-	
+
 	sState = V5Dbg_AllocateServerState();
 	V5Dbg_StartServer(&sState);
 }
@@ -35,16 +35,15 @@ opcontrol(void)
 {
 	$ntask
 	$function
-	
-  int x = 0;
-  $expose(x);
+
+    int x = 0;
+    $expose(x);
 
 	while (true)
 	{
+        $cbreak(x % 4 == 0);
 
-    $cbreak(x % 2 == 0);
+        x++;
 		pros::delay(300);
-
-    x++;
 	}
 }
