@@ -16,6 +16,7 @@ nav:
       - $ntask: cpp/macros/debug/ntask.md
       - $expose: cpp/macros/debug/expose.md
       - $break: cpp/macros/debug/break.md
+      - $cbreak: cpp/macros/debug/cbreak.md
   - Debugger:
     - Installation: install/debugger.md
     - Commands:

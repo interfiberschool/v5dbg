@@ -1,9 +1,9 @@
 ---
-description: Documentation for the $break macro which is used to place disabled-by-default breakpoints in code
+description: Documentation for the $cbreak macro which is used to place conditional breakpoints in code
 icon: octicons/pause-24
 ---
 
-# `$break`
+# `$cbreak(E)`
 
 !!! abstract "Version information"
     Introduced in version **v0.2** :octicons-tag-24:
@@ -12,11 +12,12 @@ icon: octicons/pause-24
 
 ## About
 
-The `$break` macro allows the programmer to insert **breakpoint locations**. Once breakpoints are placed they be **enabled** by their file path or ID later in the debugger using the [`break`](../../../debugger/cmds/break.md) command.
-
-For **conditional breakpoints** see the [`$cbreak`](./cbreak.md) macro.
+The `$cbreak` macro is used to place **conditional breakpoints** in code. When the expression `E` **evaluates to `true`** then the breakpoint trips, otherwise nothing will happen.
 
 ## Notes
+
+!!! note
+    Unlike [`$break`](./break.md) breakpoints, these breakpoints are **enabled by default**
 
 !!! danger "Required environment"
     - This macro **requires** the debug server to have been initialized before being called.
@@ -43,11 +44,11 @@ opcontrol()
     {
         pros::lcd::print("%i", i);
 
-        $break; // (1)
+        $cbreak(i % 4 == 0); // (1)
 
         i++;
     }
 }
 ```
 
-1. Our breakpoint will be placed here and can be enabled using the `break` command in the debugger
+1. This breakpoint will be enabled by default and will only trip if the value of `i` is divisible by `4` with no remainder

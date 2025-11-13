@@ -3,7 +3,7 @@ description: Documentation for the $expose macro which is used to expose memory 
 icon: octicons/arrow-switch-24
 ---
 
-# `$expose`
+# `$expose(T)`
 
 !!! abstract "Version information"
     Introduced in version **v0.1** :octicons-tag-24:
