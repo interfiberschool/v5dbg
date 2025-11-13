@@ -27,9 +27,9 @@ The only true VEX debugger™
 
     Use **breakpoints** to suspend the program at specific points and obtain realtime **stacktraces**.
 
-    [:octicons-arrow-right-24: C++ Documentation](cpp/macros/debug/function.md)
+    [:octicons-arrow-right-24: C++ Documentation](cpp/macros/debug/break.md)
 
-    [:octicons-arrow-right-24: Debugger Documentation](debugger/commands.md#Breakpoints)
+    [:octicons-arrow-right-24: Debugger Documentation](debugger/cmds/break.md)
 
 - :fontawesome-solid-memory: Manage memory
 
@@ -39,7 +39,7 @@ The only true VEX debugger™
 
     [:octicons-arrow-right-24: C++ Documentation](cpp/macros/debug/expose.md)
 
-    [:octicons-arrow-right-24: Debugger Documentation](debugger/commands.md#Memory)
+    [:octicons-arrow-right-24: Debugger Documentation](debugger/cmds/set.md)
 
 - :fontawesome-solid-bolt: Inspect device states
 

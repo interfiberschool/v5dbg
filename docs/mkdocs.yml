@@ -28,6 +28,8 @@ nav:
       - print: debugger/cmds/print.md
       - state: debugger/cmds/state.md
       - thread: debugger/cmds/thread.md
+      - set: debugger/cmds/set.md
+      - setc: debugger/cmds/setc.md
   # - Advanced Topics:
     # - Pretty Printers: advanced/pretty_printers.md
     # - Wireless Debugging: advanced/wireless.md

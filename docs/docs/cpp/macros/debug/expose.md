@@ -12,7 +12,7 @@ icon: octicons/arrow-switch-24
 
 ## About
 
-The `$expose` macro allows v5dbg to **expose variables** to the debugger. The exposed variables can be **viewed and modified** later using debugger commands such as [`print`](../../../debugger/cmds/print.md)
+The `$expose` macro allows v5dbg to **expose variables** to the debugger. The exposed variables can be **viewed and modified** later using debugger commands such as [`print`](../../../debugger/cmds/print.md) and [`set`](../../../debugger/cmds/set.md)
 
 ??? question "Why do I need to use this macro?"
     V5dbg **cannot see** where local variables are **in memory**, see [the engineering page](../../../debug_server/exposed_memory.md) for more information.
