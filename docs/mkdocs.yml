@@ -32,6 +32,7 @@ nav:
       - setc: debugger/cmds/setc.md
       - preview: debugger/cmds/preview.md
       - evalpy: debugger/cmds/evalpy.md
+      - break: debugger/cmds/break.md
   # - Advanced Topics:
     # - Pretty Printers: advanced/pretty_printers.md
     # - Wireless Debugging: advanced/wireless.md
