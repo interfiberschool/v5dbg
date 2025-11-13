@@ -35,7 +35,7 @@ nav:
       - Exposed memory: debug_server/exposed_memory.md
     # - Debugger:
       # - Comms server: debugger/comms.md
-    - Protocol Documentation: protocol/v1.md
+    - Protocol Documentation: protocol/current.md
 
 theme:
   name: material
@@ -52,7 +52,7 @@ theme:
 
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
-      scheme: default 
+      scheme: default
       primary: white
 
       toggle:
@@ -95,7 +95,7 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets:
       auto_append:
-        - includes/abbr.md 
+        - includes/abbr.md
   - pymdownx.superfences
   - admonition
   - pymdownx.details
