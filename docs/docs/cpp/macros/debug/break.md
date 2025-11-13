@@ -1,21 +1,20 @@
 ---
-description: Documentation for the $expose macro which is used to expose memory to thd debugger
-icon: octicons/arrow-switch-24
+description: Documentation for the $break macro which is used to place disabled-by-default breakpoints in code
+icon: octicons/pause-24
 ---
 
-# `$expose`
+# `$break`
 
 !!! abstract "Version information"
-    Introduced in version **v0.1** :octicons-tag-24:
+    Introduced in version **v0.2** :octicons-tag-24:
 
     This macro is considered **stable** :octicons-check-24:
 
 ## About
 
-The `$expose` macro allows v5dbg to **expose variables** to the debugger. The exposed variables can be **viewed and modified** later using debugger commands such as [`print`](../../../debugger/cmds/print.md)
+The `$break` macro allows the programmer to insert **breakpoint locations**. Once breakpoints are placed they be **enabled** by their file path or ID later in the debugger using the [`break`](../../../debugger/cmds/break.md) command.
 
-??? question "Why do I need to use this macro?"
-    V5dbg **cannot see** where local variables are **in memory**, see [the engineering page](../../../debug_server/exposed_memory.md) for more information.
+For **conditional breakpoints** see the [`$cbreak`](./cbreak.md) macro.
 
 ## Notes
 
@@ -28,7 +27,7 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
     The `$expose` macro allows you to expose memory which **should be marked as const**. For example the following code is valid:
 
     ```c++
-    #include "v5dbg/debug.h"
+    #include "v5dbg/state.h"
 
     void funcWithParams(const std::string &data)
     {
@@ -55,7 +54,7 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
 === "Single scope"
 
     ```c++ hl_lines="11 12 17" linenums="1"
-    #include "v5dbg/debug.h"
+    #include "v5dbg/state.h"
 
     void
     opcontrol()
@@ -85,7 +84,7 @@ The `$expose` macro allows v5dbg to **expose variables** to the debugger. The ex
 === "Multiple scopes"
 
     ```c++ hl_lines="8 22" linenums="1"
-    #include "v5dbg/debug.h"
+    #include "v5dbg/state.h"
 
     void
     printAndSleep(const std::string &p)
